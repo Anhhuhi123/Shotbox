@@ -1,0 +1,15 @@
+.wrapper{
+    --margin-top-content: var(--height-navbar)
+}
+.container{
+    display: flex;
+}
+.block{
+    width: 100%;
+
+}
+.main-content{
+    margin-left: 190px;
+    margin-top: var(--margin-top-content);
+}
+

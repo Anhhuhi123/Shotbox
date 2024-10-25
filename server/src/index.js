@@ -1,13 +1,28 @@
-import express from 'express'
+import express from 'express';
+import cors from 'cors';
+import routes from './routes/index.js';
+// import db from './config/database.js';
+import db from './config/database.js';
 const app = express();
-const PORT = process.env.PORT;
+const port = 8080;
+app.use(cors());
+// middleware use Parse data from body request (Form html)
+app.use(express.urlencoded({ extended: false }));
+// middleware use Parse data from javascript (fetch)
+app.use(express.json());
 
-
-app.get('/', (req, res) => {
-    res.send('home');
+db.connect((err) => {
+    if (err) {
+        console.log(err);
+    }
+    else {
+        console.log('success to connect mysql');
+    }
 })
 
-app.listen(PORT, () => {
-    console.log(`http://localhost:${PORT}`);
-})
+routes(app);
+
+app.listen(port, () => {
+    console.log(`http://localhost:${port}`);
+});
 

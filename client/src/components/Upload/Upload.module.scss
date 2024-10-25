@@ -1,0 +1,51 @@
+.wrapper{
+    position: fixed;
+    background-color:rgba(150, 148, 148, 0.8);
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.upload{
+    position: fixed;    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    left: 50%;
+    top: 50px;
+    min-width: 450px;
+    height: 150px;
+    transform: translateX(-50%);
+    background-color: #efefef;  
+    padding: 30px 20px;
+}
+
+.wrapper-button{
+    padding: 10px;  
+    background-color: #fff;
+}
+.form{
+    display: flex;
+    align-items: center;
+}
+
+.frame{
+    background-color: #fff;
+    margin-top: 10px;
+    padding: 20px 10px 20px 0px;
+    width: 500px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.circle-xmark{
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    cursor: pointer;
+    transition: .4s ease;
+    &:hover{
+        font-weight: 700;
+    }
+}

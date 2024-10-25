@@ -1,0 +1,35 @@
+.wrapper{
+    height: 100vh;
+}
+// .title{
+//     line-height: normal;
+//     margin: 0;
+// }
+
+
+.title {
+    line-height: normal;
+    margin: 0;
+    // font-size: 2rem; // Kích thước mặc định
+
+    @media (max-width: 900px) {
+        font-size: 1.2rem; // Kích thước khi màn hình dưới 700px
+       text-align: center;
+    }
+    @media (max-width: 750px) {
+       font-size: 1.1rem; // Kích thước khi màn hình dưới 700px
+       text-align: center;
+    }
+    @media (max-width: 700px) {
+        font-size: 1rem; // Kích thước khi màn hình dưới 700px
+        text-align: center;
+     }
+     @media (max-width: 650px) {
+        font-size: 14px; // Kích thước khi màn hình dưới 700px
+        text-align: center;
+     }
+     @media (max-width: 600px) {
+        display: none;
+     }
+     
+}

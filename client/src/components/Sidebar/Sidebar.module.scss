@@ -1,0 +1,10 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    background-color: #222;  
+    position: fixed;
+    width: 180px;
+    height: 100%;
+    top: var(--height-navbar);   //margin-top-side-bar = height-navbar
+    left: 0;
+}

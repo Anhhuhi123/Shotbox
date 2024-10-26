@@ -11,12 +11,9 @@ function Webcam() {
     const [capturedImage, setCapturedImage] = useState(null);
     // console.log(capturedImage)
     const handleAddImages = async () => {
-<<<<<<< HEAD
         //const CLOUD_NAME = 'djfgf1byn';
         const CLOUD_NAME = 'dnouyejs5';
-=======
-        const CLOUD_NAME = 'dt3gvugaf';
->>>>>>> main
+
         const PRESET_NAME = 'demo-upload';
         const FOLDER_NAME = 'Demo';
         const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;

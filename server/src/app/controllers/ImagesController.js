@@ -4,7 +4,7 @@ class ImagesController {
     // Get localhost/images/
     async getAllImages(req, res) {
         const images = await Images.getAllImages();
-        // console.log(images)
+        console.log(images)
         return res.status(200).json({ data: images });
     }
     // Post localhost/images/

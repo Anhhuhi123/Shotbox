@@ -23,6 +23,8 @@ const Image = {
         // Sử dụng sharp để lấy thông tin ảnh
         const metadata = await sharp(buffer).metadata();
     
+        // con thieu them id user them anh 
+        // chac la lay tu req.body.user tu ben client 
         const query = 'INSERT INTO Images (filePath, fileName, fileSize, fileWidth, fileHeight, fileFormat) VALUES (?, ?, ?, ?, ?, ?)';
         const [result] = await db.query(
             query,
@@ -41,27 +43,29 @@ const Image = {
      
 
     // sua lai bang deleted_images de luu tru day du thong tin cua anh
-    // id truyen id anh deletedBy truyen id user
-    deleteImages: async (id, deletedBy) => {
+    // id truyen id cua anh, deletedBy truyen id user
+    deleteImages: async (imageId, deletedBy) => {
+        
+        //kiem tra xem anh da co chua
         const selectQuery = 'SELECT * FROM Images WHERE id = ?';
-        const [imageData] = await db.query(selectQuery, [id]);
+        const [imageData] = await db.query(selectQuery, [imageId]);
     
         if (imageData.length === 0) {
             throw new Error('Image not found'); 
         }
-    
-        const deleteQuery = 'DELETE FROM Images WHERE id = ?';
-        await db.query(deleteQuery, [id]);
-    
+        
+        // them anh vao deleted-images truoc
         const { filePath, fileName, fileSize, fileWidth, fileHeight, fileFormat } = imageData[0];
         const insertDeletedQuery = `
             INSERT INTO Deleted_Images (imageId, filePath, fileName, fileSize, fileWidth, fileHeight, fileFormat, deletedBy)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        await db.query(insertDeletedQuery, [id, filePath, fileName, fileSize, fileWidth, fileHeight, fileFormat, deletedBy]);
+        await db.query(insertDeletedQuery, [imageId, filePath, fileName, fileSize, fileWidth, fileHeight, fileFormat, deletedBy]);
+
+        //xoa anh khoi images
+        const deleteQuery = 'DELETE FROM Images WHERE id = ?';
+        await db.query(deleteQuery, [imageId]);
     }
-    
-    
 }
 
 export default Image;

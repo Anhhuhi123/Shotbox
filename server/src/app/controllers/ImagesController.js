@@ -15,14 +15,16 @@ class ImagesController {
     // Delete
     async deleteImages(req, res) 
     {
-        const { id , name , gmail } = req.user ;
-
-        
-        const imageId = req.params.id;
-        const deletedBy = req.body.deletedBy;
-
         try {
-            await Images.deleteImages(imageId, deletedBy);
+            // const { id , name , gmail } = req.user ;
+            // console.log(id);
+    
+            const imageId = req.params.id;
+            //const deletedBy = req.body.deletedBy;
+            console.log(imageId);
+            //console.log(deletedBy);
+
+            await Images.deleteImages(imageId, 1);
             res.status(200).json({ message: 'Image deleted and moved to Deleted_Images' });
         } catch (error) {
             console.error('Error deleting image:', error);

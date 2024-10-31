@@ -1,24 +1,27 @@
-import Deleted_Images from '../models/Deleted_Images';
+import Deleted_Images from '../models/Deleted_Images.js';
 
-class Deleted_Images{
-    async getAllImages_Deleted(req,res) {
-        const images = await Deleted_Images.getAllImages_Deleted();
-        console.log(images);
-        return res.status(200).json({ data : images });
+class Deleted_ImagesController {
+    async getAllImages_Deleted(req, res) {
+        try {
+            const images = await Deleted_Images.getAllImages_Deleted();
+            console.log(images);
+            return res.status(200).json({ data: images });
+        } catch (error) {
+            console.error('Error fetching deleted images:', error);
+            return res.status(500).json({ message: 'Failed to fetch deleted images' });
+        }
     }
 
-    async restoreImages(req,res) {
-
-        const { id , name , gmail } = req.user ;
+    async restoreImages(req, res) {
         const imageId = req.params.id;
         const deletedBy = req.body.deletedBy;
 
         try {
-            await Images.restoreImages(imageId, deletedBy);
-            res.status(200).json({ message: 'Image deleted and moved to Deleted_Images' });
+            const result = await Deleted_Images.restoreImages(imageId, deletedBy);
+            res.status(200).json(result);
         } catch (error) {
-            console.error('Error deleting image:', error);
-            res.status(500).json({ message: 'Failed to delete image' });
+            console.error('Error restoring image:', error);
+            res.status(500).json({ message: 'Failed to restore image' });
         }
     }
 }

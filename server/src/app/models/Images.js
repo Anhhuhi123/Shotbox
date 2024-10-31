@@ -45,22 +45,31 @@ const Image = {
     // sua lai bang deleted_images de luu tru day du thong tin cua anh
     // id truyen id cua anh, deletedBy truyen id user
     deleteImages: async (imageId, deletedBy) => {
-        
+        console.log(imageId);
         //kiem tra xem anh da co chua
         const selectQuery = 'SELECT * FROM Images WHERE id = ?';
         const [imageData] = await db.query(selectQuery, [imageId]);
+        
     
         if (imageData.length === 0) {
             throw new Error('Image not found'); 
         }
+
+        console.log(imageData[0]);
         
         // them anh vao deleted-images truoc
-        const { filePath, fileName, fileSize, fileWidth, fileHeight, fileFormat } = imageData[0];
-        const insertDeletedQuery = `
-            INSERT INTO Deleted_Images (imageId, filePath, fileName, fileSize, fileWidth, fileHeight, fileFormat, deletedBy)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `;
-        await db.query(insertDeletedQuery, [imageId, filePath, fileName, fileSize, fileWidth, fileHeight, fileFormat, deletedBy]);
+        const { id, fileName, fileSize, fileWidth, fileHeight, fileFormat, filePath } = imageData[0];
+        try{
+                const insertDeletedQuery = `
+                INSERT INTO Deleted_Images (id, filePath, fileName, fileSize, fileWidth, fileHeight, fileFormat, deletedBy)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `;
+            await db.query(insertDeletedQuery, [id, filePath, fileName, fileSize, fileWidth, fileHeight, fileFormat, deletedBy]);
+        } catch(error)
+        {
+            console.log(error)
+        }
+
 
         //xoa anh khoi images
         const deleteQuery = 'DELETE FROM Images WHERE id = ?';

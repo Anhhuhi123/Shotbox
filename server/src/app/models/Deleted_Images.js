@@ -9,9 +9,7 @@ const deleted_images = {
     },
 
     // Hàm phục hồi ảnh
-    // sua lai cac truong cho phu hop
     restoreImages: async (imageId, deletedBy) => {
-
         try {
             // Truy vấn để lấy ảnh từ bảng Deleted_Images dựa trên ID
             const [deletedImageRows] = await db.query(
@@ -20,7 +18,7 @@ const deleted_images = {
             );
 
             if (deletedImageRows.length === 0) {
-                return res.status(404).json({ message: 'Deleted image not found' });
+                throw new Error('Deleted image in table Deleted_Images not found');
             }
 
             const deletedImage = deletedImageRows[0];
@@ -41,10 +39,10 @@ const deleted_images = {
             // Xóa ảnh khỏi bảng Deleted_Images sau khi phục hồi
             await db.query('DELETE FROM Deleted_Images WHERE id = ?', [imageId]);
 
-            res.json({ message: 'Image restored successfully' });
+            return { message: 'Image restored successfully' };
         } catch (error) {
             console.error('Restore error:', error);
-            res.status(500).json({ message: 'Failed to restore image' });
+            throw error;  // Ném lỗi để controller có thể bắt và phản hồi
         }
     },
 };

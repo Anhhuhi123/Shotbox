@@ -22,10 +22,30 @@ class UserController {
     }
 
     // PUT request để cập nhật thông tin người dùng
-    updateUser(req, res) {
-        const userId = req.params.id;
-        // Logic để cập nhật thông tin người dùng
-        res.send(`PUT request to update user with ID: ${userId}`);
+    async updateUser(req, res) {
+        try {
+            const userId = req.params.id;
+            const { name, email, password, roldId } = req.body; // Dữ liệu cập nhật
+                
+            // Gọi hàm update từ model User để cập nhật thông tin người dùng
+            const updatedUser = await User.update({ id: userId, name, email, password, roldId});
+
+            if (updatedUser) {
+                return res.status(200).json({
+                    message: 'User updated successfully',
+                    data: updatedUser
+                });
+            } else {
+                return res.status(404).json({
+                    message: 'User not found'
+                });
+            }
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Error updating user',
+                error: error.message
+            });
+        }
     }
 
     // DELETE request để xóa người dùng

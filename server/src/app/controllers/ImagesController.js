@@ -14,8 +14,18 @@ class ImagesController {
     }
     // Delete
     async deleteImages(req, res) {
-        const imageId = req.params.id;
-        res.send(`Delete ${imageId}`);
+        const id = req.params.id;
+        try {
+            const result = await Images.delete({ id });
+            if (result) {
+                return res.status(200).json({ message: `Images với ID ${id} đã được xóa` });
+            } else {
+                return res.status(404).json({ message: 'Images không tìm thấy' });
+            }
+        } catch (error) {
+            console.error("Lỗi khi xóa Images:", error);
+            return res.status(500).json({ error: 'Lỗi khi xóa Images' });
+        }
     }
 
 }

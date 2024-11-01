@@ -24,7 +24,7 @@ function Images() {
                 return (
                     <img
                         key={index}
-                        src={obj.url}
+                        src={obj.filePath}
                         className={cx('img')}
                         alt="img"
                     />

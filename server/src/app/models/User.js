@@ -1,16 +1,15 @@
-import db from '../../config/database.js'
+import db from '../../config/database.js';
+
 const User = {
-    getAllUsername: async () => {
-        const query = 'SELECT * FROM users';
+    getAllUsers: async () => {
+        const query = 'SELECT * FROM Users';
         const [rows] = await db.query(query);
         return rows;
     },
     findByUsername: async (data) => {
         const username = data;
-        const query = 'SELECT * FROM users WHERE name = ?';
-        const [rows] = await db.query(
-            query, [username]
-        );
+        const query = 'SELECT * FROM Users WHERE name = ?';
+        const [rows] = await db.query(query, [username]);
         if (rows.length > 0) {
             return rows[0];
         }
@@ -19,10 +18,8 @@ const User = {
     // hoi tai sao lai viet  const email = data; ma khong ghi nhieu mien ra data o day la gi?
     findByEmail: async (data) => {
         const email = data;
-        const query = 'SELECT * FROM users WHERE email = ?';
-        const [rows] = await db.query(
-            query, [email]
-        );
+        const query = 'SELECT * FROM Users WHERE email = ?';
+        const [rows] = await db.query(query, [email]);
         if (rows.length > 0) {
             return rows[0];
         }
@@ -65,11 +62,17 @@ const User = {
     },
     
     create: async (data) => {
+<<<<<<< HEAD
         const { name, email, password,roldid } = data;
         const query = 'INSERT INTO users (name, email, password, roldid) VALUES (?, ?, ?, ?)';
         const [result] = await db.query(
             query, [name, email, password,roldid]
         );
+=======
+        const { username, email, password, roldid } = data; 
+        const query = 'INSERT INTO Users (name, email, password, roldid) VALUES (?, ?, ?, ?)';
+        const [result] = await db.query(query, [username, email, password, roldid]);
+>>>>>>> anh_new
         return result.insertId;
     },
 }

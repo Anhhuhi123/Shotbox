@@ -28,6 +28,7 @@ class LoginController {
                 process.env.JWT_SECRET,
                 {
                     expiresIn: process.env.JWT_EXPIRE,
+                    //expiresIn: '3s'
                 }
             )
 

@@ -62,17 +62,18 @@ const User = {
     },
     
     create: async (data) => {
-<<<<<<< HEAD
-        const { name, email, password,roldid } = data;
-        const query = 'INSERT INTO users (name, email, password, roldid) VALUES (?, ?, ?, ?)';
-        const [result] = await db.query(
-            query, [name, email, password,roldid]
-        );
-=======
+
+        //cu
+        // const { name, email, password,roldid } = data;
+        // const query = 'INSERT INTO users (name, email, password, roldid) VALUES (?, ?, ?, ?)';
+        // const [result] = await db.query(
+        //     query, [name, email, password,roldid]
+        // );
+
+        // moi
         const { username, email, password, roldid } = data; 
         const query = 'INSERT INTO Users (name, email, password, roldid) VALUES (?, ?, ?, ?)';
         const [result] = await db.query(query, [username, email, password, roldid]);
->>>>>>> anh_new
         return result.insertId;
     },
 }

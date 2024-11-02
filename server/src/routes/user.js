@@ -1,15 +1,8 @@
 import express from 'express';
 import UserController from '../app/controllers/UserController.js'
-<<<<<<< HEAD
-// import delay from "../middleware/auth.js";
-const router = express.Router();
-// router.all("*", delay);
-// const router = express.Router();
-=======
 import auth from '../middleware/auth.js';
 const router = express.Router();
 router.all("*", auth);
->>>>>>> anh_new
 
 router.get('/account', UserController.getUser);
 

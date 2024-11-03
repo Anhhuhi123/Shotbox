@@ -13,6 +13,16 @@ const Image = {
             throw new Error("Unable to fetch images.");
         }
     },
+    getImage: async (id) => {
+        try {
+            const query = 'SELECT * FROM images WHERE id = ?';
+            const [rows] = await db.query(query, [id]);
+            return rows[0];
+        } catch (error) {
+            console.error("Error fetching images:", error); // Log lỗi chi tiết
+            throw new Error("Unable to fetch images.");
+        }
+    },
     create: async (url, userId) => {
         try {
             const response = await axios.get(url, { responseType: 'arraybuffer' });

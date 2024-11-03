@@ -1,13 +1,13 @@
 import Images from '../models/Images.js';
 import AlbumImage from '../models/AlbumImage.js';
-
+import DeletedImages from '../models/DeletedImages.js';
 class ImagesController {
     // Get localhost/images/
     async getAllImages(req, res) {
         try {
             const { id, name, email } = req.user; // data handle from middleware
             const images = await Images.getAllImages(id);
-            console.log(images);
+            // console.log(images);
             return res.status(200).json({ data: images });
         } catch (error) {
             console.error("Error fetching images:", error); // Log lỗi chi tiết
@@ -37,9 +37,17 @@ class ImagesController {
     async deleteImages(req, res) {
         try {
             const imgId = req.params.id;
-            // step1: delete images from album before delete original images
-            const deleteImageFromAlbum = await AlbumImage.deleteByImgId(imgId);
-            // step2: delete original images
+            // step1: check exist image
+            const image = await Images.getImage(imgId);
+            // console.log(image);
+            if (image.length === 0) {
+                res.status(404).json({ message: "Image not found." });
+            }
+            // step2: add image deleted throw table deleted_images
+            await DeletedImages.create(image);
+            // step3: delete images from album before delete original images
+            await AlbumImage.deleteByImgId(imgId);
+            // step4: delete original images
             const affectedRows = await Images.delete(imgId);
 
             if (affectedRows > 0) {

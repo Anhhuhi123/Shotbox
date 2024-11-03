@@ -1,6 +1,7 @@
 import Main from '../pages/Main'
 import LoginSignup from '../pages/LoginSignup'
 import Album from '../pages/Album'
+import AlbumDetail from '../pages/AlbumDetail'
 import Home from '../pages/Home'
 import Images from '../pages/Images'
 import User from '../pages/User'
@@ -44,6 +45,12 @@ const routes = [
         isPrivate: true
 
     },
+    {
+        path: '/album/:id',
+        component: AlbumDetail,
+        isPrivate: true,
+    },
+
     {
         path: '/user',
         component: User,

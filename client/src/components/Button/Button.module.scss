@@ -6,11 +6,12 @@
     border-radius: 3px;
     cursor: pointer;
     outline: none;
-    text-decoration: none;
+    text-decoration: none;  
     text-align: center;
     &:hover{
         opacity: 0.8;
     }
+    
 }
 .first{
     display: inline-block;
@@ -48,10 +49,12 @@
     text-align: left;
     padding: 5px 5px;
     font-size: 14px;
+    white-space: nowrap;
     &:hover{
         color: white;
         font-weight: 700;
     }  
+
 }
 .five{
     padding: 6px 18px;

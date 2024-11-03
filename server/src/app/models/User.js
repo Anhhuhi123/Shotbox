@@ -5,16 +5,19 @@ const User = {
         const [rows] = await db.query(query);
         return rows;
     },
-    findByUsername: async (data) => {
-        const username = data;
-        const query = 'SELECT * FROM users WHERE name = ?';
-        const [rows] = await db.query(
-            query, [username]
-        );
-        if (rows.length > 0) {
-            return rows[0];
+    findByUsername: async (username) => {
+        try {
+            const query = 'SELECT * FROM users WHERE name = ?';
+            const [rows] = await db.query(query, [username]);
+
+            if (rows.length > 0) {
+                return rows[0];
+            }
+            return null;
+        } catch (error) {
+            console.error("Error fetching user by username:", error); // Log lỗi chi tiết
+            throw new Error("Unable to find user.");
         }
-        return null;
     },
     findByEmail: async (data) => {
         const email = data;
@@ -28,13 +31,18 @@ const User = {
         return null;
     },
     create: async (data) => {
-        const { username, email, password } = data;
-        const query = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
-        const [result] = await db.query(
-            query, [username, email, password]
-        );
-        return result.insertId;
-    },
+        try {
+            const { username, email, password } = data;
+            const roleId = 2;
+            const query = 'INSERT INTO users (name, email, password, roleId) VALUES (?, ?, ?, ?)';
+            const [result] = await db.query(query, [username, email, password, roleId]);
+
+            return result.insertId;
+        } catch (error) {
+            console.error("Error creating user:", error); // Log lỗi chi tiết
+            throw new Error("Unable to create user.");
+        }
+    }
 }
 
 export default User;

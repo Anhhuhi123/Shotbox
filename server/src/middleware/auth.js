@@ -3,9 +3,9 @@ import jwt from "jsonwebtoken";
 const auth = (req, res, next) => {
     const routes = ["/", "/login/"];
     const url = req.baseUrl + req.url;
-    console.log(url)
+    // console.log(url)
     let checkRoute = routes.find(value => value === url);
-    console.log(checkRoute);
+    // console.log(checkRoute);
 
     if (checkRoute) {
         next();
@@ -15,7 +15,7 @@ const auth = (req, res, next) => {
             const accessToken = req.headers.authorization.split(' ')[1];
             try {
                 const decode = jwt.verify(accessToken, process.env.JWT_SECRET);
-                console.log('check token: ', decode);
+                // console.log('check token: ', decode);
                 req.user = {
                     id: decode.id,
                     name: decode.username,

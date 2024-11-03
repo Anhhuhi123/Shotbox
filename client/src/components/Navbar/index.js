@@ -5,6 +5,7 @@ import classnames from 'classnames/bind'
 import styles from './Navbar.module.scss'
 import { showUpload } from '../../redux/actions/upload'
 import { authLogout } from '../../redux/actions/auth'
+import Upload from '../Upload'
 import Button from '../Button'
 import { jwtDecode } from "jwt-decode";
 const cx = classnames.bind(styles)
@@ -41,6 +42,7 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
             <div className={cx('fix-toolbar')}>
                 <div className={cx('actions')} >
                     <Button second onClick={handleOnclick}>UPLOAD</Button>
+
                 </div >
 
                 <div className={cx('actions')} >
@@ -64,6 +66,7 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
 
             </div>
         }
+
 
     </div >
 }

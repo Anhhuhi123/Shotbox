@@ -1,8 +1,8 @@
 import express from 'express';
 import ImagesController from '../app/controllers/ImagesController.js'
-import delay from "../middleware/auth.js";
+import auth from "../middleware/auth.js";
 const router = express.Router();
-router.all("*", delay);
+router.all("*", auth);
 
 router.get('/', ImagesController.getAllImages);
 

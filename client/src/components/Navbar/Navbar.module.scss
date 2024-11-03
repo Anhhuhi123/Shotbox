@@ -28,6 +28,8 @@
 .actions{
     margin-right: 3px;
     position: relative;
+    user-select: none;
+
 }
 .fix-toolbar{
     display: flex;
@@ -41,6 +43,8 @@
     background-color: black;
     top:35px;
     right: 0;   
+   
+
 }
 .upload-container{
     display: flex;

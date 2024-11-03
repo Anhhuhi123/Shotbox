@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import axios from 'axios';
 import React, { useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import classNames from 'classnames/bind';
 import styles from './Upload.module.scss';
 import Button from '../Button';
 import * as ImageService from '../../services/imageService';
+import { hideUpload } from '../../redux/actions/upload'
+
 const cx = classNames.bind(styles);
 
-function UpLoad({ onClick }) {
+function UpLoad() {
 
     const fileInputRef = useRef(null);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -52,6 +55,12 @@ function UpLoad({ onClick }) {
         }
         window.location.reload();
     };
+    const dispatch = useDispatch();
+
+    const handleClickIcon = (e) => {
+        const action = hideUpload(false);
+        dispatch(action);
+    }
 
     return (
         <div className={cx('wrapper')}>
@@ -78,7 +87,7 @@ function UpLoad({ onClick }) {
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
                 />
-                <i className={`fa-regular fa-circle-xmark ${cx('circle-xmark')}`} onClick={onClick}></i>
+                <i className={`fa-regular fa-circle-xmark ${cx('circle-xmark')}`} onClick={handleClickIcon}></i>
             </div>
         </div>
     );

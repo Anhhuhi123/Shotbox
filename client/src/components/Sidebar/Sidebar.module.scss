@@ -7,4 +7,6 @@
     height: 100%;
     top: var(--height-navbar);   //margin-top-side-bar = height-navbar
     left: 0;
+    user-select: none;
+    // z-index: -1  ;
 }

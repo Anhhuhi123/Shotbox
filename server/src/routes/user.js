@@ -1,9 +1,8 @@
 import express from 'express';
 import UserController from '../app/controllers/UserController.js'
-import delay from "../middleware/auth.js";
+import auth from "../middleware/auth.js";
 const router = express.Router();
-router.all("*", delay);
-// const router = express.Router();
+router.all("*", auth);
 
 router.get('/account', UserController.getUser);
 

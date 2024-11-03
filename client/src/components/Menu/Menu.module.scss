@@ -1,0 +1,21 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    position: absolute; /* Thay đổi ở đây */
+    background-color: white; /* Màu nền để menu rõ ràng */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Đổ bóng cho menu */
+    z-index: 1;
+}
+.modifier {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    position: relative;
+    background-color: black;
+}
+
+.modifier span:first-of-type {
+    position: absolute;
+    left: 0;
+    padding: 0px 5px;
+}

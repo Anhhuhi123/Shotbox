@@ -45,9 +45,9 @@ class ImagesController {
             }
             // step2: add image deleted throw table deleted_images
             await DeletedImages.create(image);
-            // step3: delete images from album before delete original images
+            //step3: delete images from album before delete original images
             await AlbumImage.deleteByImgId(imgId);
-            // step4: delete original images
+            //step4: delete original images
             const affectedRows = await Images.delete(imgId);
 
             if (affectedRows > 0) {

@@ -18,19 +18,32 @@ const Albums_Images = {
         const [result] = await db.query(query, [albumId, imageId]);
         return result.insertId;
     },
-    
-    // delete: async (data) => {
-    //     const { album_id } = data; // Lấy album_id từ data
-    //     const query = 'DELETE FROM album WHERE id = ?';
-    
-    //     try {
-    //         const [result] = await db.query(query, [album_id]);
-    //         return result.affectedRows; // Trả về số lượng bản ghi đã bị xóa (nếu thành công là 1)
-    //     } catch (error) {
-    //         console.error("Lỗi khi xóa album:", error);
-    //         throw error;
-    //     }
-    // }
+    findByIdAlbum: async (data) => {
+        const albumId =parseInt(data, 10);
+        
+        const query = 'SELECT * FROM  album_images WHERE albumId = ?';
+        const [rows] = await db.query(
+            query, [albumId]
+        );
+        if (rows.length > 0) {
+            
+            return rows[0];
+            
+        }
+        return null;
+    },
+    delete: async (data) => {
+        const { id } = data; // Lấy album_id từ data
+        const deleteAlbumQuery = 'DELETE FROM album_images WHERE albumId  = ?';
+        
+        try {
+            const [result] = await db.query(deleteAlbumQuery, [id]);
+            return result.affectedRows; // Trả về số lượng bản ghi đã bị xóa (nếu thành công là 1)
+        } catch (error) {
+            console.error("Lỗi khi xóa album :", error);
+            throw error;
+        }
+    }
     
 }
 

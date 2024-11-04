@@ -43,11 +43,11 @@ const Album = {
     },
     delete: async (data) => {
         const { id } = data; // Lấy album_id từ data
-        const deleteAlbumImagesQuery = 'DELETE FROM album_images WHERE albumId = ?';// chỗ này mai cần sửa lại cơ sỡ dữ liệu
+        
         const query = 'DELETE FROM album WHERE id = ?';
     
         try {
-            await db.query(deleteAlbumImagesQuery, [id]);//chỗ này mai cần sửa lại cơ sỡ dữ liệu
+            
             const [result] = await db.query(query, [id]);
             return result.affectedRows; // Trả về số lượng bản ghi đã bị xóa (nếu thành công là 1)
         } catch (error) {

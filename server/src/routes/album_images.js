@@ -9,4 +9,5 @@ router.get('/', Albums_ImagesController.getAllImageswithId_album);
 
 router.post('/', Albums_ImagesController.addImagesToAlbum);
 
+// router.get('/:id', Albums_ImagesController.findByIdAlbum);
 export default router;

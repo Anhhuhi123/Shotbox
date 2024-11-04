@@ -1,4 +1,5 @@
 import Albums from '../models/Albums.js';
+import Albums_Images from '../models/Albums_Images.js';
 
 class AlbumController {
     // Get localhost/images/
@@ -16,6 +17,8 @@ class AlbumController {
     {
         try {
             const idAlbum = req.params.id;
+            
+
             const { albumName, description } = req.body; // Dữ liệu cập nhật
                 
             
@@ -42,7 +45,15 @@ class AlbumController {
     async deleteAlbums(req, res) {
         const id = req.params.id;
         try {
+            
+            const idAlbumExists = await Albums_Images.findByIdAlbum(id);
+            if(idAlbumExists)
+            {
+                
+                await Albums_Images.delete({id});
+            }
             const result = await Albums.delete({ id });
+           
             if (result) {
                 return res.status(200).json({ message: `Album với ID ${id} đã được xóa` });
             } else {

@@ -42,11 +42,13 @@ const Album = {
         return result.affectedRows > 0 ? { id, albumName, description } : null;  
     },
     delete: async (data) => {
-        const { album_id } = data; // Lấy album_id từ data
+        const { id } = data; // Lấy album_id từ data
+        const deleteAlbumImagesQuery = 'DELETE FROM album_images WHERE albumId = ?';// chỗ này mai cần sửa lại cơ sỡ dữ liệu
         const query = 'DELETE FROM album WHERE id = ?';
     
         try {
-            const [result] = await db.query(query, [album_id]);
+            await db.query(deleteAlbumImagesQuery, [id]);//chỗ này mai cần sửa lại cơ sỡ dữ liệu
+            const [result] = await db.query(query, [id]);
             return result.affectedRows; // Trả về số lượng bản ghi đã bị xóa (nếu thành công là 1)
         } catch (error) {
             console.error("Lỗi khi xóa album:", error);

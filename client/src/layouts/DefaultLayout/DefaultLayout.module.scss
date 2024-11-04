@@ -1,16 +1,19 @@
-.wrapper{
+.wrapper {
     --margin-top-content: var(--height-navbar);
 }
-.container{
+
+.container {
     display: flex;
 }
-.block{
+
+.block {
     width: 100%;
     margin-top: 10px;
-
 }
-.main-content{
+
+.main-content {
     margin-left: 190px;
     margin-top: var(--margin-top-content);
+    margin-right: 10px;
+    height: calc(100vh - var(--margin-top-content) - 10px); /* Sửa lỗi cú pháp ở đây */
 }
-

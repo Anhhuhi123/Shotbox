@@ -33,7 +33,17 @@ const Album = {
             throw new Error('Unable to insert album into the database.');
         }
     },
-
+    update: async (id, data) => {
+        try {
+            const { albumName, description } = data;
+            const query = 'UPDATE album SET albumName = ?, description = ? WHERE id = ?';
+            const [result] = await db.query(query, [albumName, description, id]);
+            return result.affectedRows;
+        } catch (error) {
+            console.error('Error updating album:', error);
+            throw new Error('Failed to update album');
+        }
+    },
     delete: async (imgId) => {
         try {
             const query = 'DELETE FROM images WHERE id = ?';

@@ -57,7 +57,7 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
                     <Button icon={<i className="fa-solid fa-ellipsis-vertical"></i>} onClick={() => setShowMenuItems(!showMenuItems)}>
                         {showMenuItems &&
                             <div className={cx('menu-items')}>
-                                <Button to='/user' four>Information</Button>
+                                <Button to='/user' four>Settings</Button>
                                 <Button four onClick={handleOnlickLogout}>Logout</Button>
                             </div>
                         }

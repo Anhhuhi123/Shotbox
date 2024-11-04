@@ -41,6 +41,23 @@ class AlbumController {
         }
     }
 
+    // Update
+    async updateAlbum(req, res) {
+        try {
+            const id = req.params.id;
+            const data = req.body;
+            const affectedRows = await Album.update(id, data);
+            if (affectedRows === 0) {
+                return res.status(404).json({ message: 'Album not found or no changes made' });
+            }
+            return res.status(200).json({ message: 'Album updated successfully' });
+        } catch (error) {
+            console.error('Error updating album:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+
+
     // Delete
     async deleteAlbum(req, res) {
 

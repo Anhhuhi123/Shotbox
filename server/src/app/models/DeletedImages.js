@@ -12,7 +12,7 @@ const DeletedImages = {
                 VALUES ( ?, ?, ?, ?, ?, ?, ?)
             `;
             const [result] = await db.query(query, [url, fileName, fileSize, fileWidth, fileHeight, fileFormat, userId]);
-            
+
             // Kiểm tra ảnh đã được thêm thành công
             if (result.affectedRows > 0) {
                 console.log("Deleted image inserted successfully.");
@@ -20,10 +20,10 @@ const DeletedImages = {
                 console.error("Failed to insert deleted image.");
             }
 
-            const queryy = 'SELECT * FROM Deleted_Images';
-            const [ketqua] = await db.query(queryy);
-            console.log(ketqua); // Hiển thị tất cả ảnh hiện có trong bảng
-            
+            // const queryy = 'SELECT * FROM Deleted_Images';
+            // const [ketqua] = await db.query(queryy);
+            // console.log(ketqua); // Hiển thị tất cả ảnh hiện có trong bảng
+
             return result.insertId;
         } catch (error) {
             console.error("Error inserting deleted image:", error);

@@ -26,6 +26,15 @@ export const createAlbum = async (value) => {
         throw error;
     }
 }
+export const updateAlbum = async (idAlbum, value) => {
+    try {
+        const res = await request.put(`/album/${idAlbum}`, value);
+        return res;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
 export const deleteAlbum = async (imgId) => {
     try {
         const res = await request.deleteRequest(`/album/${imgId}`);

@@ -9,6 +9,8 @@ router.get('/', AlbumController.getAllAlbums);
 
 router.post('/', AlbumController.postAlbums);
 
+router.put('/:id', AlbumController.updateAlbums);
+
 router.delete('/:id', AlbumController.deleteAlbums);
 
 export default router;

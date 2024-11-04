@@ -12,6 +12,32 @@ class AlbumController {
         await Albums.create(req.body);
         return res.status(201).json({ data: 'Success' });
     }
+    async updateAlbums(req, res)
+    {
+        try {
+            const idAlbum = req.params.id;
+            const { albumName, description } = req.body; // Dữ liệu cập nhật
+                
+            
+            const updatedAlbum = await Albums.update({ id: idAlbum, albumName, description});
+
+            if (updatedAlbum) {
+                return res.status(200).json({
+                    message: 'User updated successfully',
+                    data: updatedAlbum
+                });
+            } else {
+                return res.status(404).json({
+                    message: 'User not found'
+                });
+            }
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Error updating albums',
+                error: error.message
+            });
+        }
+    }
     // Delete
     async deleteAlbums(req, res) {
         const id = req.params.id;

@@ -116,6 +116,18 @@ function AlbumDetail() {
         setAlbumName(album.albumName);
         setDescription(album.description);
     };
+    const handleDeleteAlbum = (e) => {
+        const deleteAlbum = async () => {
+            const id = album.id;
+            try {
+                const res = await AlbumService.deleteAlbum(id);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        deleteAlbum();
+        window.location.href = "/album"
+    }
 
     const MenuItems = [
         {
@@ -196,7 +208,7 @@ function AlbumDetail() {
                         <p>Do you want to delete this album?</p>
                         <div className={cx('modal-buttons')}>
                             <button onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
-                            <button onClick={(e) => { console.log('aaas') }}>Delete</button>
+                            <button onClick={(e) => handleDeleteAlbum(e)}>Delete</button>
                         </div>
                     </div>
                 </div>

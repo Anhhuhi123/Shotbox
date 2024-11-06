@@ -24,6 +24,16 @@ const AlbumImages = {
             throw new Error("Unable to retrieve images. Please try again later.");
         }
     },
+    findByIdAlbum: async (albumId) => {
+        const query = 'SELECT * FROM  album_images WHERE albumId = ?';
+        const [rows] = await db.query(
+            query, [albumId]
+        );
+        if (rows.length > 0) {
+            return rows[0];
+        }
+        return null;
+    },
     create: async (albumId, imageId) => {
         try {
             const query = 'INSERT INTO album_images (albumId, imageId) VALUES (?, ?)';
@@ -53,19 +63,18 @@ const AlbumImages = {
             console.error("Error deleting image:", error);
             throw new Error("Failed to delete image. Please try again.");
         }
+    },
+    deleteByAlbumId: async (albumId) => {
+
+        const deleteAlbumQuery = 'DELETE FROM album_images WHERE albumId  = ?';
+        try {
+            const [result] = await db.query(deleteAlbumQuery, [albumId]);
+            return result.affectedRows; // Trả về số lượng bản ghi đã bị xóa (nếu thành công là 1)
+        } catch (error) {
+            console.error("Lỗi khi xóa album :", error);
+            throw error;
+        }
     }
-    // delete: async (albumImgId) => {
-    //     try {
-    //         const query = 'DELETE FROM album_images WHERE id = ?';
-    //         const [result] = await db.query(query, [albumImgId]);
-    //         return result.affectedRows;
-    //     } catch (error) {
-    //         console.error("Error deleting image:", error);
-    //         throw new Error("Failed to delete image. Please try again.");
-    //     }
-    // }
-
-
 }
 
 export default AlbumImages;

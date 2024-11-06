@@ -6,6 +6,8 @@ import Home from '../pages/Home'
 import Images from '../pages/Images'
 import User from '../pages/User'
 import Webcam from '../pages/Webcam'
+import DeletedImages from '../pages/DeletedImages'
+
 
 const routes = [
     {
@@ -45,6 +47,12 @@ const routes = [
         isPrivate: true
 
     },
+    {
+        path: '/deleted/images',
+        component: DeletedImages,
+        isPrivate: true
+    },
+
     {
         path: '/album/:id',
         component: AlbumDetail,

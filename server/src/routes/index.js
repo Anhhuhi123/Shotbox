@@ -5,6 +5,7 @@ import imagesRouter from './images.js'
 import userRouter from './user.js'
 import albumRouter from './album.js'
 import albumImagesRouter from './albumImages.js'
+import deletedImagesRouter from './deletedImages.js'
 
 
 function routes(app) {
@@ -14,7 +15,7 @@ function routes(app) {
     app.use('/user', userRouter)
     app.use('/album', albumRouter)
     app.use('/album/images', albumImagesRouter)
-
+    app.use('/deleted/images', deletedImagesRouter)
 
 }
 export default routes;

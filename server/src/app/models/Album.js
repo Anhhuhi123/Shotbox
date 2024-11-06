@@ -44,10 +44,10 @@ const Album = {
             throw new Error('Failed to update album');
         }
     },
-    delete: async (imgId) => {
+    delete: async (id) => {
         try {
-            const query = 'DELETE FROM images WHERE id = ?';
-            const [result] = await db.query(query, [imgId]);
+            const query = 'DELETE FROM album WHERE id = ?';
+            const [result] = await db.query(query, [id]);
             return result.affectedRows;
         } catch (error) {
             console.error("Error deleting image:", error);

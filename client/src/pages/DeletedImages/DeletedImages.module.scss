@@ -1,0 +1,37 @@
+.img {
+    height: 200px;
+}
+
+.wrapper {
+    background-color: white;
+    padding: 8px 8px 15px 8px;
+    margin-right: 10px;
+    // margin-top: 10px;
+    position: relative;
+}
+
+.demo {
+    display: flex;
+    flex-wrap: wrap;
+    user-select: none;
+}
+
+.menu-items {
+    display: flex;
+    flex-direction: column;
+    position: absolute; /* Thay đổi ở đây */
+    background-color: white; /* Màu nền để menu rõ ràng */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Đổ bóng cho menu */
+    z-index: 1;
+
+}
+
+.test {
+    position: relative;
+    cursor: pointer;
+}
+.hope{
+    position:absolute;
+    bottom: 0;
+    right: 20;
+}

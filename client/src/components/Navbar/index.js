@@ -58,6 +58,7 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
                         {showMenuItems &&
                             <div className={cx('menu-items')}>
                                 <Button to='/user' four>Settings</Button>
+                                <Button to='/deleted/images' four>Recycle Bin</Button>
                                 <Button four onClick={handleOnlickLogout}>Logout</Button>
                             </div>
                         }

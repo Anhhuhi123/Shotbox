@@ -60,7 +60,23 @@ class AlbumController {
 
     // Delete
     async deleteAlbum(req, res) {
+        const id = req.params.id;
+        try {
+            const idAlbumExists = await AlbumImage.findByIdAlbum(id);
+            if (idAlbumExists) {
+                await AlbumImage.deleteByAlbumId(id);
+            }
+            const result = await Album.delete(id);
 
+            if (result) {
+                return res.status(200).json({ message: `Album với ID ${id} đã được xóa` });
+            } else {
+                return res.status(404).json({ message: 'Album không tìm thấy' });
+            }
+        } catch (error) {
+            console.error("Lỗi khi xóa album:", error);
+            return res.status(500).json({ error: 'Lỗi khi xóa album' });
+        }
     }
 }
 

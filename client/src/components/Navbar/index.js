@@ -1,4 +1,5 @@
-import { useState } from 'react'
+// import { useState } from 'react'
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames/bind'
@@ -7,14 +8,34 @@ import { showUpload } from '../../redux/actions/upload'
 import { authLogout } from '../../redux/actions/auth'
 import Upload from '../Upload'
 import Button from '../Button'
+import * as userService from '../../services/userService.js'
 import { jwtDecode } from "jwt-decode";
 const cx = classnames.bind(styles)
 function NavBar({ mainLayout, defaultLayout, href, children }) {
     const [showMenuItems, setShowMenuItems] = useState(false)
     const dispatch = useDispatch();
-    if (localStorage.getItem('authToken')) {
-        var user = jwtDecode(localStorage.getItem('authToken'));
-    }
+    // if (localStorage.getItem('authToken')) {
+    //     var user = jwtDecode(localStorage.getItem('authToken'));
+    // }
+    const [user, setUser] = useState({
+        name: "",
+        email: "",
+
+    });
+    useEffect(() => {
+        const fetchApi = async () => {
+            try {
+                const res = await userService.getUser();
+                setUser({
+                    name: res.name,
+                    email: res.email,
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchApi();
+    }, [])
     const handleOnclick = (e) => {
         const action = showUpload(true);
         dispatch(action)
@@ -50,7 +71,7 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
                 </div >
 
                 <div className={cx('actions')} >
-                    <Button to='/user'>{user ? user.username : ""}</Button>
+                    <Button to='/user'>{user ? user.name : ""}</Button>
                 </div >
 
                 <div className={cx('actions')} >

@@ -59,16 +59,20 @@ const User = {
     update: async (userId, data) => {
         try {
             const { name, email, password, roleId } = data;
+            // const query = `
+            //     UPDATE users 
+            //     SET name = ?, email = ?, password = COALESCE(?, password), roleId = ?
+            //     WHERE id = ?
+            // `;
             const query = `
-                UPDATE users 
-                SET name = ?, email = ?, password = COALESCE(?, password), roleId = ?
-                WHERE id = ?
-            `;
+            UPDATE users 
+            SET  email = ?, password = ? WHERE id = ?
+             `;
             const [result] = await db.query(query, [
-                name, 
-                email, 
+                // name, 
+                email,
                 password,  // Sử dụng mật khẩu đã mã hóa (hoặc giữ nguyên nếu không có mật khẩu mới)
-                roleId, 
+                // roleId, 
                 userId
             ]);
 

@@ -2,28 +2,43 @@ import classNames from 'classnames/bind';
 import styles from './User.module.scss';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { jwtDecode } from "jwt-decode";
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-
+import * as userService from '../../services/userService.js'
 
 const cx = classNames.bind(styles);
 
 function User() {
-    if (localStorage.getItem('authToken')) {
-        var user = jwtDecode(localStorage.getItem('authToken'));
-    }
+    const [user, setUser] = useState({
+        name: "",
+        email: "",
+
+    });
+    useEffect(() => {
+        const fetchApi = async () => {
+            try {
+
+                const res = await userService.getUser();
+                setUser({
+                    name: res.name,
+                    email: res.email,
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchApi();
+    }, [])
     const [isChangeEmailOpen, setIsChangeEmailOpen] = useState(false);
     const [hideButtonChange, setHideButtonChange] = useState(true);
     const validationSchema = Yup.object({
-        new_email: Yup.string()
-            .email('Invalid email address')
-            .required('Required'),
         current_password: Yup.string().required('Required'),
         new_password: Yup.string()
             .required('Required')
-            .min(5, 'Must be at least 5 characters'),
+            .min(5, 'Must be at least 5 characters')
+            .notOneOf([Yup.ref('current_password')], 'New password must be different from current password'), // Ensure new_password is different
         password_confirmation: Yup.string()
             .oneOf([Yup.ref('new_password'), null], 'Passwords must match')
             .required('Required')
@@ -31,15 +46,28 @@ function User() {
 
     const formik = useFormik({
         initialValues: {
-            new_email: '',
             current_password: '',
             new_password: '',
             password_confirmation: '',
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log(values);
+            const data = {
+                currentPassword: values.current_password,
+                newPassword: values.new_password,
+            }
+            const fetchApi = async () => {
+                try {
+                    const res = await userService.updatePassword(data);
+                    alert(res.message);
+                    window.location.reload();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            fetchApi();
         }
+
     });
 
 
@@ -57,6 +85,19 @@ function User() {
         validationSchema: validationSchema1,
         onSubmit: (values) => {
             console.log(values);
+            const data = {
+                newEmail: values.new_email,
+            }
+            const fetchApi = async () => {
+                try {
+                    const res = await userService.updateEmail(data);
+                    alert(res.message);
+                    window.location.reload();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            fetchApi();
         }
     });
 
@@ -71,7 +112,6 @@ function User() {
                 <h2>Email Address</h2>
                 <div className={cx('block-email')}>
                     <p>{"Your email address is "}
-                        {/* <strong>nguyenquoctien2401@gmail.com</strong> */}
                         <strong>{user.email}</strong>
 
                     </p>

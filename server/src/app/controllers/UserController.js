@@ -16,7 +16,19 @@ class UserController {
 
     // GET thông tin người dùng hiện tại
     async getUser(req, res) {
-        return res.status(200).json(req.user);
+        try {
+            const { id } = req.user;
+            const userExists = await User.findById(id)
+
+            if (!userExists) {
+                return res.status(404).json({ error: 'User not found.' });
+            }
+
+            res.status(200).json({ name: userExists.name, email: userExists.email }); // Return only name and email
+        } catch (error) {
+            console.error("Error in getUser:", error);
+            res.status(500).json({ error: 'An error occurred while fetching the user.' });
+        }
     }
 
     // GET thông tin người dùng theo ID
@@ -37,13 +49,15 @@ class UserController {
     }
 
     // PUT để cập nhật thông tin người dùng
-    async updateUser(req, res) {
+    async updateUserPassword(req, res) {
         try {
-            const userId = req.params.id;
-            const { currentPassword, newPassword, name, email, roleId } = req.body;
+            // const userId = req.params.id;
+            const { id, name, email } = req.user;
+            // const { currentPassword, newPassword, name, email, roleId } = req.body;
+            const { currentPassword, newPassword } = req.body;
 
             // Tìm người dùng trong cơ sở dữ liệu
-            const userExists = await User.findById(userId);
+            const userExists = await User.findById(id);
             if (!userExists) {
                 return res.status(404).json({ error: 'User not found.' });
             }
@@ -62,16 +76,50 @@ class UserController {
 
             // Chuẩn bị dữ liệu cập nhật
             const updatedData = {
-                name: name || userExists.name, // Giữ giá trị cũ nếu không có giá trị mới
+                // name: name || userExists.name, // Giữ giá trị cũ nếu không có giá trị mới
                 email: email || userExists.email,
                 password: hashedPassword,
-                roleId: roleId || userExists.roleId,
+                // roleId: roleId || userExists.roleId,
             };
 
             // Cập nhật thông tin người dùng
-            const updated = await User.update(userId, updatedData);
+            const updated = await User.update(id, updatedData);
             if (updated) {
-                return res.status(200).json({ message: 'User updated successfully.' });
+                return res.status(200).json({ message: 'Password updated successfully.' });
+            }
+
+            return res.status(500).json({ error: 'Failed to update user.' });
+        } catch (error) {
+            console.error("Error in updateUser:", error);
+            res.status(500).json({ error: 'An error occurred while updating the user.' });
+        }
+    }
+
+    async updateUserEmail(req, res) {
+        try {
+            const { id, name, email } = req.user;
+
+            const { newEmail } = req.body;
+
+            // Tìm người dùng trong cơ sở dữ liệu
+            const userExists = await User.findById(id);
+            if (!userExists) {
+                return res.status(404).json({ error: 'User not found.' });
+            }
+
+            const userPassword = userExists.password; // Giữ mật khẩu cũ nếu không có mật khẩu mới
+
+            // Chuẩn bị dữ liệu cập nhật
+            const updatedData = {
+                email: newEmail,
+                password: userPassword,
+                // roleId: roleId || userExists.roleId,
+            };
+
+            // Cập nhật thông tin người dùng
+            const updated = await User.update(id, updatedData);
+            if (updated) {
+                return res.status(200).json({ message: 'Email updated successfully.' });
             }
 
             return res.status(500).json({ error: 'Failed to update user.' });

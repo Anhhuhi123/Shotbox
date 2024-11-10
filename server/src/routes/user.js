@@ -10,7 +10,9 @@ router.get('/:id', UserController.getUserById);
 
 router.get('/', UserController.getAllUser)
 
-router.put('/:id', UserController.updateUser);
+router.put('/password', UserController.updateUserPassword);
+
+router.put('/email', UserController.updateUserEmail);
 
 router.delete('/:id', UserController.deleteUser);
 

@@ -57,8 +57,18 @@ function DeletedImages() {
         }
         restoreImg();
     }
-    const handleDeleteImg = (obj, e) => {
-
+    const handleDeleteImg = (objDeletedImage, e) => {
+        const id = objDeletedImage.id;
+        const removeImg = async () => {
+            try {
+                const res = await deletedImgService.removeDeletedImage(id);
+                alert(res.message);
+                window.location.reload();
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        removeImg();
     }
     const MenuItems = [
         {

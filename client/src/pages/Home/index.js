@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as ImageService from '../../services/imageService';
+import * as DeletedImgService from '../../services/deletedImgService';
 import classNames from 'classnames/bind';
 import styles from './Home.module.scss';
 const cx = classNames.bind(styles);
@@ -65,7 +66,7 @@ function Home() {
                 listImagesRef.current.style.transition = "none";
                 listImagesRef.current.style.transform = `translateX(0px)`;
                 setTimeout(() => {
-                    listImagesRef.current.style.transition = "0.5s ease-in-out 0.2s";
+                    // listImagesRef.current.style.transition = "0.5s ease-in-out 0.2s";
                     setCurrentIndex(1); // Đặt lại chỉ số về 0
                 }, 2000);
             } else {
@@ -84,8 +85,11 @@ function Home() {
     useEffect(() => {
         const getImages = async () => {
             try {
-                const res = await ImageService.showAllImages();
-                const totalSize = res.data.reduce((sum, obj) => sum + obj.fileSize, 0);
+                const res1 = await ImageService.showAllImages();
+                const totalSize1 = res1.data.reduce((sum, obj) => sum + obj.fileSize, 0);
+                const res2 = await DeletedImgService.showDeletedImages();
+                const totalSize2 = res2.data.reduce((sum, obj) => sum + obj.fileSize, 0);
+                const totalSize = totalSize1 + totalSize2;
                 const storage = 1 * 1024;
                 setCapacity({
                     used: totalSize,

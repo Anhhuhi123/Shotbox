@@ -47,6 +47,24 @@ class UserController {
             res.status(500).json({ error: 'An error occurred while fetching the user.' });
         }
     }
+    // GET thông tin người dùng theo name
+    async findUserByUsername(req, res) {
+        // console.log(username);
+        try {
+            const username = req.query.search;
+            const user = await User.findByUsername(username);
+
+            if (!user) {
+                return res.status(404).json({ error: 'User not found.' });
+            }
+
+            return res.status(200).json({ name: user.name, email: user.email });
+        } catch (error) {
+            console.error("Error in getUserById:", error);
+            res.status(500).json({ error: 'An error occurred while fetching the user.' });
+        }
+    }
+
 
     // PUT để cập nhật thông tin người dùng
     async updateUserPassword(req, res) {

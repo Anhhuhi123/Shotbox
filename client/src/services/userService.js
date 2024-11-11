@@ -9,6 +9,21 @@ export const getUser = async () => {
         throw error;
     }
 }
+
+export const getUserByUsername = async (username) => {
+    try {
+        const res = await request.get('/user/username', {
+            params: {
+                search: username
+            }
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 export const updatePassword = async (value) => {
     try {
         const res = await request.put(`/user/password`, value);

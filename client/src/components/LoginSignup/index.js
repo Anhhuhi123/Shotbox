@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux'
 import { useFormik } from 'formik';
+import { Link } from 'react-router-dom'
 import * as Yup from 'yup';
 import classNames from "classnames/bind";
 import Tippy from '@tippyjs/react';
@@ -115,7 +116,7 @@ function LoginSigup() {
                 </div>
 
                 <div className={cx("forgot")}>
-                    <a href="/">Forgot password?</a>
+                    <Link to="./identify">Forgot password?</Link>
                 </div>
 
                 <button className={cx("btn-signup")} type='button' onClick={handleOnclick}>Create new account</button>

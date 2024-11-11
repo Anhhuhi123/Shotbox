@@ -7,7 +7,7 @@ import Images from '../pages/Images'
 import User from '../pages/User'
 import Webcam from '../pages/Webcam'
 import DeletedImages from '../pages/DeletedImages'
-
+import ForgotPassword from '../pages/ForgotPassword'
 
 const routes = [
     {
@@ -19,6 +19,12 @@ const routes = [
     {
         path: '/login',
         component: LoginSignup,
+        layout: null,
+        isPrivate: false
+    },
+    {
+        path: '/login/identify',
+        component: ForgotPassword,
         layout: null,
         isPrivate: false
     },
@@ -64,7 +70,6 @@ const routes = [
         component: User,
         isPrivate: true
     },
-
     {
         path: '/admin',
         component: Album,

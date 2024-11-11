@@ -2,6 +2,9 @@ import express from 'express';
 import UserController from '../app/controllers/UserController.js'
 import auth from "../middleware/auth.js";
 const router = express.Router();
+
+router.get('/username', UserController.findUserByUsername);
+
 router.all("*", auth);
 
 router.get('/account', UserController.getUser);

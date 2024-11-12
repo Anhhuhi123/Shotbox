@@ -11,11 +11,11 @@ const auth = (req, res, next) => {
         next();
     } else {
         if (req.headers && req.headers.authorization) {
-
+            // console.log(req.headers.authorization);
             const accessToken = req.headers.authorization.split(' ')[1];
             try {
                 const decode = jwt.verify(accessToken, process.env.JWT_SECRET);
-                // console.log('check token: ', decode);
+                console.log('check token: ', decode);
                 req.user = {
                     id: decode.id,
                     name: decode.username,

@@ -33,6 +33,16 @@ const Album = {
             throw new Error('Unable to insert album into the database.');
         }
     },
+    isAlbumNameExists: async (albumName, userId) => {
+        try {
+            const query = 'SELECT COUNT(*) AS count FROM album WHERE albumName = ? AND userId = ?';
+            const [rows] = await db.query(query, [albumName, userId]);
+            return rows[0].count > 0; // Trả về true nếu có ít nhất 1 album trùng tên
+        } catch (error) {
+            console.error("Error checking album name:", error);
+            throw new Error("Unable to check album name.");
+        }
+    },
     update: async (id, data) => {
         try {
             const { albumName, description } = data;

@@ -11,7 +11,7 @@ function Webcam() {
     const [capturedImage, setCapturedImage] = useState(null);
     // console.log(capturedImage)
     const handleAddImages = async () => {
-        const CLOUD_NAME = 'djfgf1byn';
+        const CLOUD_NAME = 'dt3gvugaf';
         const PRESET_NAME = 'demo-upload';
         const FOLDER_NAME = 'Demo';
         const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
@@ -27,7 +27,7 @@ function Webcam() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log(response.data.secure_url); // Hiển thị thông tin phản hồi từ Cloudinary
+          //  console.log(response.data.secure_url); // Hiển thị thông tin phản hồi từ Cloudinary
 
 
             // const res = await axios.post('http://localhost:8080/images', {
@@ -38,7 +38,7 @@ function Webcam() {
             })
             alert(res.data)
         } catch (error) {
-            console.error('Upload failed:', error);
+          //  console.error('Upload failed:', error);
         }
     };
 

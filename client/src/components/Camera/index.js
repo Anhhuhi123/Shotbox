@@ -38,7 +38,7 @@ function Camera({ setCapturedImage }) {
                             first
                             onClick={() => {
                                 const imageSrc = getScreenshot({ width: 700, height: 400 });
-                                console.log(imageSrc)
+                                // console.log(imageSrc)
                                 if (imageSrc) {
                                     // Chuyển đổi Base64 thành Blob
                                     const blob = base64ToBlob(imageSrc);

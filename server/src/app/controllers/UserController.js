@@ -83,7 +83,8 @@ class UserController {
     async updateUserPassword(req, res) {
         try {
             // const userId = req.params.id;
-            const { id, name, email } = req.user;
+            // const { id, name, email } = req.user;
+            const {id} = req.user;
             // const { currentPassword, newPassword, name, email, roleId } = req.body;
             const { currentPassword, newPassword } = req.body;
 
@@ -108,7 +109,7 @@ class UserController {
             // Chuẩn bị dữ liệu cập nhật
             const updatedData = {
                 // name: name || userExists.name, // Giữ giá trị cũ nếu không có giá trị mới
-                email: email || userExists.email,
+                email: userExists.email,
                 password: hashedPassword,
                 // roleId: roleId || userExists.roleId,
             };

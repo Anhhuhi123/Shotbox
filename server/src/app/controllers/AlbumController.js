@@ -43,21 +43,9 @@ class AlbumController {
     async postAlbum(req, res) {
         try {
             const data = req.body;
-<<<<<<< HEAD
-            // console.log(data);
             const albumName = data.albumName;
-            // console.log(data);
             const { id, name, email } = req.user;
             const existsNameAlbum = await Album.isAlbumNameExists(albumName, id);
-
-=======
-            console.log(data);
-            const albumName = data.albumName; 
-            console.log(data);
-            const { id, name, email } = req.user;
-            const existsNameAlbum = await Album.isAlbumNameExists(albumName, id);
-            
->>>>>>> 1899b96d6f4f5691abb271122b031b7421696dab
             if (!existsNameAlbum) {
                 await Album.create(data, id);
                 return res.status(201).json({ data: 'Create album successfully' });

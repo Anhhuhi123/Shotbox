@@ -32,6 +32,15 @@
     user-select: none;
 
 }
+.option{
+    // margin-right: 10px;
+    // margin-left: 10px;
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+    padding: 10px;
+
+}
 .fix-toolbar{
     display: flex;
     align-items: center;
@@ -43,7 +52,7 @@
     width: 120px;
     background-color: black;
     top:35px;
-    right: 0;   
+    right: 10px;   
    
 
 }

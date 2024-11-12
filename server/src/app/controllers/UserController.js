@@ -13,7 +13,20 @@ class UserController {
             data: users
         });
     }
+    async getRoleId(req, res) {
+        try {
+            const { id } = req.user;
+            const userExists = await User.findById(id)
 
+            if (!userExists) {
+                return res.status(404).json({ error: 'User not found.' });
+            }
+            res.status(200).json({ roleId: userExists.roleId }); // Return only name and email
+        } catch (error) {
+            console.error("Error in getUser:", error);
+            res.status(500).json({ error: 'An error occurred while fetching the user.' });
+        }
+    }
     // GET thông tin người dùng hiện tại
     async getUser(req, res) {
         try {
@@ -24,7 +37,7 @@ class UserController {
                 return res.status(404).json({ error: 'User not found.' });
             }
 
-            res.status(200).json({ name: userExists.name, email: userExists.email }); // Return only name and email
+            res.status(200).json({ id: userExists.id, name: userExists.name, email: userExists.email }); // Return only name and email
         } catch (error) {
             console.error("Error in getUser:", error);
             res.status(500).json({ error: 'An error occurred while fetching the user.' });

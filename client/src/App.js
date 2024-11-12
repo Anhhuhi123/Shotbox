@@ -17,8 +17,8 @@ function App() {
     const fetchData = async () => {
       if (isAuthenticated) {
         try {
-          const res = await userService.getUser();
-          dispatch(authAccount(res));
+          const res = await userService.getRoleId();
+          dispatch(authAccount(res.roleId));
         } catch (error) {
           console.error(error);
         }

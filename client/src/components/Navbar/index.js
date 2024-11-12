@@ -1,27 +1,25 @@
-// import { useState } from 'react'
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
-import classnames from 'classnames/bind'
-import styles from './Navbar.module.scss'
-import { showUpload } from '../../redux/actions/upload'
-import { authLogout } from '../../redux/actions/auth'
-import Upload from '../Upload'
-import Button from '../Button'
-import * as userService from '../../services/userService.js'
-import { jwtDecode } from "jwt-decode";
-const cx = classnames.bind(styles)
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import classnames from 'classnames/bind';
+import styles from './Navbar.module.scss';
+import { showUpload } from '../../redux/actions/upload';
+import { authLogout } from '../../redux/actions/auth';
+import Button from '../Button';
+import * as userService from '../../services/userService.js';
+
+const cx = classnames.bind(styles);
+
 function NavBar({ mainLayout, defaultLayout, href, children }) {
-    const [showMenuItems, setShowMenuItems] = useState(false)
+    const [showMenuItems, setShowMenuItems] = useState(false);
+    const menuRef = useRef(null); // Ref to track the menu element
     const dispatch = useDispatch();
-    // if (localStorage.getItem('authToken')) {
-    //     var user = jwtDecode(localStorage.getItem('authToken'));
-    // }
+
     const [user, setUser] = useState({
         name: "",
         email: "",
-
     });
+
     useEffect(() => {
         const fetchApi = async () => {
             try {
@@ -29,68 +27,82 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
                 setUser({
                     name: res.name,
                     email: res.email,
-                })
+                });
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
+        };
+        if (localStorage.getItem('authToken')) {
+            fetchApi();
         }
-        fetchApi();
-    }, [])
+    }, []);
+
     const handleOnclick = (e) => {
         const action = showUpload(true);
-        dispatch(action)
-    }
+        dispatch(action);
+    };
+
     const handleOnlickLogout = (e) => {
         dispatch(authLogout());
-    }
+    };
 
-    const props = {
-        to: href,
-    }
-
-    return <div className={cx('wrapper')}>
-        <Link className={cx('logo')} {...props}></Link>
-
-        {children}
-
-        {mainLayout &&
-            <div className={cx('actions')} >
-                <Button first to='/login'>Log In</Button>
-            </div >
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setShowMenuItems(false);
+            }
+        };
+        if (showMenuItems) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
         }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showMenuItems]);
 
-        {defaultLayout &&
-            <div className={cx('fix-toolbar')}>
-                <div className={cx('actions')} >
-                    <Button second onClick={handleOnclick}>UPLOAD</Button>
 
-                </div >
+    return (
+        <div className={cx('wrapper')}>
+            <Link className={cx('logo')} to="../home"></Link>
+            {children}
 
-                <div className={cx('actions')} >
-                    <Button icon={<i className="fa-regular fa-user"></i>}></Button>
-                </div >
+            {mainLayout && (
+                <div className={cx('actions')}>
+                    <Button first to='/login'>Log In</Button>
+                </div>
+            )}
 
-                <div className={cx('actions')} >
-                    <Button to='/user'>{user ? user.name : ""}</Button>
-                </div >
+            {defaultLayout && (
+                <div className={cx('fix-toolbar')}>
+                    <div className={cx('actions')}>
+                        <Button second onClick={handleOnclick}>UPLOAD</Button>
+                    </div>
 
-                <div className={cx('actions')} >
-                    <Button icon={<i className="fa-solid fa-ellipsis-vertical"></i>} onClick={() => setShowMenuItems(!showMenuItems)}>
-                        {showMenuItems &&
+                    <div className={cx('actions')}>
+                        <Button icon={<i className="fa-regular fa-user"></i>}></Button>
+                    </div>
+
+                    <div className={cx('actions')}>
+                        <Button to='/user'>{user ? user.name : ""}</Button>
+                    </div>
+
+                    <div className={cx('option')} ref={menuRef} onClick={() => setShowMenuItems(!showMenuItems)}>
+                        <i className="fa-solid fa-ellipsis-vertical" ></i>
+                        {showMenuItems && (
                             <div className={cx('menu-items')}>
                                 <Button to='/user' four>Settings</Button>
                                 <Button to='/deleted/images' four>Recycle Bin</Button>
                                 <Button four onClick={handleOnlickLogout}>Logout</Button>
                             </div>
-                        }
-                    </Button>
-                </div >
-
-            </div>
-        }
-
-
-    </div >
+                        )}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default NavBar;

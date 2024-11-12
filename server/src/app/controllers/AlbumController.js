@@ -28,15 +28,35 @@ class AlbumController {
     }
 
     // Post localhost/album/
+    // async postAlbum(req, res) {
+    //     try {
+    //         const data = req.body;
+    //         const { id, name, email } = req.user;
+
+    //         await Album.create(data, id);
+    //         return res.status(201).json({ data: 'Create ablum successfully' });
+    //     } catch (error) {
+    //         console.error('Error uploading image:', error); // Log lỗi chi tiết
+    //         return res.status(500).json({ error: 'Internal Server Error' });
+    //     }
+    // }
     async postAlbum(req, res) {
         try {
             const data = req.body;
+            // console.log(data);
+            const albumName = data.albumName;
+            // console.log(data);
             const { id, name, email } = req.user;
+            const existsNameAlbum = await Album.isAlbumNameExists(albumName, id);
 
-            await Album.create(data, id);
-            return res.status(201).json({ data: 'Create ablum successfully' });
+            if (!existsNameAlbum) {
+                await Album.create(data, id);
+                return res.status(201).json({ data: 'Create album successfully' });
+            } else {
+                return res.status(409).json({ error: 'Album name already exists' });
+            }
         } catch (error) {
-            console.error('Error uploading image:', error); // Log lỗi chi tiết
+            console.error('Error uploading album:', error); // Log lỗi chi tiết
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     }

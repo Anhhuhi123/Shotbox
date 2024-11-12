@@ -20,6 +20,16 @@ const Album = {
             throw new Error("Unable to fetch images.");
         }
     },
+    isAlbumNameExists: async (albumName, userId) => {
+        try {
+            const query = 'SELECT COUNT(*) AS count FROM album WHERE albumName = ? AND userId = ?';
+            const [rows] = await db.query(query, [albumName, userId]);
+            return rows[0].count > 0; // Trả về true nếu có ít nhất 1 album trùng tên
+        } catch (error) {
+            console.error("Error checking album name:", error);
+            throw new Error("Unable to check album name.");
+        }
+    },
     create: async (data, userId) => {
         const albumName = data.albumName;
         const description = data.description;
@@ -53,7 +63,7 @@ const Album = {
             console.error("Error deleting image:", error);
             throw new Error("Failed to delete image. Please try again.");
         }
-    }
+    },
 
 }
 

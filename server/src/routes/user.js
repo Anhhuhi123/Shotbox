@@ -7,6 +7,8 @@ router.get('/username', UserController.findUserByUsername);
 
 router.all("*", auth);
 
+router.get('/roleId', UserController.getRoleId);
+
 router.get('/account', UserController.getUser);
 
 router.get('/:id', UserController.getUserById);

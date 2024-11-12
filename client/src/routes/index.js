@@ -8,6 +8,8 @@ import User from '../pages/User'
 import Webcam from '../pages/Webcam'
 import DeletedImages from '../pages/DeletedImages'
 import ForgotPassword from '../pages/ForgotPassword'
+import Manager from '../pages/Manager'
+
 
 const routes = [
     {
@@ -71,8 +73,8 @@ const routes = [
         isPrivate: true
     },
     {
-        path: '/admin',
-        component: Album,
+        path: '/manager',
+        component: Manager,
         isPrivate: true,
         permission: true,
     },

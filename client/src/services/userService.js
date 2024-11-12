@@ -10,6 +10,16 @@ export const getUser = async () => {
     }
 }
 
+export const getRoleId = async () => {
+    try {
+        const res = await request.get('/user/roleId');
+        return res;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 export const getUserByUsername = async (username) => {
     try {
         const res = await request.get('/user/username', {

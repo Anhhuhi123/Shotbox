@@ -135,6 +135,8 @@ function Images() {
 
     return (
         <div className={cx('demo')}>
+
+
             {img.map((obj, index) => (
                 <div key={index} className={cx('wrapper')}>
                     <img
@@ -153,6 +155,8 @@ function Images() {
                     </div>
                 </div>
             ))}
+
+
         </div>
     );
 }

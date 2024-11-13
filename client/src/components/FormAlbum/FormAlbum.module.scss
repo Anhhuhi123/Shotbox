@@ -9,6 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2;
 }
 
 // Hộp form
@@ -24,6 +25,28 @@
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     transform: translateY(-20%);
 }
+@media only screen and (max-width: 550px) {
+    .form {
+        min-width: 400px;
+
+    }
+   
+ }
+ 
+ @media only screen and (max-width: 500px) {
+    .form {
+        min-width: 350px;
+
+    }
+   
+ }
+ @media only screen and (max-width: 400px) {
+    .form {
+        min-width: 300px;
+
+    }
+   
+ }
 
 // Tiêu đề
 .form h2 {

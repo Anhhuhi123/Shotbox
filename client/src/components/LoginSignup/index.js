@@ -62,7 +62,7 @@ function LoginSigup() {
 
     // login
 
-    return (<div className={cx('wrapper')}>
+    return (<div className={cx('wrapper1')}>
 
         <div className="block__intro">
             <div className="block__messege">  <h1 style={{ color: 'black' }}>WELCOME TO WEBSITE</h1></div>

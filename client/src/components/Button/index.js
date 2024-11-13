@@ -30,8 +30,8 @@ function Button({ to, href, first, second, third, four, five, children, classNam
     });
     return (
         <Comp className={classes} {...props}>
-            {icon && <span>{icon}</span>}
-            <span>{children}</span>
+            {icon && <span className={cx('icon')}>{icon}</span>}
+            <span className={cx('text')}>{children}</span>
         </Comp>
     )
 }

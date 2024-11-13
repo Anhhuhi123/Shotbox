@@ -1,53 +1,92 @@
-.wrapper{
+.wrapper {
     position: fixed;
-    background-color:rgba(150, 148, 148, 0.8);
+    background-color: rgba(150, 148, 148, 0.8);
     bottom: 0;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1;
+    z-index: 2;
 }
-.upload{
-    position: fixed;    
+
+.upload {
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     left: 50%;
-    top: 50px;
-    min-width: 450px;
-    height: 150px;
+    top: -220px; /* Ban đầu phần tử sẽ ở ngoài màn hình (phía trên) */
+    height: 220px;
+    width: 80%;
+    max-width: 500px;
     transform: translateX(-50%);
-    background-color: #efefef;  
-    padding: 30px 20px;
-
+    background-color: #efefef;
+    padding: 10px 30px;
+    transition: top 0.5s ease-out; /* Hiệu ứng chuyển động mượt mà khi thay đổi top */
 }
 
-.wrapper-button{
-    padding: 10px;  
+
+
+.upload.show {
+    top: 50px;
+}
+.wrapper-button {
+    padding: 10px;
     background-color: #fff;
 }
-.form{
-    display: flex;
-    align-items: center;
-}
 
-.frame{
+.frame {
     background-color: #fff;
-    margin-top: 10px;
-    padding: 20px 10px 20px 0px;
-    width: 500px;
+    padding: 20px;
+    width: 100%;
     min-height: 50px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
 }
-.circle-xmark{
+
+.circle-xmark {
     position: absolute;
     top: 7px;
     right: 7px;
     cursor: pointer;
     transition: .4s ease;
-    &:hover{
-        font-weight: 700;
+}
+
+.circle-xmark:hover {
+    font-weight: 700;
+}
+
+.input {
+    flex: 3;
+    font-size: 14px;
+    height: 33px;
+    outline: none;
+    border: 1px solid rgb(221, 220, 220);
+    padding: 5px;
+}
+
+.btn {
+    flex: 1;
+}
+
+
+@media screen and (max-width: 600px) {
+    .upload {
+        max-width: 400px; 
     }
+}
+
+@media screen and (max-width: 500px) {
+  
+    .frame{
+        display: flex;
+        flex-direction: column;
+        .input{
+            width: 100%;
+            margin-bottom: 5px;
+        }
+    }
+    .btn{
+        font-size: 14px;
+    }
+    
 }

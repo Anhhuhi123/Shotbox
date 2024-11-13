@@ -26,6 +26,12 @@
     }
 
 }
+@media only screen and (max-width: 750px) {
+   .wrapper{
+       z-index: 2;
+   }
+   
+ }
 .actions{
     margin-right: 3px;
     position: relative;
@@ -41,6 +47,12 @@
     padding: 10px;
 
 }
+@media only screen and (max-width: 550px) {
+    .demo111{
+        display: none;
+    }
+   
+ }
 .fix-toolbar{
     display: flex;
     align-items: center;

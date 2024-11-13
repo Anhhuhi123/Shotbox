@@ -1,4 +1,4 @@
-.wrapper{
+.wrapper1{
     display: flex;
     background-color: #f1f1f1;
     height: 100vh;
@@ -8,6 +8,20 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover
+}
+@media only screen and (max-width: 750px) {
+   .wrapper1{
+       display: flex;
+       flex-direction: column;
+       justify-content: center;
+    //    justify-content: space-around;
+    // margin: auto auto;
+   }
+  
+}
+.abc{
+    width: 100px;
+    height: 100px;
 }
 .block__description{
     text-align: center;

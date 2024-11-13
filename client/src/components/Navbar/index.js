@@ -82,11 +82,11 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
                     </div>
 
                     <div className={cx('actions')}>
-                        <Button icon={<i className="fa-regular fa-user"></i>}></Button>
+                        <Button icon={<i className="fa-regular fa-user"></i>} className={cx('demo111')}></Button>
                     </div>
 
                     <div className={cx('actions')}>
-                        <Button to='/user'>{user ? user.name : ""}</Button>
+                        <Button to='/user' className={cx('demo111')}>{user ? user.name : ""}</Button>
                     </div>
 
                     <div className={cx('option')} ref={menuRef} onClick={() => setShowMenuItems(!showMenuItems)}>

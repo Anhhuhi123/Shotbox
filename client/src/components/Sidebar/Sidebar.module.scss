@@ -10,6 +10,13 @@
     user-select: none;
     // z-index: -1  ;
 }
-.modify{
-    margin-top: 5px;
-}
+
+@media only screen and (max-width: 750px) {
+    .wrapper{
+        // position: relative;
+        max-height: 150px;
+        width: 100%;
+        z-index: 1;
+    }
+   
+ }

@@ -1,27 +1,39 @@
 .img {
-    height: 200px;
+    width: 100%;
+    object-fit: cover; 
+    height: 200px; 
+    border-radius: 8px; 
 }
 
 .wrapper {
+    flex-basis: calc(33.33% - 10px);
     background-color: white;
     padding: 8px 8px 15px 8px;
-    margin-right: 10px;
-    // margin-top: 10px;
     position: relative;
+    margin: 5px;
 }
 
+
+
+ @media only screen and (max-width: 750px) {
+    .wrapper {
+        flex-basis: calc(50% - 10px)
+    }
+   
+ }
 .demo {
     display: flex;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    user-select: none;
+    user-select: none;  
 }
 
 .menu-items {
     display: flex;
     flex-direction: column;
-    position: absolute; /* Thay đổi ở đây */
-    background-color: white; /* Màu nền để menu rõ ràng */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Đổ bóng cho menu */
+    position: absolute; 
+    background-color: white; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     z-index: 1;
 
 }

@@ -2,12 +2,13 @@ import classNames from 'classnames/bind'
 import styles from './Button.module.scss'
 import { Link } from 'react-router-dom'
 const cx = classNames.bind(styles)
-function Button({ to, href, first, second, third, four, five, children, className, icon, onClick, onBlur, type }) {
+function Button({ to, href, first, second, third, four, five, children, className, icon, onClick, onBlur, type, disabled }) {
     let Comp = 'button';
     const props = {
         onClick,
         onBlur,
         type,
+        disabled
     }
     if (to) {
         props.to = to;

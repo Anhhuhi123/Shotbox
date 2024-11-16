@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './AlbumDetail.module.scss';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 import Menu from '../../components/Menu';
 import Button from '../../components/Button';
 import * as AlbumService from '../../services/albumService';
@@ -12,17 +14,20 @@ function AlbumDetail() {
     const [activeIndex, setActiveIndex] = useState(null);
     const [img, setImg] = useState([]);
     const [test, setTest] = useState([]);
-    const menuRef = useRef(null);
     const [album, setAlbum] = useState(null);
     const [fixAlbum, setFixAlbum] = useState(false);
     const [albumName, setAlbumName] = useState("");
     const [description, setDescription] = useState("");
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const menuRef = useRef(null);
+
+    const [isImageClicked, setIsImageClicked] = useState(false);  // State to track image click
+    const [selectedImage, setSelectedImage] = useState(null);
+    const imgRefs = useRef([]);
     useEffect(() => {
         const showAlbumDetail = async () => {
             try {
                 const res = await AlbumService.showAlbumDetail(id);
-                // console.log(res.data);
                 setAlbum(res.data);
                 setAlbumName(res.data.albumName);
                 setDescription(res.data.description);
@@ -93,28 +98,14 @@ function AlbumDetail() {
         deleteImgFromAlbum();
     }
 
-    const handleSave = async () => {
-        const updateAlbum = async () => {
-            const id = album.id;
-            const data = {
-                albumName: albumName,
-                description: description
-            }
-            try {
-                const res = await AlbumService.updateAlbum(id, data);
-                alert(res.message);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        updateAlbum();
-        window.location.reload();
-    };
-
     const handleCancel = () => {
         setFixAlbum(false);
         setAlbumName(album.albumName);
         setDescription(album.description);
+        formik.setValues({
+            albumName: album.albumName,
+            description: album.description,
+        });
     };
     const handleDeleteAlbum = (e) => {
         const deleteAlbum = async () => {
@@ -140,34 +131,85 @@ function AlbumDetail() {
         }
     ];
 
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            albumName: albumName || '',
+            description: description || '',
+        },
+        validationSchema: Yup.object({
+            albumName: Yup.string()
+                .required('Album name is required')
+                .min(3, 'Album name must be at least 3 characters'),
+            description: Yup.string()
+                .max(500, 'Description cannot exceed 500 characters'),
+        }),
+        onSubmit: async (values) => {
+            const updateAlbum = async () => {
+                const id = album.id;
+                const data = {
+                    albumName: values.albumName,
+                    description: values.description
+                }
+                try {
+                    const res = await AlbumService.updateAlbum(id, data);
+                    alert(res.message);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            updateAlbum();
+            window.location.reload();
+        },
+    });
+    const handleCloseImage = () => {
+        setIsImageClicked(false);
+        setSelectedImage(null);
+    };
+    const handleGetImage = (e, index) => {
+        const imgElement = imgRefs.current[index];
+        if (imgElement) {
+            setSelectedImage(imgElement.src);  // Save selected image URL
+            setIsImageClicked(true);  // Mark image as clicked
+        }
+    };
     return (
-        <div className={cx('demoo')}>
+        <div className={cx('wrapper')}>
             {album && (
-                <div className={cx('header')}>
-                    <div className={cx('aaa')}>
+                <div className={cx('session1')}>
+                    <div className={cx('header')}>
                         {fixAlbum ? (
-                            <div className={cx('test1')}>
+                            <form className={cx('form')} onSubmit={formik.handleSubmit}>
                                 <input
                                     className={cx("album-control")}
                                     type="text"
                                     id="albumName"
                                     name="albumName"
                                     placeholder="Album Name"
-                                    value={albumName}
-                                    onChange={(e) => setAlbumName(e.target.value)}
+                                    value={formik.values.albumName}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
                                 />
+                                {formik.touched.albumName && formik.errors.albumName && (
+                                    <p className={cx('message-error')}>{formik.errors.albumName}</p>
+                                )}
                                 <textarea
                                     className={cx('txt-area')}
                                     placeholder="Description"
                                     name="description"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
+                                    value={formik.values.description}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
                                 />
-                                <div>
-                                    <Button first onClick={handleCancel}>Cancel</Button>
-                                    <Button first onClick={handleSave}>Save</Button>
+                                {formik.touched.description && formik.errors.description && (
+                                    <p className={cx('message-error')}>{formik.errors.description}</p>
+                                )}
+                                <div className={cx('btn')}>
+                                    <Button first onClick={handleCancel} className={cx('btn-modifier')} type="button">Cancel</Button>
+                                    <Button first className={cx('btn-modifier')} type="submit">Save</Button>
+
                                 </div>
-                            </div>
+                            </form>
                         ) : (
                             <>
                                 <h2 className={cx('heading')}>{album.albumName}</h2>
@@ -185,12 +227,23 @@ function AlbumDetail() {
                 </div>
             )}
 
-            <div className={cx('demo')}>
+            <div className={cx('session2')}>
+                {isImageClicked && selectedImage && (
+                    <div className={cx('image-overlay')} onClick={handleCloseImage}>
+                        <img src={selectedImage} alt="Selected" className={cx('full-screen-img')} />
+                    </div>
+                )}
                 {img.map((obj, index) => (
-                    <div key={index} className={cx('wrapper')}>
-                        <img src={obj.url} className={cx('img')} alt="img" />
-                        <div className={cx('hope')} ref={activeIndex === index ? menuRef : null}>
-                            <i className={`fa-solid fa-bars ${cx('test')}`} onClick={() => handleOnclick(index)}>
+                    <div key={index} className={cx('card')}>
+                        <img
+                            ref={(el) => (imgRefs.current[index] = el)}
+                            src={obj.url}
+                            className={cx('img')}
+                            alt="img"
+                            onClick={(e) => handleGetImage(e, index)}
+                        />
+                        <div className={cx('block-option')} ref={activeIndex === index ? menuRef : null}>
+                            <i className={`fa-solid fa-bars ${cx('icon-modifier')}`} onClick={() => handleOnclick(index)}>
                                 {activeIndex === index && (
                                     <Menu ImageObj={obj} setImg={setImg} MenuItems={MenuItems} test={test} setTest={setTest} />
                                 )}

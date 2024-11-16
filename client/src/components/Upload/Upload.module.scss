@@ -66,6 +66,13 @@
 
 .btn {
     flex: 1;
+    
+    &.disabled {
+        user-select: none;
+        cursor: not-allowed;
+        opacity: 0.5; 
+        pointer-events: none; 
+      }
 }
 
 

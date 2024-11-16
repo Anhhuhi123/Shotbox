@@ -1,67 +1,88 @@
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import classNames from 'classnames/bind';
 import styles from './FormAlbum.module.scss';
 import { v4 as uuidv4 } from 'uuid';
 import Input from '../Input';
 import Button from '../Button';
-import * as AlbumService from '../../services/albumService'
-import { useState } from 'react';
+import * as AlbumService from '../../services/albumService';
 const cx = classNames.bind(styles);
-function FormAlbum({ handleUnmount }) {
-    const [albumName, setAlbumName] = useState('');
-    const [description, setDescription] = useState('');
 
-    const handleOnclickAdd = (e) => {
-        const create = async () => {
+function FormAlbum({ handleUnmount }) {
+    const formik = useFormik({
+        initialValues: {
+            albumName: '',
+            description: '',
+        },
+        validationSchema: Yup.object({
+            albumName: Yup.string()
+                .required('Album name is required')
+                .min(3, 'Album name must be at least 3 characters'),
+            description: Yup.string()
+                .max(500, 'Description cannot exceed 500 characters'),
+        }),
+        onSubmit: async (values, { resetForm }) => {
             const uniqueId = uuidv4();
             try {
                 const res = await AlbumService.createAlbum({
-                    albumName: albumName,
-                    description: description,
+                    albumName: values.albumName,
+                    description: values.description,
                     location: uniqueId,
                 });
                 alert(res.data);
+                resetForm();
                 window.location.reload();
             } catch (error) {
+                formik.setFieldError('albumName', 'This album name is already taken. Please choose another.');
                 console.error('Error creating album:', error);
             }
-        }
-        create();
+        },
+    });
 
-    }
-    const handleOnchange = (e) => {
-        const { name, value } = e.target;
-        if (name === 'albumName') {
-            setAlbumName(value);
-        }
-        else {
-            setDescription(value);
-        }
-    }
+    return (
+        <div className={cx('wrapper')}>
+            <div className={cx('form')}>
+                <h2>ADD NEW ALBUM</h2>
+                <form onSubmit={formik.handleSubmit}>
+                    <Input
+                        className={cx('album-control')}
+                        type="text"
+                        id="albumName"
+                        name="albumName"
+                        placeholder="Album Name"
+                        autoComplete="albumName"
+                        value={formik.values.albumName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.albumName && formik.errors.albumName && (
+                        <p className={cx('message-error')}>{formik.errors.albumName}</p>
+                    )}
 
-    return (<div className={cx('wrapper')}>
-        <div className={cx('form')}>
-            <h2>ADD NEW ALBUM</h2>
-            <Input className={cx("album-control")}
-                type="text"
-                id="albumName"
-                name="albumName"
-                placeholder="Album Name"
-                autoComplete="albumName"
-                value={albumName}
-                onChange={handleOnchange}
-            />
-            <textarea className={cx('txt-area')}
-                placeholder="Description"
-                name="description"
-                value={description}
-                onChange={handleOnchange}>
-            </textarea>
-            <div>
-                <Button first onClick={handleUnmount}>Cancel</Button>
-                <Button first onClick={handleOnclickAdd}>Add</Button>
+                    <textarea
+                        className={cx('txt-area')}
+                        placeholder="Description"
+                        name="description"
+                        value={formik.values.description}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.description && formik.errors.description && (
+                        <p className={cx('message-error')}>{formik.errors.description}</p>
+                    )}
+
+                    <div>
+                        <Button first onClick={handleUnmount} type="button">
+                            Cancel
+                        </Button>
+                        <Button first type="submit">
+                            Add
+                        </Button>
+                    </div>
+                </form>
             </div>
         </div>
-    </div>);
+    );
 }
 
 export default FormAlbum;

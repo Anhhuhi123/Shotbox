@@ -9,7 +9,6 @@ const cx = classNames.bind(styles);
 
 function Webcam() {
     const [capturedImage, setCapturedImage] = useState(null);
-    // console.log(capturedImage)
     const handleAddImages = async () => {
         const CLOUD_NAME = 'dt3gvugaf';
         const PRESET_NAME = 'demo-upload';
@@ -27,49 +26,47 @@ function Webcam() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-          //  console.log(response.data.secure_url); // Hiển thị thông tin phản hồi từ Cloudinary
-
-
-            // const res = await axios.post('http://localhost:8080/images', {
-            //     url: response.data.secure_url,
-            // });
             const res = await ImageService.createImage({
                 url: response.data.secure_url,
             })
             alert(res.data)
         } catch (error) {
-          //  console.error('Upload failed:', error);
+            console.error('Upload failed:', error);
         }
     };
 
     return (
-        <div className={cx('wrapper')}>
-            <h2 className={cx('title')}>My Camera</h2>
+        <div className={cx('wrapper')} >
+            {/* <h2 className={cx('title')}>My Camera</h2> */}
             {!capturedImage && <Camera setCapturedImage={setCapturedImage} />}
-            {capturedImage && (
-                <div className={cx('demo')}>
-                    <img src={URL.createObjectURL(capturedImage)} className={cx('demo1')} alt="" />
-                </div>
-            )}
-            {capturedImage && (
-                <div className={cx('demo3')}>
-                    <Button first onClick={() => setCapturedImage(null)}>
-                        Back
-                    </Button>
-                    <Button first onClick={handleAddImages}>
-                        Add To Images
-                    </Button>
-                    <Button first onClick={() => {
-                        const link = document.createElement('a');
-                        link.href = URL.createObjectURL(capturedImage);
-                        link.download = 'demo.jpg';
-                        link.click();
-                    }}>
-                        Download
-                    </Button>
-                </div>
-            )}
-        </div>
+            {
+                capturedImage && (
+                    <div className={cx('block-img')}>
+                        <img src={URL.createObjectURL(capturedImage)} className={cx('img')} alt="" />
+                    </div>
+                )
+            }
+            {
+                capturedImage && (
+                    <div className={cx('list-btn')}>
+                        <Button first onClick={() => setCapturedImage(null)}>
+                            Back
+                        </Button>
+                        <Button first onClick={handleAddImages}>
+                            Add To Images
+                        </Button>
+                        <Button first onClick={() => {
+                            const link = document.createElement('a');
+                            link.href = URL.createObjectURL(capturedImage);
+                            link.download = 'demo.jpg';
+                            link.click();
+                        }}>
+                            Download
+                        </Button>
+                    </div>
+                )
+            }
+        </div >
     );
 }
 

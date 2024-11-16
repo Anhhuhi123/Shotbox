@@ -1,20 +1,40 @@
 .wrapper{
     display: flex;
+    justify-content: center;
     flex-direction: column;
-    align-items: center;
+    position: relative;
 }
-.title{
-    padding: 0;
-    margin: 0;
-}
-.demo{
+.block-img{
+    position: relative;
     display: flex;
     flex-direction: column;
+    height: calc(100vh - 66px);
+    width: 100%;
+
 }
-.demo1{
-    width: 1080px;
-    height:490px ;
+.img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
 }
-.demo3{
-    margin-top: 10px;
+.list-btn{
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+@media screen and (max-width:750px){
+    .block-img {
+        display: flex;
+        flex-direction: column;
+        width: 100%; /* Chiều rộng mong muốn */
+        height: calc(100vh - 206px);
+        position: relative;
+    }
 }

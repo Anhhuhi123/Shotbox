@@ -58,14 +58,13 @@
 
 // Vùng nhập liệu
 .album-control {
-    margin-bottom: 15px;
+    // margin-bottom: 15px;
     padding: 10px;
     font-size: 1rem;
     border-radius: 4px;
     border: 1px solid #ccc;
     transition: border-color 0.3s;
     &:focus {
-        // border-color: #ccc;
         outline: none;
     }
 }
@@ -73,15 +72,21 @@
 // Vùng nhập văn bản
 .txt-area {
     min-height: 80px;
+    width: 100%;
     padding: 10px;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 4px;
-    // resize: vertical;
-    margin-bottom: 15px;
     transition: border-color 0.3s;
     &:focus {
-        // border-color: #ccc;
         outline: none;
     }
+}
+
+
+.message-error{
+    padding: 0;
+    margin: 0;
+    color: red;
+    font-size: 14px;
 }

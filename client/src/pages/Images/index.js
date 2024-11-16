@@ -14,7 +14,10 @@ function Images() {
     const [album, setAlbum] = useState([]);
     const [test, setTest] = useState([]);
     const [activeIndex, setActiveIndex] = useState(null);
+    const [isImageClicked, setIsImageClicked] = useState(false);  // State to track image click
+    const [selectedImage, setSelectedImage] = useState(null);
     const menuRef = useRef(null);
+    const imgRefs = useRef([]);
     // show images from user
     useEffect(() => {
         const getImages = async () => {
@@ -101,7 +104,6 @@ function Images() {
     const handleShowAlbumName = async (ImageObj, e) => {
 
         e.stopPropagation();
-        // console.log(album)
         const newItems = album.map(item => ({
             id: item.id,
             userId: item.userId,
@@ -131,21 +133,38 @@ function Images() {
             handleOnclick: handleDeleteImg
         }
     ];
+    const handleGetImage = (e, index) => {
+        const imgElement = imgRefs.current[index];
+        if (imgElement) {
+            setSelectedImage(imgElement.src);  // Save selected image URL
+            setIsImageClicked(true);  // Mark image as clicked
+        }
+    };
 
+    const handleCloseImage = () => {
+        setIsImageClicked(false);
+        setSelectedImage(null);
+    };
 
     return (
-        <div className={cx('demo')}>
-
+        <div className={cx('wrapper')}>
+            {isImageClicked && selectedImage && (
+                <div className={cx('image-overlay')} onClick={handleCloseImage}>
+                    <img src={selectedImage} alt="Selected" className={cx('full-screen-img')} />
+                </div>
+            )}
 
             {img.map((obj, index) => (
-                <div key={index} className={cx('wrapper')}>
+                <div key={index} className={cx('card')}>
                     <img
+                        ref={(el) => (imgRefs.current[index] = el)}
                         src={obj.url}
                         className={cx('img')}
                         alt="img"
+                        onClick={(e) => handleGetImage(e, index)}
                     />
-                    <div className={cx('hope')} ref={activeIndex === index ? menuRef : null}>
-                        <i className={`fa-solid fa-bars ${cx('test')}`} onClick={() => handleOnclick(index)}>
+                    <div className={cx('block-option')} ref={activeIndex === index ? menuRef : null}>
+                        <i className={`fa-solid fa-bars ${cx('icon-modifier')}`} onClick={() => handleOnclick(index)}>
                             {activeIndex === index && (
 
                                 <Menu ImageObj={obj} MenuItems={MenuItems} test={test} setTest={setTest} />

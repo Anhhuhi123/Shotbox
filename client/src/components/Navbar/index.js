@@ -93,9 +93,9 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
                         <i className="fa-solid fa-ellipsis-vertical" ></i>
                         {showMenuItems && (
                             <div className={cx('menu-items')}>
-                                <Button to='/user' four>Settings</Button>
-                                <Button to='/deleted/images' four>Recycle Bin</Button>
-                                <Button four onClick={handleOnlickLogout}>Logout</Button>
+                                <Button to='/user' four icon={<i className={`fa-solid fa-gear ${cx('icon-modifier')}`}></i>}>Settings</Button>
+                                <Button to='/deleted/images' four icon={<i className={`fa-solid fa-trash ${cx('icon-modifier')}`}></i>}>Recycle Bin</Button>
+                                <Button four onClick={handleOnlickLogout} icon={<i className={`fa-solid fa-right-from-bracket ${cx('icon-modifier')}`}></i>}>Logout</Button>
                             </div>
                         )}
                     </div>

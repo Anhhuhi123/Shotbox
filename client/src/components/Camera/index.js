@@ -6,11 +6,11 @@ import Button from '../Button';
 const cx = classNames.bind(styles);
 
 function Camera({ setCapturedImage }) {
-    const videoConstraints = {
-        width: 1080,
-        height: 490,
-        facingMode: "user"
-    };
+    // const videoConstraints = {
+    //     width: 1080,
+    //     height: 490,
+    //     facingMode: "user"
+    // };
 
     // Hàm chuyển base64 thành Blob
     const base64ToBlob = (base64, type = 'image/jpeg') => {
@@ -30,15 +30,17 @@ function Camera({ setCapturedImage }) {
             <Webcam
                 audio={false}
                 screenshotFormat="image/jpeg"
-                videoConstraints={videoConstraints}
+            // videoConstraints={videoConstraints}
             >
                 {({ getScreenshot }) => (
                     <div className={cx('action-get-img')}>
                         <Button
                             first
                             onClick={() => {
-                                const imageSrc = getScreenshot({ width: 700, height: 400 });
-                                // console.log(imageSrc)
+                                const imageSrc = getScreenshot({ width: 1280, height: 720 });
+                                // const imageSrc = getScreenshot();
+
+                                console.log(imageSrc)
                                 if (imageSrc) {
                                     // Chuyển đổi Base64 thành Blob
                                     const blob = base64ToBlob(imageSrc);

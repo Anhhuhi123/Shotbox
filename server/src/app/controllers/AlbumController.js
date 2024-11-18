@@ -59,20 +59,54 @@ class AlbumController {
     }
 
     // Update
+    // async updateAlbum(req, res) {
+    //     try {
+    //         const id = req.params.id;
+    //         const data = req.body;
+    //         const {albumName, description} = req.body;
+
+    //         //console.log(id , albumName, description);
+    //         //const albumNameExit = await AlbumImage.findNameAlbum(id);
+
+    //         const affectedRows = await Album.update(id, data);
+    //         if (affectedRows === 0) {
+    //             return res.status(404).json({ message: 'Album not found or no changes made' });
+    //         }
+    //         return res.status(200).json({ message: 'Album updated successfully' });
+    //     } catch (error) {
+    //         console.error('Error updating album:', error);
+    //         return res.status(500).json({ error: 'Internal Server Error' });
+    //     }
+    // }
+
     async updateAlbum(req, res) {
         try {
             const id = req.params.id;
-            const data = req.body;
-            const affectedRows = await Album.update(id, data);
-            if (affectedRows === 0) {
-                return res.status(404).json({ message: 'Album not found or no changes made' });
+            const { albumName, description } = req.body;
+    
+            //Hàm check xem đã có tên chưa 
+            const isDuplicate = await Album.checkDuplicateAlbumName(albumName, id);
+
+            if (isDuplicate) {
+                console.log("Album name already exists.");
+                return res.status(400).json({ message: 'Album name already exists.' });
             }
-            return res.status(200).json({ message: 'Album updated successfully' });
+    
+            // Thực hiện cập nhật
+            const affectedRows = await Album.update(id, { albumName, description });
+            if (affectedRows === 0) {
+                return res.status(404).json({ message: 'Album not found or no changes made.' });
+            }
+    
+            return res.status(200).json({ message: 'Album updated successfully.' });
         } catch (error) {
             console.error('Error updating album:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     }
+    
+    
+    
 
 
     // Delete

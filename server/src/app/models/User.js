@@ -81,7 +81,52 @@ const User = {
             console.error("Error updating user:", error);
             throw new Error("Unable to update user.");
         }
+    },
+
+    // Kiểm tra xem vai trò hiện tại của user đang đăng nhập
+    checkRoleId: async (id) => {
+        const query = 'SELECT roleId FROM users WHERE id = ?';
+        const [result] = await db.query(query, [id]);
+    
+        if (result.length === 0) {
+            throw new Error('User not found');
+        }
+    
+        const roleId = result[0].roleId;
+        console.log(roleId);
+    
+        if (roleId === 1) {
+            return 'admin';
+        } else if (roleId === 2) {
+            return 'user';
+        } else {
+            throw new Error('Unknown role');
+        }
+    },
+
+    updateRoleId: async (newRoleId, userId) => {
+        try {
+            // Kiểm tra xem newRoleId và userId có hợp lệ không
+            if (!newRoleId || !userId) {
+                throw new Error('Missing newRoleId or userId');
+            }
+    
+            // Truy vấn SQL để cập nhật RoleId
+            const query = 'UPDATE users SET roleId = ? WHERE id = ?';
+            const [result] = await db.query(query, [newRoleId, userId]);
+    
+            // Kiểm tra xem có ảnh hưởng dòng dữ liệu nào không
+            if (result.affectedRows > 0) {
+                return { success: true, message: 'Role updated successfully' };
+            } else {
+                throw new Error('User not found or RoleId is the same');
+            }
+        } catch (error) {
+            console.error(error);
+            return { success: false, message: error.message };
+        }
     }
+
 };
 
 export default User;

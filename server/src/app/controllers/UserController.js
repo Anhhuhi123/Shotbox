@@ -162,10 +162,46 @@ class UserController {
     }
 
     // DELETE để xóa người dùng
-    deleteUser(req, res) {
+    async deleteUser(req, res) {
         const userId = req.params.id;
         res.send(`DELETE request for user with ID: ${userId}`);
     }
+
+    // Change RoleId
+    async ChangeRoleId(req, res) {
+        try {
+            const { id, name, gmail } = req.user; 
+            console.log(id);
+            const checkRoleId = await User.checkRoleId(id); // Kiểm tra vai trò của người dùng hiện tại
+
+            // Nếu người dùng là admin, có quyền thay đổi vai trò
+            if (checkRoleId === 'admin') {
+                // chổ ni đợi tiến truyền api vào 
+                const { newRoleId, userId } = req.body; // Giả sử bạn gửi newRoleId và userId trong body của request
+
+                // Kiểm tra xem userId có hợp lệ không
+                if (!userId || !newRoleId) {
+                    return res.status(400).json({ message: 'Missing userId or newRoleId' });
+                }
+
+                // Cập nhật RoleId của người dùng
+                const result = await User.updateRoleId(newRoleId, userId);
+
+                // Kiểm tra nếu cập nhật thành công
+                if (result > 0) {
+                    return res.status(200).json({ message: 'Role updated successfully' });
+                } else {
+                    return res.status(404).json({ message: 'User not found or RoleId is the same' });
+                }
+            } else {
+                return res.status(403).json({ message: 'You do not have permission to change roles' });
+            }
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'An error occurred while changing role', error: error.message });
+        }
+    }
+
 }
 
 export default new UserController();

@@ -9,6 +9,8 @@ import Webcam from '../pages/Webcam'
 import DeletedImages from '../pages/DeletedImages'
 import ForgotPassword from '../pages/ForgotPassword'
 import Manager from '../pages/Manager'
+import UpgradeCapacity from '../pages/UpgradeCapacity'
+
 
 
 const routes = [
@@ -77,6 +79,13 @@ const routes = [
         component: Manager,
         isPrivate: true,
         permission: true,
+    },
+
+    {
+        path: '/upgrade',
+        component: UpgradeCapacity,
+        layout: 'undefined',
+        isPrivate: true
     },
 
 ]

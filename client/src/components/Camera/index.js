@@ -36,11 +36,12 @@ function Camera({ setCapturedImage }) {
                     <div className={cx('action-get-img')}>
                         <Button
                             first
+                            icon={<i className={`fa-solid fa-camera ${cx('icon-modifier')}`}></i>}
                             onClick={() => {
                                 const imageSrc = getScreenshot({ width: 1280, height: 720 });
                                 // const imageSrc = getScreenshot();
 
-                                console.log(imageSrc)
+                                // console.log(imageSrc)
                                 if (imageSrc) {
                                     // Chuyển đổi Base64 thành Blob
                                     const blob = base64ToBlob(imageSrc);

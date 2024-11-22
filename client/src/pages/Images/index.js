@@ -2,23 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Images.module.scss';
 import * as ImageService from '../../services/imageService';
-import Button from '../../components/Button';
-import axios from 'axios';
 import Menu from '../../components/Menu';
 import * as AlbumService from '../../services/albumService';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
 
 function Images() {
     const [img, setImg] = useState([]);
     const [album, setAlbum] = useState([]);
-    const [test, setTest] = useState([]);
+    const [albumOnlick, setAlbumOnlick] = useState([]);
     const [activeIndex, setActiveIndex] = useState(null);
     const [isImageClicked, setIsImageClicked] = useState(false);  // State to track image click
     const [selectedImage, setSelectedImage] = useState(null);
     const menuRef = useRef(null);
     const imgRefs = useRef([]);
-    // show images from user
+    const [isDeleting, setIsDeleting] = useState(false);
     useEffect(() => {
         const getImages = async () => {
             try {
@@ -44,6 +43,7 @@ function Images() {
     }, []);
     // handle when we mousedown
     useEffect(() => {
+        // console.log(activeIndex)
         if (activeIndex !== null) {
             document.addEventListener('mousedown', handleClickOutside);
         }
@@ -53,29 +53,20 @@ function Images() {
     }, [activeIndex]);
 
     const handleOnclick = (index) => {
+        if (isDeleting) return;
         setActiveIndex(activeIndex === index ? null : index);
     };
 
     const handleClickOutside = (e) => {
         if (menuRef.current && !menuRef.current.contains(e.target)) {
             setActiveIndex(null);
+            setAlbumOnlick([]);
         }
     };
 
-    // handle MenuItems
-    const demo = async (ImageObj) => {
-        const url = ImageObj.url;
-        try {
-            const response = await axios.head(url);
-            const fileSizeInBytes = response.headers['content-length'];
-            const fileSizeInKB = fileSizeInBytes / 1024;
-            console.log(`Dung lượng ảnh: ${fileSizeInKB.toFixed(2)} KB`);
-        } catch (error) {
-            console.error("Không thể lấy dung lượng ảnh:", error);
-        }
-    };
 
     const handleDownloadImg = async (ImageObj) => {
+        if (isDeleting) return;
         const url = ImageObj.url;
         try {
             const response = await fetch(url);
@@ -89,20 +80,37 @@ function Images() {
             console.error('Error downloading image:', error);
         }
     };
-
-    const handleDeleteImg = async (ImageObj) => {
+    const handleDeleteImg = async (ImageObj, e) => {
+        if (isDeleting) return;
+        e.stopPropagation();
+        setIsDeleting(true);
+        document.removeEventListener('mousedown', handleClickOutside);
         const idImg = ImageObj.id;
-        try {
-            const res = await ImageService.deleteImage(idImg);
-            alert(res.message);
-            setImg((prev) => prev.filter((img) => img.id !== idImg));
-        } catch (error) {
-            console.error(error);
+        const fetchData = async () => {
+            try {
+                const res = await ImageService.deleteImage(idImg);
+                toast.success(`Success:${res.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                    onClose: () => {
+                        setImg((prev) => prev.filter((img) => img.id !== idImg));
+                        setActiveIndex(null);
+                        setIsDeleting(false);
+                    },
+                });
+            } catch (error) {
+                console.error(error);
+                toast.success(`Error:${error.response.data.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+            }
         }
+        fetchData();
     };
 
     const handleShowAlbumName = async (ImageObj, e) => {
-
+        if (isDeleting) return;
         e.stopPropagation();
         const newItems = album.map(item => ({
             id: item.id,
@@ -112,28 +120,28 @@ function Images() {
             location: item.location,
             createdAt: item.createdAt,
         }));
-        setTest(prev => [...prev, ...newItems]);
+        setAlbumOnlick(prev => [...prev, ...newItems]);
     };
 
     const MenuItems = [
         {
-            name: 'Get Size',
-            handleOnclick: demo
-        },
-        {
+            icon: 'fa-solid fa-folder',
             name: 'Add To Album',
             handleOnclick: handleShowAlbumName
         },
         {
+            icon: 'fa-solid fa-download',
             name: 'Download',
             handleOnclick: handleDownloadImg
         },
         {
+            icon: 'fa-solid fa-trash',
             name: 'Delete',
             handleOnclick: handleDeleteImg
         }
     ];
     const handleGetImage = (e, index) => {
+        if (isDeleting) return;
         const imgElement = imgRefs.current[index];
         if (imgElement) {
             setSelectedImage(imgElement.src);  // Save selected image URL
@@ -148,6 +156,7 @@ function Images() {
 
     return (
         <div className={cx('wrapper')}>
+            <ToastContainer />
             {isImageClicked && selectedImage && (
                 <div className={cx('image-overlay')} onClick={handleCloseImage}>
                     <img src={selectedImage} alt="Selected" className={cx('full-screen-img')} />
@@ -167,15 +176,13 @@ function Images() {
                         <i className={`fa-solid fa-bars ${cx('icon-modifier')}`} onClick={() => handleOnclick(index)}>
                             {activeIndex === index && (
 
-                                <Menu ImageObj={obj} MenuItems={MenuItems} test={test} setTest={setTest} />
+                                <Menu ImageObj={obj} MenuItems={MenuItems} albumOnlick={albumOnlick} setAlbumOnlick={setAlbumOnlick} />
 
                             )}
                         </i>
                     </div>
                 </div>
             ))}
-
-
         </div>
     );
 }

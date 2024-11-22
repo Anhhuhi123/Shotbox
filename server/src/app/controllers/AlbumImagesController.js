@@ -6,10 +6,10 @@ class AlbumImageController {
         try {
             const { albumId, imageId } = req.body;
             await AlbumImage.create(albumId, imageId);
-            return res.status(201).json({ data: 'Push image into ablum successfully' });
+            return res.status(201).json({ message: 'Push image into ablum successfully' });
         } catch (error) {
             console.error('Error uploading image:', error); // Log lỗi chi tiết
-            return res.status(500).json({ error: 'Internal Server Error' });
+            return res.status(500).json({ message: 'Internal Server Error' });
         }
     }
     async showImagesFromAlbum(req, res) {

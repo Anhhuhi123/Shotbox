@@ -1,4 +1,6 @@
 import { useFormik } from 'formik';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
 import classNames from 'classnames/bind';
 import styles from './FormAlbum.module.scss';
@@ -29,11 +31,17 @@ function FormAlbum({ handleUnmount }) {
                     description: values.description,
                     location: uniqueId,
                 });
-                alert(res.data);
-                resetForm();
-                window.location.reload();
+
+                toast.success(`Success:${res.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                    onClose: () => {
+                        resetForm();
+                        window.location.reload();
+                    },
+                });
             } catch (error) {
-                formik.setFieldError('albumName', 'This album name is already taken. Please choose another.');
+                formik.setFieldError('albumName', `${error.response.data.message}`);
                 console.error('Error creating album:', error);
             }
         },
@@ -81,6 +89,7 @@ function FormAlbum({ handleUnmount }) {
                     </div>
                 </form>
             </div>
+            <ToastContainer />
         </div>
     );
 }

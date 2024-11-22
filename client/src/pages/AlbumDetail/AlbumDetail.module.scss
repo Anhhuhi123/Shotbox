@@ -98,13 +98,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 9999;
 }
 
 .modal-content {
     background-color: white;
-    padding: 20px;
+    padding: 30px;
     border-radius: 8px;
     text-align: center;
+    box-shadow: 0px 0px 10px #333;
 }
 
 .modal-buttons button {
@@ -152,3 +154,13 @@
     }
    
  }
+
+.btn-cancel{
+     background-color: blue;
+}
+
+ 
+.btn-delete{
+    background-color: red;
+}
+

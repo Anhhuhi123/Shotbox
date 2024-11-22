@@ -34,13 +34,6 @@ const DeletedImages = {
             `;
             const [result] = await db.query(query, [url, fileName, fileSize, fileWidth, fileHeight, fileFormat, userId]);
 
-            // Kiểm tra ảnh đã được thêm thành công
-            if (result.affectedRows > 0) {
-                console.log("Deleted image inserted successfully.");
-            } else {
-                console.error("Failed to insert deleted image.");
-            }
-
             return result.insertId;
         } catch (error) {
             console.error("Error inserting deleted image:", error);

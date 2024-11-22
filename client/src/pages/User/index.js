@@ -3,11 +3,11 @@ import styles from './User.module.scss';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
-import { jwtDecode } from "jwt-decode";
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import * as userService from '../../services/userService.js'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
 
 function User() {
@@ -59,18 +59,25 @@ function User() {
             const fetchApi = async () => {
                 try {
                     const res = await userService.updatePassword(data);
-                    alert(res.message);
-                    window.location.reload();
+                    toast.success(`Success:${res.message}`, {
+                        position: "top-right",
+                        autoClose: 1000,
+                        onClose: () => {
+                            window.location.reload();
+                        },
+                    });
                 } catch (error) {
                     console.log(error);
+                    toast.error(`Error:${error.respone.data.message}`, {
+                        position: "top-right",
+                        autoClose: 1000,
+                    });
                 }
             }
             fetchApi();
         }
 
     });
-
-
 
     const validationSchema1 = Yup.object({
         new_email: Yup.string()
@@ -91,8 +98,9 @@ function User() {
             const fetchApi = async () => {
                 try {
                     const res = await userService.updateEmail(data);
-                    alert(res.message);
-                    window.location.reload();
+                    if (res.message) {
+                        window.location.reload();
+                    }
                 } catch (error) {
                     console.log(error);
                 }
@@ -191,6 +199,8 @@ function User() {
                     </div>
                 </form>
             </div>
+            <ToastContainer />
+
         </div>
     );
 }

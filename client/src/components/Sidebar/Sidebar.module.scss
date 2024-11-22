@@ -8,15 +8,16 @@
     top: var(--height-navbar);   //margin-top-side-bar = height-navbar
     left: 0;
     user-select: none;
-    // z-index: -1  ;
 }
 
 @media only screen and (max-width: 750px) {
     .wrapper{
-        // position: relative;
-        max-height: 150px;
+        height: inherit;
         width: 100%;
         z-index: 1;
+        position: sticky;
+        top:46px;
+        margin-top: 46px;
     }
    
  }

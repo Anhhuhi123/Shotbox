@@ -7,6 +7,7 @@ import albumRouter from './album.js'
 import albumImagesRouter from './albumImages.js'
 import deletedImagesRouter from './deletedImages.js'
 import identifyRouter from './identify.js'
+import capacityPackage from './capacityPackage.js'
 
 
 function routes(app) {
@@ -18,6 +19,7 @@ function routes(app) {
     app.use('/album/images', albumImagesRouter)
     app.use('/deleted/images', deletedImagesRouter)
     app.use('/identify', identifyRouter);
+    app.use('/package/capacity', capacityPackage)
 
 }
 export default routes;

@@ -26,7 +26,7 @@ function Album() {
         if (!showformAlbum) {
             getAllAlbums();
         }
-    }, []);
+    }, [showformAlbum]);
 
     const handleOnclick = (e) => {
         setShowFormAlbum(!showformAlbum);

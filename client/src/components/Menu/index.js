@@ -2,13 +2,13 @@ import classNames from "classnames/bind";
 import styles from './Menu.module.scss';
 import Button from "../Button";
 import * as AlbumService from '../../services/albumService';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
 
-function Menu({ ImageObj, MenuItems, test, setTest }) {
+function Menu({ ImageObj, MenuItems, albumOnlick, setAlbumOnlick }) {
 
-    const current = test.length > 0 ? test : MenuItems;
-
+    const current = albumOnlick.length > 0 ? albumOnlick : MenuItems;
     const handleAddImgToAlbum = (e, AlbumObj, ImageObj) => {
         e.stopPropagation();
         const addImgToAblum = async () => {
@@ -18,7 +18,10 @@ function Menu({ ImageObj, MenuItems, test, setTest }) {
             }
             try {
                 const res = await AlbumService.addImgToAlbum(data);
-                alert(res.data);
+                toast.success(`Success:${res.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
             } catch (error) {
                 console.log(error);
             }
@@ -28,10 +31,10 @@ function Menu({ ImageObj, MenuItems, test, setTest }) {
 
     return (
         <div className={cx('wrapper')}>
-            {test.length > 0 && (
+            {albumOnlick.length > 0 && (
                 <Button four icon={<i className="fa-solid fa-arrow-left"></i>} className={cx('modifier')} onClick={(e) => {
                     e.stopPropagation();
-                    setTest([]);
+                    setAlbumOnlick([]);
                 }}>
                     Back
                 </Button>
@@ -44,11 +47,12 @@ function Menu({ ImageObj, MenuItems, test, setTest }) {
 
                     </Button>
                 ) : (
-                    <Button key={index} four onClick={(e) => item.handleOnclick(ImageObj, e)}>
+                    <Button key={index} four icon={<i className={`${item.icon} ${cx('icon-modifier')}`}></i>} onClick={(e) => item.handleOnclick(ImageObj, e)}>
                         {item.name}
                     </Button>
                 )
             ))}
+            <ToastContainer />
 
         </div>
     );

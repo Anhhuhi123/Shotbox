@@ -1,55 +1,60 @@
 
-// .wrapper {
-//     display: flex;
-//     flex-wrap: wrap;
-//     gap: 10px;
-// }
+.wrapper {
+    // padding: 16px;
+    // background-color: #f9f9f9;
+    min-height: calc(100vh - 56px);
+    position: relative;
+}
 
-// .card {
-//     background-color: #fff;
-//     border: 1px solid #ddd;
-//     border-radius: 8px;
-//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-//     padding: 16px;
-//     width: 200px;
-//     // margin-top: 10px;
-//     height: 100px;
-//     cursor: pointer;
-//     transition: transform 0.3s ease, box-shadow 0.3s ease;
+.btn-modifier {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    color: black;
+    text-align: center;
+    background-color: inherit;
+    border: none;
+    cursor: pointer;
+    z-index: 1000; // Đảm bảo nút luôn ở trên
+}
 
-//     &:hover {
-//         transform: translateY(-5px);
-//         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-//     }
+.icon-modifier {
+    font-size: 30px;
+}
 
-// }
+.dropdown {
+    position: fixed;
+    bottom: 60px; // Hiển thị phía trên nút
+    right: 10px; // Căn chỉnh sang phải
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    max-height: 200px;
+    overflow-y: scroll;
+    z-index: 1000;
+}
 
-// .card-title {
-//     font-size: 18px;
-//     font-weight: bold;
-//     color: #333;
-// }
+.dropdown-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    &:last-child {
+        border-bottom: none;
+    }
+    strong {
+        display: block;
+        font-size: 14px;
+        color: #333;
+    }
+    p {
+        margin: 0;
+        font-size: 12px;
+        color: #666; 
+    }
+}
 
-// .card-description {
-//     font-size: 14px;
-//     color: #666;
-//     margin-top: 8px;
-// }
-
-// .card-bonus{
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     font-size: 25px;
-// }
-
-// .albums{
-//     background-color: red;
-//     padding: 30px;
-//     position: fixed;
-//     top: 50%;
-//     left: 50%;
-//     transform: translate(-50%, -50%);
-// }
-
-
+.dropdown-item:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+}

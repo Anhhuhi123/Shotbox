@@ -1,6 +1,7 @@
 const initialState = {
     isAuthenticated: !!localStorage.getItem('authToken'),
-    roleId: 2,
+    // roleId: 2,
+    roleId: 1,
 }
 
 const authReducer = (state = initialState, action) => {
@@ -17,7 +18,9 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isAuthenticated: newState,
-                roleId: 2,
+                // roleId: 2,
+                roleId: 1,
+
             }
         }
         case 'CHECK_ACCOUNT': {

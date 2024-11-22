@@ -1,0 +1,93 @@
+.wrapper1{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    // background-color: #2d3436;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1;
+}
+.wrapper {
+    position: fixed; /* Cố định vị trí trên màn hình */
+    top: 46px; /* Cách top 46px */
+    left: 50%; /* Căn giữa theo chiều ngang */
+    transform: translateX(-50%); /* Dịch chuyển để căn giữa chính xác */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: calc(50vh); /* Trừ đi khoảng cách top và padding */
+    padding: 20px;
+    background: linear-gradient(135deg, #74b9ff, #81ecec); /* Màu nền gradient */
+    border-radius: 12px; /* Bo góc */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng */
+    min-width: 400px; /* Giới hạn chiều rộng */
+    color: #2d3436; /* Màu chữ */
+}
+
+  
+  label {
+    font-weight: bold; /* In đậm chữ */
+    margin: 10px 0 5px; /* Khoảng cách trên dưới */
+    color: #ffffff; /* Màu chữ */
+  }
+  
+  select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #0984e3; /* Viền */
+    border-radius: 8px; /* Bo góc */
+    background-color: #dfe6e9; /* Màu nền */
+    color: #2d3436; /* Màu chữ */
+    font-size: 16px; /* Kích thước chữ */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Hiệu ứng chuyển mượt mà */
+  }
+  
+  select:hover {
+    border-color: #74b9ff; /* Đổi màu viền khi hover */
+    background-color: #ffffff; /* Đổi màu nền khi hover */
+  }
+  
+  select:focus {
+    outline: none; /* Xóa viền mặc định */
+    border-color: #6c5ce7; /* Màu viền khi focus */
+    box-shadow: 0 0 6px rgba(108, 92, 231, 0.5); /* Hiệu ứng focus */
+  }
+  
+
+
+.btn {
+    padding: 10px 20px; /* Kích thước nút */
+    margin: 10px; /* Khoảng cách giữa các nút */
+    border: none; /* Xóa viền mặc định */
+    border-radius: 8px; /* Bo góc */
+    font-size: 16px; /* Kích thước chữ */
+    font-weight: bold; /* Chữ đậm */
+    cursor: pointer; /* Con trỏ dạng tay khi hover */
+    transition: all 0.3s ease; /* Hiệu ứng mượt mà khi thay đổi */
+}
+
+/* Nút Save */
+.btn:first-child {
+    background-color: #6c5ce7; /* Màu nền */
+    color: #ffffff; /* Màu chữ */
+}
+
+.btn:first-child:hover {
+    background-color: #4e3dc7; /* Màu nền khi hover */
+    box-shadow: 0 4px 8px rgba(108, 92, 231, 0.5); /* Hiệu ứng đổ bóng */
+}
+
+/* Nút Cancel */
+.btn:last-child {
+    background-color: #d63031; /* Màu nền */
+    color: #ffffff; /* Màu chữ */
+}
+
+.btn:last-child:hover {
+    background-color: #c0392b; /* Màu nền khi hover */
+    box-shadow: 0 4px 8px rgba(214, 48, 49, 0.5); /* Hiệu ứng đổ bóng */
+}

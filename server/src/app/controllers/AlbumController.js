@@ -48,13 +48,13 @@ class AlbumController {
             const existsNameAlbum = await Album.isAlbumNameExists(albumName, id);
             if (!existsNameAlbum) {
                 await Album.create(data, id);
-                return res.status(201).json({ data: 'Create album successfully' });
+                return res.status(201).json({ message: 'Create album successfully' });
             } else {
-                return res.status(409).json({ error: 'Album name already exists' });
+                return res.status(409).json({ message: 'Album name already exists' });
             }
         } catch (error) {
             console.error('Error uploading album:', error); // Log lỗi chi tiết
-            return res.status(500).json({ error: 'Internal Server Error' });
+            return res.status(500).json({ message: 'Internal Server Error' });
         }
     }
 
@@ -83,31 +83,26 @@ class AlbumController {
         try {
             const id = req.params.id;
             const { albumName, description } = req.body;
-    
+
             //Hàm check xem đã có tên chưa 
             const isDuplicate = await Album.checkDuplicateAlbumName(albumName, id);
 
             if (isDuplicate) {
-                console.log("Album name already exists.");
-                return res.status(400).json({ message: 'Album name already exists.' });
+                return res.status(400).json({ message: 'AlbumName already exists.' });
             }
-    
+
             // Thực hiện cập nhật
             const affectedRows = await Album.update(id, { albumName, description });
             if (affectedRows === 0) {
                 return res.status(404).json({ message: 'Album not found or no changes made.' });
             }
-    
+
             return res.status(200).json({ message: 'Album updated successfully.' });
         } catch (error) {
             console.error('Error updating album:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     }
-    
-    
-    
-
 
     // Delete
     async deleteAlbum(req, res) {

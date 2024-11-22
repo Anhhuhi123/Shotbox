@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
 import classNames from 'classnames/bind';
 import styles from './Upload.module.scss';
 import Button from '../Button';
@@ -46,11 +48,20 @@ function UpLoad() {
             const res = await ImageService.createImage({
                 url: response.data.secure_url,
             });
-            alert(res.data);
+            toast.success(`Success:${res.message}`, {
+                position: "bottom-center",
+                autoClose: 1000,
+                onClose: () => {
+                    window.location.reload();
+                },
+            });
         } catch (error) {
             console.error('Upload failed:', error);
+            toast.error(`Error:${error.response.data.message}`, {
+                position: "bottom-center",
+                autoClose: 1000,
+            });
         }
-        window.location.reload();
     };
 
     const handleClickIcon = () => {
@@ -94,6 +105,7 @@ function UpLoad() {
                     onClick={handleClickIcon}
                 ></i>
             </div>
+            <ToastContainer />
         </div>
     );
 }

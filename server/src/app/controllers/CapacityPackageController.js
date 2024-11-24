@@ -46,7 +46,7 @@ class CapacityPackageController {
             }
             if (userExists.roleId === 1) {
                 const idPackage = req.params.id;
-                const { data } = req.body;
+                const data = req.body;
                 const result = await CapacityPackage.updateCapacityPackage(idPackage, data);
 
                 if (result > 0) {

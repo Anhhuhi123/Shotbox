@@ -1,29 +1,3 @@
-// .modifier {
-//   display: flex;
-//   padding-left: 0;
-//   cursor: pointer;
-//   // max-width: 500px;
-//   li {
-//     flex: 1;
-//     list-style: none;
-//     // width: 100px;
-//     text-align: center;
-//     background-color: #007bff;
-//     padding: 5px 0;
-//     border-right: 1px solid #f7f7f9;
-//     color: #FFFFFF;
-
-//     a {
-//       display: block; 
-//       width: 100%;
-//     }
-//   }
-//   li:last-child{
-//     border-right: none;
-//  }
-// }
-
-
 .modifier {
   display: flex;
   justify-content: center; /* Căn giữa các nút */
@@ -84,3 +58,38 @@
     pointer-events: none; /* Không cho phép click */
   }
 }
+.header{
+  text-align: center;
+  margin-bottom: 0px;
+}
+.block-search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; 
+  padding: 10px;
+}
+
+.input {
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+  border: none;
+  outline: none;
+}
+
+.btn-search {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 0 5px 5px 0; 
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+

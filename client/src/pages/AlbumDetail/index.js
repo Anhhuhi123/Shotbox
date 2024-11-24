@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import classNames from 'classnames/bind';
 import styles from './AlbumDetail.module.scss';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import Menu from '../../components/Menu';
 import Button from '../../components/Button';
+import FormConfirm from '../../components/FormConfirm';
 import * as AlbumService from '../../services/albumService';
 import { useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
 
 function AlbumDetail() {
@@ -20,7 +21,7 @@ function AlbumDetail() {
     const [fixAlbum, setFixAlbum] = useState(false);
     const [albumName, setAlbumName] = useState("");
     const [description, setDescription] = useState("");
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [showFormConfirm, setShowFormConfirm] = useState(false);
     const menuRef = useRef(null);
     const [isImageClicked, setIsImageClicked] = useState(false);  // State to track image click
     const [selectedImage, setSelectedImage] = useState(null);
@@ -248,7 +249,7 @@ function AlbumDetail() {
                     </div>
                     <div className={cx('icon1')} onClick={() => {
                         if (isDeleting) return;
-                        setShowDeleteConfirm(true)
+                        setShowFormConfirm(true)
                     }}>
                         <i className="fa-solid fa-trash"></i>
                     </div>
@@ -282,17 +283,13 @@ function AlbumDetail() {
             </div>
 
 
-            {showDeleteConfirm && (
-                <div className={cx('modal')}>
-                    <div className={cx('modal-content')}>
-                        <h1 className={cx('title-confirm')}>Confirm</h1>
-                        <p>Do you want to delete this album?</p>
-                        <div className={cx('modal-buttons')}>
-                            <Button first onClick={() => setShowDeleteConfirm(false)} className={cx('btn-cancel')}>Cancel</Button>
-                            <Button first onClick={(e) => handleDeleteAlbum(e)} className={cx('btn-delete')}>Delete</Button>
-                        </div>
+            {showFormConfirm && (
+                <FormConfirm title={"Confirm"} content={"Do you want to delete this album?"}>
+                    <div className={cx('modal-buttons')}>
+                        <Button first onClick={() => setShowFormConfirm(false)} className={cx('btn-cancel')}>Cancel</Button>
+                        <Button first onClick={(e) => handleDeleteAlbum(e)} className={cx('btn-delete')}>Delete</Button>
                     </div>
-                </div>
+                </FormConfirm>
             )
             }
             <ToastContainer />

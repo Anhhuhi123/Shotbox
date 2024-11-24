@@ -20,6 +20,8 @@ export const createCapacityPackage = async (value) => {
 }
 export const updateCapacityPackage = async (idPackage, value) => {
     try {
+        console.log(idPackage);
+        console.log(value);
         const res = await request.put(`/package/capacity/${idPackage}`, value);
         return res;
     } catch (error) {

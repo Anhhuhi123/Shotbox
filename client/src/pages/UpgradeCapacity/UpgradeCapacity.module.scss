@@ -38,3 +38,10 @@
     color: rgb(59, 60, 62);
     border-bottom: 1px solid rgb(136, 195, 67);
 }
+
+.btn-disabled {
+    background-color: #d3d3d3;
+    color: #808080;
+    cursor: not-allowed;
+    border: 1px solid #ccc;
+}

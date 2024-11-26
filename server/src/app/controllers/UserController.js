@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import HistoryUpgrade from '../models/HistoryUpgrade.js';
 import express from 'express';
 import bcrypt from 'bcrypt';
 
@@ -213,21 +214,17 @@ class UserController {
     async UpdateUserCapacity(req, res) {
         try {
             const { id, name, email } = req.user;
-            const userExists = await User.findById(id); // Check userExists
+            const userExists = await User.findById(id);
             if (!userExists) {
                 return res.status(404).json({ message: 'User not found' });
             }
-            // Nếu người dùng là admin, có quyền thay đổi vai trò
             if (userExists.roleId === 1) {
-                // chổ ni đợi tiến truyền api vào 
-                const { newCapacity, userId } = req.body; // Giả sử bạn gửi newRoleId và userId trong body của request
-                // Kiểm tra tính hợp lệ của newRoleId và userId
+                const { newCapacity, userId, capacityPackageId } = req.body;
                 if (!userId || !newCapacity) {
                     return res.status(400).json({ message: 'Invalid userId or newRoleId' });
                 }
-                // Cập nhật RoleId của người dùng
                 const result = await User.updateCapacity(newCapacity, userId);
-                // Kiểm tra nếu cập nhật thành công
+                await HistoryUpgrade.updateStatusByUserId(userId);
                 if (result) {
                     return res.status(200).json({ message: 'Role updated successfully' });
                 } else {

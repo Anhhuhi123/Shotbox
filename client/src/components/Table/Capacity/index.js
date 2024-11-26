@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import classNames from 'classnames/bind';
-import styles from './CapacityManager.module.scss';
-import Table from '../Table';
-import Button from '../Button';
-import FormConfirm from '../FormConfirm';
-import FormCapacity from '../FormCapacity';
-import * as capacityPackageService from '../../services/capacityPackageService';
+import styles from './Capacity.module.scss';
+import Table from '../../Table';
+import Button from '../../Button';
+import FormConfirm from '../../FormConfirm';
+import FormCapacity from '../../FormCapacity';
+import * as capacityPackageService from '../../../services/capacityPackageService';
 const cx = classNames.bind(styles);
 function CapacityManager() {
     const [currentItems, setCurrentItems] = useState([]);
@@ -26,6 +26,7 @@ function CapacityManager() {
         }
         fetchData();
     }, []);
+
     const columns = [
         {
             title: 'ID',

@@ -9,6 +9,7 @@ import Menu from '../../components/Menu';
 import Button from '../../components/Button';
 import FormConfirm from '../../components/FormConfirm';
 import * as AlbumService from '../../services/albumService';
+import Input from '../../components/Input'
 import { useParams } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
@@ -27,6 +28,8 @@ function AlbumDetail() {
     const [selectedImage, setSelectedImage] = useState(null);
     const imgRefs = useRef([]);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [listIdImgChecked, setListIdImgChecked] = useState([]);
+    // console.log(img);
     useEffect(() => {
         const showAlbumDetail = async () => {
             try {
@@ -90,6 +93,7 @@ function AlbumDetail() {
     }
 
     const handleDeleteImg = (ImageObj, e) => {
+        console.log(ImageObj.id);
         if (isDeleting) return;
         e.stopPropagation();
         setIsDeleting(true);
@@ -196,6 +200,40 @@ function AlbumDetail() {
             setIsImageClicked(true);  // Mark image as clicked
         }
     };
+    const handleOnclickCheckbox = (e, obj) => {
+        // if (listIdImgChecked.length === 0) {
+        //     setIsHideAlbum(false);
+        // }
+        setListIdImgChecked((pre) => {
+            const isChecked = listIdImgChecked.includes(obj.id);
+            if (isChecked) {
+                return listIdImgChecked.filter(item => item !== obj.id);
+            }
+            else {
+                return [...pre, obj.id]
+            }
+        });
+    }
+    const handleDeleteMutipleImgFromAlbum = (e) => {
+        const fetchData = async () => {
+            try {
+                const res = await AlbumService.deleteMultipleImgFromAlbum(listIdImgChecked);
+                toast.success(`Success:${res.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+                setListIdImgChecked([]);
+                setImg((prev) => prev.filter((img) => !listIdImgChecked.includes(img.id)));
+            } catch (error) {
+                console.log(error);
+                toast.success(`Error:${error.response.data.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+            }
+        }
+        fetchData();
+    }
     return (
         <div className={cx('wrapper')}>
             {album && (
@@ -278,10 +316,18 @@ function AlbumDetail() {
                                 )}
                             </i>
                         </div>
+                        <Input type="checkbox" className={cx('modifier-btn-checkbox')} onChange={(e) => handleOnclickCheckbox(e, obj)} checked={listIdImgChecked.includes(obj.id)} />
                     </div>
                 ))}
             </div>
-
+            {
+                listIdImgChecked.length > 0 &&
+                <div className={cx('block')}>
+                    <div className={cx('toolbar')}>
+                        <Button second icon={<i className={`fa-solid fa-trash`} ></i>} onClick={handleDeleteMutipleImgFromAlbum} ></Button>
+                    </div>
+                </div>
+            }
 
             {showFormConfirm && (
                 <FormConfirm title={"Confirm"} content={"Do you want to delete this album?"}>

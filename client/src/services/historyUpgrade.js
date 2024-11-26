@@ -10,7 +10,25 @@ export const showAllHistoryUpgrades = async () => {
 }
 export const showHistoryUpgradePanding = async () => {
     try {
-        const res = await request.get('/history/panding');
+        const res = await request.get('/history/pending');
+        return res
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+export const showUpgradePending = async (userId) => {
+    try {
+        const res = await request.get(`/history/pending/${userId}`);
+        return res
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+export const showUpgradeSucess = async () => {
+    try {
+        const res = await request.get(`/history/success`);
         return res
     } catch (error) {
         console.log(error);

@@ -24,9 +24,7 @@ const DeletedImages = {
 
     // Hàm thêm ảnh vào bảng deleted_images
     create: async (data) => {
-        // console.log('Data to delete:', data);
         const { id, userId, fileName, fileSize, fileWidth, fileHeight, fileFormat, url } = data;
-
         try {
             const query = `
                 INSERT INTO Deleted_Images ( url, fileName, fileSize, fileWidth, fileHeight, fileFormat, deletedBy)

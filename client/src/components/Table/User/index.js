@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import classNames from "classnames/bind";
-import Table from '../Table';
-import * as userService from '../../services/userService';
-import FormUpdate from "../FormUpdate";
-import styles from './PaginatedItems.module.scss'
-import Input from "../Input";
-import Button from "../Button"
+import Table from '../../Table';
+import * as userService from '../../../services/userService';
+import FormUpdate from "../../FormUpdate";
+import styles from './User.module.scss'
+import Input from "../../Input";
+import Button from "../../Button"
 const cx = classNames.bind(styles)
 
-function PaginatedItems({ itemsPerPage }) {
+function User({ itemsPerPage }) {
     const [items, setItems] = useState([]); // State to hold fetched data
     const [itemOffset, setItemOffset] = useState(0); // Pagination offset
     const [loading, setLoading] = useState(true); // Loading state
@@ -131,4 +131,4 @@ function PaginatedItems({ itemsPerPage }) {
         </>
     );
 }
-export default PaginatedItems;
+export default User;

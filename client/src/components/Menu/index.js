@@ -24,6 +24,10 @@ function Menu({ ImageObj, MenuItems, albumOnlick, setAlbumOnlick }) {
                 });
             } catch (error) {
                 console.log(error);
+                toast.error(`Error:${error.response.data.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
             }
         }
         addImgToAblum();

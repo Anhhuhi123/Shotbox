@@ -3,9 +3,11 @@ import classNames from 'classnames/bind';
 import styles from './Images.module.scss';
 import * as ImageService from '../../services/imageService';
 import Menu from '../../components/Menu';
+import Input from '../../components/Input'
 import * as AlbumService from '../../services/albumService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Button from '../../components/Button';
 const cx = classNames.bind(styles);
 
 function Images() {
@@ -18,6 +20,8 @@ function Images() {
     const menuRef = useRef(null);
     const imgRefs = useRef([]);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [listIdImgChecked, setListIdImgChecked] = useState([]);
+    const [isHideAlbum, setIsHideAlbum] = useState(false);
     useEffect(() => {
         const getImages = async () => {
             try {
@@ -41,6 +45,7 @@ function Images() {
         };
         showAlbum();
     }, []);
+    console.log(album);
     // handle when we mousedown
     useEffect(() => {
         // console.log(activeIndex)
@@ -153,7 +158,68 @@ function Images() {
         setIsImageClicked(false);
         setSelectedImage(null);
     };
-
+    const handleOnclickCheckbox = (e, obj) => {
+        if (listIdImgChecked.length === 0) {
+            setIsHideAlbum(false);
+        }
+        setListIdImgChecked((pre) => {
+            const isChecked = listIdImgChecked.includes(obj.id);
+            if (isChecked) {
+                return listIdImgChecked.filter(item => item !== obj.id);
+            }
+            else {
+                return [...pre, obj.id]
+            }
+        });
+    }
+    const handleDeleteMutipleImg = (e) => {
+        const fetchData = async () => {
+            try {
+                const res = await ImageService.deleteMultipleImage(listIdImgChecked);
+                toast.success(`Success:${res.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+                setIsHideAlbum(false);
+                setListIdImgChecked([]);
+                setImg((prev) => prev.filter((img) => !listIdImgChecked.includes(img.id)));
+            } catch (error) {
+                console.log(error);
+                toast.success(`Error:${error.response.data.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+            }
+        }
+        fetchData();
+    }
+    const handleShowAlbum = (e) => {
+        setIsHideAlbum(!isHideAlbum);
+    }
+    const handleAddImagesToAlbum = (e, albumObj) => {
+        console.log(albumObj.id)
+        const data = {
+            albumId: albumObj.id,
+            listImageId: listIdImgChecked,
+        }
+        const fetchData = async () => {
+            try {
+                const res = await AlbumService.addMultipleImgToAlbum(data);
+                toast.success(`Success:${res.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+                setIsHideAlbum(false);
+                setListIdImgChecked([]);
+            } catch (error) {
+                toast.success(`Error:${error.response.data.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+            }
+        }
+        fetchData();
+    }
     return (
         <div className={cx('wrapper')}>
             <ToastContainer />
@@ -181,9 +247,28 @@ function Images() {
                             )}
                         </i>
                     </div>
+                    <Input type="checkbox" className={cx('modifier-btn-checkbox')} onChange={(e) => handleOnclickCheckbox(e, obj)} checked={listIdImgChecked.includes(obj.id)} />
                 </div>
             ))}
+            {
+                listIdImgChecked.length > 0 &&
+                <div className={cx('block')}>
+                    <div className={cx('toolbar')}>
+                        <Button second icon={<i className={`fa-solid fa-folder`}></i>} onClick={handleShowAlbum} ></Button>
+                        <Button second icon={<i className={`fa-solid fa-trash`} ></i>} onClick={handleDeleteMutipleImg} ></Button>
+                        {
+                            isHideAlbum &&
+                            <ul className={cx('list')}>
+                                {album.map((item, index) => {
+                                    return <li key={index} className={cx('list-item')} onClick={(e) => handleAddImagesToAlbum(e, item)}>{item.albumName}</li>
+                                })}
+                            </ul>
+                        }
+                    </div>
+                </div>
+            }
         </div>
+
     );
 }
 

@@ -21,3 +21,40 @@
     }
    
  }
+
+ .list {
+    margin: 0;
+    color: #333;
+    li {
+        font-size: 14px;
+        font-weight: bold;
+        padding: 5px 10px;
+        cursor: pointer;
+
+        // Xóa hover trên li, chỉ áp dụng cho Link
+        &:hover {
+            color: inherit;
+            border-radius: inherit;
+        }
+    }
+
+    .link-modifier {
+        display: block;
+        color: #333;
+        text-decoration: none;
+
+        &:hover {
+            color: #e9ecef;
+            border-radius: 3px;
+        }
+    }
+}
+
+.list-item.active .link-modifier {
+    color: #fff; 
+    border-radius: 3px;
+}
+
+.btn-modifier{
+    background-color: inherit;
+}

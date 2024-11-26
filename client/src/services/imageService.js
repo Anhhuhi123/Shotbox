@@ -27,3 +27,13 @@ export const deleteImage = async (imgId) => {
         throw error;
     }
 }
+
+export const deleteMultipleImage = async (value) => {
+    try {
+        const res = await request.post(`/images/delete/multiple`, value);
+        return res;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}

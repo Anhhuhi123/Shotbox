@@ -57,7 +57,46 @@ class ImagesController {
             res.status(500).json({ message: "Failed to delete image. Please try again later." });
         }
     }
+    async deleteMultiple(req, res) {
+        try {
+            const arrIdImg = req.body;
+            if (!arrIdImg || arrIdImg.length === 0) {
+                return res.status(400).json({ message: "No image IDs provided." });
+            }
+            const notFoundIds = [];
+            const deletedImages = [];
+            for (const id of arrIdImg) {
+                // step1: check exist image
+                const image = await Images.getImage(id);
+                if (!image) {
+                    notFoundIds.push(id);
+                    continue;
+                }
+                // step2: add image deleted to table deleted_images
+                await DeletedImages.create(image);
+                // step3: delete images from album before deleting original images
+                await AlbumImage.deleteByImgId(id);
+                // step4: delete original images
+                await Images.delete(id);
 
+                deletedImages.push(id);
+            }
+            if (notFoundIds.length > 0) {
+                return res.status(207).json({
+                    message: "Some images were not found.",
+                    deletedImages,
+                    notFoundIds,
+                });
+            }
+            res.status(200).json({
+                message: "All images deleted successfully.",
+                deletedImages,
+            });
+        } catch (error) {
+            console.error("Error deleting images:", error);
+            res.status(500).json({ message: "Failed to delete images. Please try again later." });
+        }
+    }
 }
 
 export default new ImagesController();

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import styles from './HistoryUpgradeManager.module.scss'
+import styles from './HistoryUpgrade.module.scss'
 import classNames from 'classnames/bind'
-import Table from '../Table';
-import * as historyUpgradeService from '../../services/historyUpgrade';
+import Table from '../../Table';
+import * as historyUpgradeService from '../../../services/historyUpgrade';
 const cx = classNames.bind(styles);
-function HistoryUpgradeManager() {
+function HistoryUpgrade() {
     const [currentItems, setCurrentItems] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
@@ -35,6 +35,14 @@ function HistoryUpgradeManager() {
             width: '15%',
         },
         {
+            title: 'SIZE',
+            key: 'size',
+            width: '15%',
+            render: (size) => {
+                return `${size}MB`
+            }
+        },
+        {
             title: 'PRICE',
             key: 'price',
             width: '10%',
@@ -62,4 +70,4 @@ function HistoryUpgradeManager() {
         <Table currentItems={currentItems} columns={columns} />
     </div>);
 }
-export default HistoryUpgradeManager;
+export default HistoryUpgrade;

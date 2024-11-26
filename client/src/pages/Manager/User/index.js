@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
-import PaginatedItems from '../../components/PaginatedItems';
-import styles from './Manager.module.scss';
 import classNames from 'classnames/bind';
-import Button from '../../components/Button';
-import CapacityManager from '../../components/CapacityManager';
-import HistoryUpgradeManager from '../../components/HistoryUpgradeManager';
-import * as historyUpgradeService from '../../services/historyUpgrade';
-
+import styles from './User.module.scss';
+// import PaginatedItems from '../../../components/PaginatedItems';
+import TableUser from '../../../components/Table/User';
+import Button from '../../../components/Button';
+import * as historyUpgradeService from '../../../services/historyUpgrade';
 const cx = classNames.bind(styles);
 
-function Manager() {
+function User() {
     const [isOpen, setIsOpen] = useState(false);
     const [listHistoryPanding, setListHistoryPanding] = useState([]);
     useEffect(() => {
@@ -23,15 +21,11 @@ function Manager() {
             }
         }
         fetchData();
-    })
-
+    }, [])
     const toggleDropdown = () => setIsOpen((prev) => !prev);
-
     return (
         <div className={cx('wrapper')}>
-            <PaginatedItems itemsPerPage={2} />
-            <CapacityManager />
-            <HistoryUpgradeManager />
+            <TableUser itemsPerPage={5} />
             <div className={cx('block-btn')}>
                 <Button
                     third
@@ -43,16 +37,24 @@ function Manager() {
             </div>
             {isOpen && (
                 <div className={cx('dropdown')}>
-                    {listHistoryPanding.map((data, index) => (
-                        <div key={index} className={cx('dropdown-item')}>
-                            <strong>{data.userName}</strong>
-                            <p className={cx('paragraph')}>Package Require: "{data.packageName}"</p>
+                    {listHistoryPanding.length > 0
+                        ? listHistoryPanding.map((data, index) => (
+                            <div key={index} className={cx('dropdown-item')}>
+                                <strong>{data.userName}</strong>
+                                <p className={cx('paragraph')}>Package Require: "{data.packageName}"</p>
+                            </div>
+                        ))
+                        : <div className={cx('dropdown-item', 'no-notification')}>
+                            <trong>
+                                No notification
+                            </trong>
                         </div>
-                    ))}
+                    }
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 }
 
-export default Manager;
+export default User;

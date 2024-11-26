@@ -8,8 +8,11 @@ import User from '../pages/User'
 import Webcam from '../pages/Webcam'
 import DeletedImages from '../pages/DeletedImages'
 import ForgotPassword from '../pages/ForgotPassword'
-import Manager from '../pages/Manager'
 import UpgradeCapacity from '../pages/UpgradeCapacity'
+import UserManager from '../pages/Manager/User'
+import CapacityManager from '../pages/Manager/Capacity'
+import HistoryUpgradeManager from '../pages/Manager/HistoryUpgrade'
+
 
 
 
@@ -75,12 +78,23 @@ const routes = [
         isPrivate: true
     },
     {
-        path: '/manager',
-        component: Manager,
+        path: '/manager/user',
+        component: UserManager,
         isPrivate: true,
         permission: true,
     },
-
+    {
+        path: '/manager/capacity',
+        component: CapacityManager,
+        isPrivate: true,
+        permission: true,
+    },
+    {
+        path: '/manager/upgrade',
+        component: HistoryUpgradeManager,
+        isPrivate: true,
+        permission: true,
+    },
     {
         path: '/upgrade',
         component: UpgradeCapacity,

@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './FormUpdate.module.scss';
 import * as userService from '../../services/userService';
 import * as capacityPackageService from '../../services/capacityPackageService';
+import * as historyUpgradeService from '../../services/historyUpgrade';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
@@ -11,11 +12,28 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
     const capacitySelectRef = useRef();
     const [listCapacityPackage, setListCapacityPackage] = useState([]);
     const [isSaving, setIsSaving] = useState(false);
+    const [upgradePending, setUpgradePeding] = useState([]);
+    const arrPackage = [];
+    upgradePending.map((item) => {
+        arrPackage.push(item.size);
+    })
+    console.log(arrPackage)
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const res = await capacityPackageService.showAllCapacityPackages();
                 setListCapacityPackage(res.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchData();
+    }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await historyUpgradeService.showUpgradePending(userId);
+                setUpgradePeding(res.data);
             } catch (error) {
                 console.log(error);
             }
@@ -65,18 +83,34 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
         setIsSaving(true);
         const roleSelectElement = roleSelectRef.current;
         const capacitySelectElement = capacitySelectRef.current;
-        if (capacitySelectElement.selectedIndex > 0) {
-            const capacityTotal = parseInt(capacitySelectElement.value) + capacity;
-            const data1 = {
-                newRoleId: parseInt(roleSelectElement.value),
-                userId: userId,
-            }
+        if (capacitySelectElement.selectedIndex > 0 && arrPackage.length > 0) {
 
-            const data2 = {
-                newCapacity: capacityTotal,
-                userId: userId,
+            if (arrPackage.includes(parseInt(capacitySelectElement.value))) {
+                const data1 = {
+                    newRoleId: parseInt(roleSelectElement.value),
+                    userId: userId,
+                }
+
+                const data2 = {
+                    newCapacity: parseInt(capacitySelectElement.value),
+                    userId: userId,
+                }
+                updateCapacityData(data1, data2);
             }
-            updateCapacityData(data1, data2);
+            else {
+                toast.error('Please choose correct capacity package', {
+                    position: 'bottom-center',
+                    autoClose: 1000,
+                })
+            }
+            setIsSaving(false);
+        }
+        else if (capacitySelectElement.selectedIndex > 0 && arrPackage.length === 0) {
+            toast.error('User dont require upgrade', {
+                position: 'bottom-center',
+                autoClose: 1000,
+            })
+            setIsSaving(false);
         }
         else {
             const data = {
@@ -85,7 +119,6 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
             }
             updateRoleIdData(data);
         }
-
     }
     const handleCancel = (e) => {
         if (isSaving) return;
@@ -106,13 +139,13 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
                 <option value="option">Option</option>
                 {
                     listCapacityPackage && listCapacityPackage.map((item) => {
-                        return <option key={item.id} value={`${item.size}`}>{`${item.name} - ${item.size}MB`}</option>
+                        return arrPackage.includes(item.size) ? <option key={item.id} value={`${item.size}`} className={cx('option-modifier')}>{`${item.name} - ${item.size}MB`}</option> : <option key={item.id} value={`${item.size}`} >{`${item.name} - ${item.size}MB`}</option>
                     })
                 }
             </select>
             <div>
-                <button className={cx('btn')} onClick={handleSave}>Save</button>
                 <button className={cx('btn')} onClick={handleCancel}>Cancel</button>
+                <button className={cx('btn')} onClick={handleSave}>Save</button>
             </div>
         </div>
         <ToastContainer />

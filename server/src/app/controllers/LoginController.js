@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt";
 
 class LoginController {
-    // POST hocalhost/login
+    // POST hocalhost/login 
     async login(req, res) {
         try {
             const { username, password } = req.body;

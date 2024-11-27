@@ -7,13 +7,12 @@
 .list-images {
     display: flex; 
     margin: 0; 
-    padding: 0; 
-    // transition: 0.5s ease-in-out 0.2s;  
-}
+    padding: 0;
+    img {
+        width: 100%; 
+        flex-shrink: 0; 
+    } 
 
-.list-images img {
-    width: 100%; 
-    flex-shrink: 0; 
 }
 
 .btn {
@@ -49,6 +48,7 @@
 .btn-right {
     margin-right: 10px; 
 }
+
 .circle{
     position: absolute;
     display: flex;
@@ -64,8 +64,10 @@
     margin-right: 10px;
     border-radius: 50%; 
 }
-
-
+.block{
+    display: flex;
+    justify-content: center;
+}
 
 
 .storage-info {
@@ -118,10 +120,6 @@
 
 .progress-bar.red {
     background: linear-gradient(90deg, #f44336, #e57373);
-}
-.block{
-    display: flex;
-    justify-content: center;
 }
 
 .btn-upgrade{

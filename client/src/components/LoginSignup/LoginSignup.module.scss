@@ -1,4 +1,4 @@
-.wrapper1{
+.wrapper{
     display: flex;
     background-color: #f1f1f1;
     height: 100vh;
@@ -9,23 +9,11 @@
     background-position: center;
     background-size: cover
 }
-@media only screen and (max-width: 750px) {
-   .wrapper1{
-       display: flex;
-       flex-direction: column;
-       justify-content: center;
-    //    justify-content: space-around;
-    // margin: auto auto;
-   }
-  
-}
-.abc{
-    width: 100px;
-    height: 100px;
-}
+
 .block__description{
     text-align: center;
 }
+
 .login-title{
     margin-top: 10px;
     margin-bottom: 5px;
@@ -39,25 +27,28 @@
     padding: 10px;
     text-align: center;
 }
+
 .group-control{
     margin: 0 10px 10px 10px;
     position: relative;
 }
+
 .login-control{
-    height: 35px;     
+    padding: 10px;  
     border: 2px solid rgb(221, 223, 226);
     border-radius: 5px;
-    padding-inline-start: 10px;
     outline: none;
     font-size: 1.2rem;
-
 }
-.exclamation-mark{
+
+.icon-modifier{
     position: absolute;
     right: 8px;
-    top:12px;
+    top:50%;
+    transform: translateY(-50%);
     color: red;
 }
+
 .btn-login{
     background-color: rgb(8, 102, 255);
     color: white;  
@@ -68,15 +59,16 @@
     border-radius: 8px;
     font-size: 20px;
     transition: opacity 0.4s ease;
-    
     &:hover{
         cursor: pointer;
         opacity: 0.8;
     }
 }
+
 .forgot{
     margin-bottom: 10px;
 }
+
 .btn-signup{
     background-color: #ffc246;
     color: white;
@@ -92,7 +84,6 @@
         opacity: 0.8;
     }
 }
-
 //Sign-up
 .signup-container{
     position: fixed;
@@ -103,4 +94,12 @@
     right: 0;
     display: flex;
     justify-content: center;
+}
+
+@media only screen and (max-width: 750px) {
+    .wrapper{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 }

@@ -1,12 +1,13 @@
 import classNames from 'classnames/bind';
 import styles from './Capacity.module.scss';
-import TableCapacity from '../../../components/Table/Capacity';
+import CapacityManager from '../../../components/Manager/CapacityManager';
+
 const cx = classNames.bind(styles);
 
 function Capacity() {
     return (
         <div className={cx('wrapper')}>
-            <TableCapacity />
+            <CapacityManager />
         </div>
     );
 }

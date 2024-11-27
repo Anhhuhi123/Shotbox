@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import classNames from 'classnames/bind';
-import styles from './Capacity.module.scss';
+import styles from './CapacityManager.module.scss';
 import Table from '../../Table';
 import Button from '../../Button';
 import FormConfirm from '../../FormConfirm';
@@ -13,7 +13,7 @@ function CapacityManager() {
     const [currentItems, setCurrentItems] = useState([]);
     const [titleCapacity, setTitleCapacity] = useState('');
     const [capacityDetail, setCapacityDetail] = useState({});
-    const [checkOption, setCheckOption] = useState(false);  // true is update , false is add
+    const [showOption, setShowOption] = useState(false);  // true is update , false is add
     const [showFormConfirm, setShowFormConfirm] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
@@ -67,7 +67,7 @@ function CapacityManager() {
             handler: (item) => {
                 const { id, name, size, description, price } = item;
                 setCapacityDetail({ id, name, size, description, price });
-                setCheckOption(true);
+                setShowOption(true);
                 setTitleCapacity('Update Capacity')
             }
         },
@@ -94,7 +94,7 @@ function CapacityManager() {
         }
     }
     const handleAdd = (e) => {
-        setCheckOption(false);
+        setShowOption(false);
         setTitleCapacity('Add New Capacity')
     }
     const handleUnmount = (e) => {
@@ -116,7 +116,7 @@ function CapacityManager() {
         </div>
         <Table currentItems={currentItems} columns={columns} actions={actions} />
         {
-            titleCapacity && <FormCapacity title={titleCapacity} handleUnmount={handleUnmount} capacityDetail={capacityDetail} checkOption={checkOption} />
+            titleCapacity && <FormCapacity title={titleCapacity} handleUnmount={handleUnmount} capacityDetail={capacityDetail} showOption={showOption} />
         }
         {
             showFormConfirm && <FormConfirm title={"Confirm"} content={"Do you want to delete this capacity package?"}>

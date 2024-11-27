@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import styles from './HistoryUpgrade.module.scss'
+import styles from './HistoryUpgradeManager.module.scss'
 import classNames from 'classnames/bind'
 import Table from '../../Table';
+import Button from '../../Button';
+import Input from "../../Input";
 import * as historyUpgradeService from '../../../services/historyUpgrade';
 const cx = classNames.bind(styles);
-function HistoryUpgrade() {
+function HistoryUpgradeManager() {
     const [currentItems, setCurrentItems] = useState([]);
+    const [fullItems, setFullItems] = useState([]);
+    const [valueInput, setValueInput] = useState('');
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const res = await historyUpgradeService.showAllHistoryUpgrades();
                 setCurrentItems(res.data);
+                setFullItems(res.data);
             } catch (error) {
                 console.log(error);
             }
@@ -65,9 +71,27 @@ function HistoryUpgrade() {
             width: '20%',
         },
     ]
+    const handleOnchange = (e) => {
+        setValueInput(e.target.value);
+        const newItems = fullItems.filter((fullItem) => {
+            return fullItem.userName.toLowerCase().includes(e.target.value.toLowerCase());
+        })
+        setCurrentItems(newItems);
+    }
     return (<div className={cx('wrapper')}>
         <h1 className={cx('heading')}>History Upgrade</h1>
+        <div className={cx('block-search')}>
+            <Input className={cx('input')}
+                id="search"
+                name="search"
+                type="text"
+                placeholder="Search...."
+                value={valueInput}
+                onChange={handleOnchange}
+            />
+            <Button className={cx('btn-search')} icon={<i className="fa-solid fa-magnifying-glass"></i>} ></Button>
+        </div>
         <Table currentItems={currentItems} columns={columns} />
     </div>);
 }
-export default HistoryUpgrade;
+export default HistoryUpgradeManager;

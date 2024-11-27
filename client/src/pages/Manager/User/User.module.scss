@@ -5,13 +5,29 @@
     z-index: 1000; 
     cursor: pointer;
 }
+
 .btn-modifier {
-        position: relative;
+    position: relative;
 }
 
 .icon-modifier {
     color: black;
     font-size: 30px;
+}
+
+.text {
+    position: absolute;
+    top: -5px;
+    right: -5px; 
+    background-color: red; 
+    color: white;   
+    font-size: 12px; 
+    min-width: 18px; 
+    min-height: 18px;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    border-radius: 50%; 
 }
 
 .dropdown {
@@ -31,6 +47,10 @@
 .dropdown-item {
     padding: 12px 16px;
     border-bottom: 1px solid #eee;
+    &:hover{
+        background-color: #f5f5f5;
+        cursor: pointer;
+    }
     &:last-child {
         border-bottom: none;
     }
@@ -47,24 +67,6 @@
     }
 }
 
-.dropdown-item:hover {
-    background-color: #f5f5f5;
-    cursor: pointer;
-}
-.text {
-    position: absolute;
-    top: -5px;
-    right: -5px; 
-    background-color: red; 
-    color: white;   
-    font-size: 12px; 
-    min-width: 18px; 
-    min-height: 18px;
-    display: flex;
-    align-items: center; 
-    justify-content: center; 
-    border-radius: 50%; 
-}
 .no-notification {
     text-align: center;
     font-size: 14px;

@@ -22,12 +22,6 @@
     }
 }
 
-@media only screen and (max-width: 750px) {
-    .card {
-        flex-basis: calc(50% - 10px)
-    }
-   
- }
 .card-title {
     font-size: 18px;
     font-weight: bold;
@@ -47,13 +41,9 @@
     font-size: 25px;
 }
 
-.albums{
-    background-color: red;
-    padding: 30px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-
+@media only screen and (max-width: 750px) {
+    .card {
+        flex-basis: calc(50% - 10px)
+    }
+   
+ }

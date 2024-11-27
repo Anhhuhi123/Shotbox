@@ -50,7 +50,7 @@ class IdentifyController {
                 } catch (error) {
                     console.error(`Lỗi khi xóa idCode ${idCode}:`, error);
                 }
-            }, 30000);
+            }, 3000000);
 
             return res.status(201).json({ message: 'idCode is sent' });
 

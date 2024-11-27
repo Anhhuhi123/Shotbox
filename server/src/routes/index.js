@@ -9,7 +9,6 @@ import deletedImagesRouter from './deletedImages.js'
 import identifyRouter from './identify.js'
 import capacityPackage from './capacityPackage.js'
 import historyUpgrade from './historyUpgrade.js'
-
 function routes(app) {
     app.use('/login', loginRouter);
     app.use('/register', registerRouter);
@@ -21,7 +20,7 @@ function routes(app) {
     app.use('/identify', identifyRouter);
     app.use('/package/capacity', capacityPackage)
     app.use('/history', historyUpgrade);
-
 }
+
 export default routes;
 

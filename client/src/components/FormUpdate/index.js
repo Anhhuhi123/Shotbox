@@ -13,11 +13,12 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
     const [listCapacityPackage, setListCapacityPackage] = useState([]);
     const [isSaving, setIsSaving] = useState(false);
     const [upgradePending, setUpgradePeding] = useState([]);
+
     const arrPackage = [];
     upgradePending.map((item) => {
         arrPackage.push(item.size);
     })
-    console.log(arrPackage)
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -29,6 +30,7 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
         }
         fetchData();
     }, []);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -40,6 +42,7 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
         }
         fetchData();
     }, []);
+
     const updateRoleIdData = async (data) => {
         try {
             const res = await userService.updateRoleId(data);
@@ -58,6 +61,7 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
             });
         }
     }
+
     const updateCapacityData = async (data1, data2) => {
         try {
             const res1 = await userService.updateRoleId(data1);
@@ -79,6 +83,7 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
             });
         }
     }
+
     const handleSave = (e) => {
         setIsSaving(true);
         const roleSelectElement = roleSelectRef.current;
@@ -120,26 +125,27 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
             updateRoleIdData(data);
         }
     }
+
     const handleCancel = (e) => {
         if (isSaving) return;
         setShowFormUpdate(false);
     }
 
-    return (<div className={cx('wrapper1')}>
-        <div className={cx('wrapper')}>
-
-            <label htmlFor="roleId">Choose a role:</label>
-            <select name="role" id="role" defaultValue={checkRoleId} ref={roleSelectRef}>
+    return (<div className={cx('wrapper')}>
+        <div className={cx('block')}>
+            <label htmlFor="roleId" className={cx('label')}>Choose a role:</label>
+            <select name="role" id="role" defaultValue={checkRoleId} ref={roleSelectRef} className={cx('select-option')}>
                 <option value="1">Admin</option>
                 <option value="2">User</option>
             </select>
-
-            <label htmlFor="capacity">Choose a capacity:</label>
-            <select name="capacity" id="capacity" ref={capacitySelectRef}>
+            <label htmlFor="capacity" className={cx('label')}>Choose a capacity:</label>
+            <select name="capacity" id="capacity" ref={capacitySelectRef} className={cx('select-option')}>
                 <option value="option">Option</option>
                 {
                     listCapacityPackage && listCapacityPackage.map((item) => {
-                        return arrPackage.includes(item.size) ? <option key={item.id} value={`${item.size}`} className={cx('option-modifier')}>{`${item.name} - ${item.size}MB`}</option> : <option key={item.id} value={`${item.size}`} >{`${item.name} - ${item.size}MB`}</option>
+                        return arrPackage.includes(item.size)
+                            ? <option key={item.id} value={`${item.size}`} className={cx('option-modifier')}>{`${item.name} - ${item.size}MB`}</option>
+                            : <option key={item.id} value={`${item.size}`} >{`${item.name} - ${item.size}MB`}</option>
                     })
                 }
             </select>

@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 const cx = classNames.bind(styles)
 function Sidebar() {
     const roleId = useSelector((state) => state.auth.roleId);
-    // const ListManager = ['User', 'Capacity', 'Upgrade'];
     const ListManager = [
         {
             name: 'User',

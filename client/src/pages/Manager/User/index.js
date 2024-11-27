@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './User.module.scss';
-// import PaginatedItems from '../../../components/PaginatedItems';
-import TableUser from '../../../components/Table/User';
+import UserManager from '../../../components/Manager/UserManager';
 import Button from '../../../components/Button';
 import * as historyUpgradeService from '../../../services/historyUpgrade';
 const cx = classNames.bind(styles);
@@ -25,7 +24,7 @@ function User() {
     const toggleDropdown = () => setIsOpen((prev) => !prev);
     return (
         <div className={cx('wrapper')}>
-            <TableUser itemsPerPage={5} />
+            <UserManager itemsPerPage={5} />
             <div className={cx('block-btn')}>
                 <Button
                     third

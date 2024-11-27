@@ -5,24 +5,14 @@
     position: fixed;
     width: 180px;
     height: 100%;
-    top: var(--height-navbar);   //margin-top-side-bar = height-navbar
+    top: var(--height-navbar);  
     left: 0;
     user-select: none;
 }
-
-@media only screen and (max-width: 750px) {
-    .wrapper{
-        height: inherit;
-        width: 100%;
-        z-index: 1;
-        position: sticky;
-        top:46px;
-        margin-top: 46px;
-    }
-   
- }
-
- .list {
+.btn-modifier{
+    background-color: inherit;
+}
+.list {
     margin: 0;
     color: #333;
     li {
@@ -30,19 +20,16 @@
         font-weight: bold;
         padding: 5px 10px;
         cursor: pointer;
-
         // Xóa hover trên li, chỉ áp dụng cho Link
         &:hover {
             color: inherit;
             border-radius: inherit;
         }
     }
-
     .link-modifier {
         display: block;
-        color: #333;
+        color: gray;
         text-decoration: none;
-
         &:hover {
             color: #e9ecef;
             border-radius: 3px;
@@ -55,6 +42,13 @@
     border-radius: 3px;
 }
 
-.btn-modifier{
-    background-color: inherit;
+@media only screen and (max-width: 750px) {
+    .wrapper{
+        height: inherit;
+        width: 100%;
+        z-index: 1;
+        position: sticky;
+        top:46px;
+        margin-top: 46px;
+    }  
 }

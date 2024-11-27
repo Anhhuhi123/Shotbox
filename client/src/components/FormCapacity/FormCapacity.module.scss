@@ -1,4 +1,3 @@
-// Màn hình mờ phủ toàn màn hình
 .wrapper {
     position: fixed;
     background-color: rgba(0, 0, 0, 0.5); // Màu nền đen mờ
@@ -12,7 +11,6 @@
     z-index: 2;
 }
 
-// Hộp form
 .block {
     position: relative;
     display: flex;
@@ -26,40 +24,19 @@
     transform: translateY(0%);
 
 }
-@media only screen and (max-width: 550px) {
-    .block {
-        min-width: 400px;
 
-    }
-   
- }
- 
- @media only screen and (max-width: 500px) {
-    .block {
-        min-width: 350px;
+.heading{
+    text-align: center;
+}
 
-    }
-   
- }
- @media only screen and (max-width: 400px) {
-    .block {
-        min-width: 300px;
-
-    }
-   
- }
-
-// Tiêu đề
-.form h2 {
+.form  {
     font-size: 1.8rem;
     color: #333;
     margin-bottom: 15px;
     text-align: center;
 }
 
-// Vùng nhập liệu
 .album-control {
-    // margin-bottom: 15px;
     padding: 10px;
     font-size: 1rem;
     border-radius: 4px;
@@ -70,7 +47,6 @@
     }
 }
 
-// Vùng nhập văn bản
 .txt-area {
     min-height: 80px;
     width: 100%;
@@ -84,7 +60,6 @@
     }
 }
 
-
 .message-error{
     padding: 0;
     margin: 0;
@@ -92,12 +67,19 @@
     font-size: 14px;
 }
 
-.form{
-    display: flex;
-    flex-direction: column;
-    gap:5px;
+@media only screen and (max-width: 550px) {
+    .block {
+        min-width: 400px;
+    }
 }
-
-.heading{
-    text-align: center;
+ 
+@media only screen and (max-width: 500px) {
+    .block {
+        min-width: 350px;
+    }
+}
+@media only screen and (max-width: 400px) {
+    .block {
+        min-width: 300px;
+    }   
 }

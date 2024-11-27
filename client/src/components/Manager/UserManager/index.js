@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import classNames from "classnames/bind";
+import styles from './UserManager.module.scss'
 import Table from '../../Table';
-import * as userService from '../../../services/userService';
 import FormUpdate from "../../FormUpdate";
-import styles from './User.module.scss'
 import Input from "../../Input";
 import Button from "../../Button"
+import * as userService from '../../../services/userService';
 const cx = classNames.bind(styles)
 
-function User({ itemsPerPage }) {
-    const [items, setItems] = useState([]); // State to hold fetched data
-    const [itemOffset, setItemOffset] = useState(0); // Pagination offset
-    const [loading, setLoading] = useState(true); // Loading state
+function UserManager({ itemsPerPage }) {
+    const [items, setItems] = useState([]);
+    const [fullItems, setFullItems] = useState([]);
+    const [itemOffset, setItemOffset] = useState(0);
+    const [loading, setLoading] = useState(true);
     const [showFormUpdate, setShowFormUpdate] = useState(false);
     const [userId, setUserId] = useState(null);
     const [capacity, setCapacity] = useState(null);
     const [checkRoleId, setCheckRoleId] = useState(null);
     const [valueInput, setValueInput] = useState('');
-    const [fullItems, setFullItems] = useState([]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -42,6 +43,15 @@ function User({ itemsPerPage }) {
         const newOffset = (event.selected * itemsPerPage) % items.length;
         setItemOffset(newOffset);
     };
+
+    const handleOnchange = (e) => {
+        setValueInput(e.target.value);
+        const newItems = fullItems.filter((fullItem) => {
+            return fullItem.name.toLowerCase().includes(e.target.value.toLowerCase());
+        })
+        setItems(newItems);
+    }
+
     if (loading) {
         return <div>Loading...</div>; // Show a loading indicator
     }
@@ -79,7 +89,7 @@ function User({ itemsPerPage }) {
             title: 'UPDATE',
             width: '20%',
             handler: (item) => {
-                const { id, name, roleId, capacity } = item;
+                const { id, roleId, capacity } = item;
                 setCheckRoleId(roleId);
                 setUserId(id);
                 setCapacity(capacity);
@@ -87,14 +97,6 @@ function User({ itemsPerPage }) {
             }
         }
     ]
-
-    const handleOnchange = (e) => {
-        setValueInput(e.target.value);
-        const newItems = fullItems.filter((fullItem, index) => {
-            return fullItem.name.toLowerCase().includes(e.target.value.toLowerCase());
-        })
-        setItems(newItems);
-    }
     return (
         <>
             <h1 className={cx('header')}>Manage User</h1>
@@ -131,4 +133,4 @@ function User({ itemsPerPage }) {
         </>
     );
 }
-export default User;
+export default UserManager;

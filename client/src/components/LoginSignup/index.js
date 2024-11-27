@@ -8,16 +8,15 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // option
 import 'tippy.js/themes/light.css';
 import styles from './LoginSignup.module.scss'
-import * as loginService from '../../services/loginService'
-import { authLogin } from '../../redux/actions/auth'
 import Input from "../Input";
 import Signup from '../Signup';
-
-
+import * as loginService from '../../services/loginService'
+import { authLogin } from '../../redux/actions/auth'
 const cx = classNames.bind(styles)
 function LoginSigup() {
     const [showFormSignup, setShowFormSignup] = useState(false);
     const dispatch = useDispatch();
+
     const validationSchema = Yup.object({
         username: Yup.string()
             .required('Required')
@@ -60,9 +59,7 @@ function LoginSigup() {
         setShowFormSignup(true)
     }
 
-    // login
-
-    return (<div className={cx('wrapper1')}>
+    return (<div className={cx('wrapper')}>
 
         <div className="block__intro">
             <div className="block__messege">  <h1 style={{ color: 'black' }}>WELCOME TO WEBSITE</h1></div>
@@ -74,7 +71,7 @@ function LoginSigup() {
         </div>
 
         <div className="login-container">
-            <form action="" method="GET" className={cx("login")} onSubmit={formik.handleSubmit}>
+            <form className={cx("login")} onSubmit={formik.handleSubmit}>
 
                 <h2 className={cx("login-title")}>LOG IN</h2>
                 <div className={cx('group-control')}>
@@ -89,7 +86,7 @@ function LoginSigup() {
                     />
                     {formik.errors.username && formik.touched.username ?
                         <Tippy content={formik.errors.username} placement={'bottom'} >
-                            <i className={`fa-solid fa-circle-exclamation ${cx('exclamation-mark')}`}></i>
+                            <i className={`fa-solid fa-circle-exclamation ${cx('icon-modifier')}`}></i>
                         </Tippy> : null
                     }
                 </div>
@@ -106,7 +103,7 @@ function LoginSigup() {
                     />
                     {formik.errors.password && formik.touched.password ?
                         <Tippy content={formik.errors.password} placement={'bottom'}>
-                            <i className={`fa-solid fa-circle-exclamation ${cx('exclamation-mark')}`}></i>
+                            <i className={`fa-solid fa-circle-exclamation ${cx('icon-modifier')}`}></i>
                         </Tippy> : null
                     }
                 </div>
@@ -124,9 +121,7 @@ function LoginSigup() {
         </div>
 
         {showFormSignup &&
-            <div className={cx("signup-container")}>
-                <Signup setShowFormSignup={setShowFormSignup} />
-            </div>
+            <Signup setShowFormSignup={setShowFormSignup} />
         }
 
     </div>);

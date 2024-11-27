@@ -13,9 +13,6 @@ import UserManager from '../pages/Manager/User'
 import CapacityManager from '../pages/Manager/Capacity'
 import HistoryUpgradeManager from '../pages/Manager/HistoryUpgrade'
 
-
-
-
 const routes = [
     {
         path: '/',
@@ -61,20 +58,24 @@ const routes = [
 
     },
     {
-        path: '/deleted/images',
-        component: DeletedImages,
-        isPrivate: true
-    },
-
-    {
         path: '/album/:id',
         component: AlbumDetail,
         isPrivate: true,
     },
-
+    {
+        path: '/deleted/images',
+        component: DeletedImages,
+        isPrivate: true
+    },
     {
         path: '/user',
         component: User,
+        isPrivate: true
+    },
+    {
+        path: '/upgrade',
+        component: UpgradeCapacity,
+        layout: 'undefined',
         isPrivate: true
     },
     {
@@ -95,12 +96,6 @@ const routes = [
         isPrivate: true,
         permission: true,
     },
-    {
-        path: '/upgrade',
-        component: UpgradeCapacity,
-        layout: 'undefined',
-        isPrivate: true
-    },
-
 ]
+
 export default routes

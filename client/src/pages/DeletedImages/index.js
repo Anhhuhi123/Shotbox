@@ -3,6 +3,8 @@ import classNames from 'classnames/bind';
 import styles from './DeletedImages.module.scss';
 import * as deletedImgService from '../../services/deletedImgService';
 import Menu from '../../components/Menu';
+import Input from '../../components/Input'
+import Button from '../../components/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
@@ -16,6 +18,7 @@ function DeletedImages() {
     const [selectedImage, setSelectedImage] = useState(null);
     const imgRefs = useRef([]);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [listIdImgChecked, setListIdImgChecked] = useState([]);
 
     useEffect(() => {
         const getDeletedImg = async () => {
@@ -121,6 +124,57 @@ function DeletedImages() {
         setIsImageClicked(false);
         setSelectedImage(null);
     };
+    const handleOnclickCheckbox = (e, objDeletedImage) => {
+        setListIdImgChecked((pre) => {
+            const isChecked = listIdImgChecked.includes(objDeletedImage.id);
+            if (isChecked) {
+                return listIdImgChecked.filter(item => item !== objDeletedImage.id);
+            }
+            else {
+                return [...pre, objDeletedImage.id]
+            }
+        });
+    }
+    const handleRestoneMulitple = (e) => {
+        const fetchData = async () => {
+            try {
+                const res = await deletedImgService.restoreMultipleDeletedImage(listIdImgChecked);
+                toast.success(`Success:${res.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+                setListIdImgChecked([]);
+                setDeleteImg((prev) => prev.filter((deleteImg) => !listIdImgChecked.includes(deleteImg.id)));
+            } catch (error) {
+                console.log(error);
+                toast.success(`Error:${error.response.data.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+            }
+        }
+        fetchData();
+    }
+    const handleDelMulitple = (e) => {
+        const fetchData = async () => {
+            try {
+                const res = await deletedImgService.removeMultipleDeletedImage(listIdImgChecked);
+                toast.success(`Success:${res.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+                setListIdImgChecked([]);
+                setDeleteImg((prev) => prev.filter((deleteImg) => !listIdImgChecked.includes(deleteImg.id)));
+            } catch (error) {
+                console.log(error);
+                toast.success(`Error:${error.response.data.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+            }
+        }
+        fetchData();
+    }
     return (
         <div className={cx('demo')}>
             {isImageClicked && selectedImage && (
@@ -146,8 +200,18 @@ function DeletedImages() {
                             )}
                         </i>
                     </div>
+                    <Input type="checkbox" className={cx('modifier-btn-checkbox')} onChange={(e) => handleOnclickCheckbox(e, obj)} checked={listIdImgChecked.includes(obj.id)} />
                 </div>
             ))}
+            {
+                listIdImgChecked.length > 0 &&
+                <div className={cx('block')}>
+                    <div className={cx('toolbar')}>
+                        <Button second icon={<i className={`fa-solid fa-arrows-rotate`}></i>} onClick={handleRestoneMulitple}></Button>
+                        <Button second icon={<i className={`fa-solid fa-trash`} onClick={handleDelMulitple} ></i>}  ></Button>
+                    </div>
+                </div>
+            }
             <ToastContainer />
         </div>
     );

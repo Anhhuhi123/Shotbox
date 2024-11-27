@@ -69,3 +69,28 @@
     object-fit: fill;
 }
 
+.modifier-btn-checkbox{
+    position: absolute;
+    bottom: 5px;
+    right: 8px;
+    cursor: pointer;
+}
+
+.block {
+    position: fixed;  
+    right: 10px;         
+    bottom: 0;        
+    display: flex;
+    flex-direction: column;  
+    justify-content: center;  
+    align-items: center;      
+    z-index: 1000;    
+    // width: 80px;     
+    height: auto;    
+}
+.toolbar{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}

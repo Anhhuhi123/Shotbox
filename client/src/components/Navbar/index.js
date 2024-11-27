@@ -3,14 +3,15 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames/bind';
 import styles from './Navbar.module.scss';
-import { showUpload } from '../../redux/actions/upload';
 import { authLogout } from '../../redux/actions/auth';
 import Button from '../Button';
+import UpLoad from '../Upload';
 import * as userService from '../../services/userService.js';
 
 const cx = classnames.bind(styles);
 
 function NavBar({ mainLayout, defaultLayout, href, children }) {
+    const [showUpload, setShowUpload] = useState(false);
     const [showMenuItems, setShowMenuItems] = useState(false);
     const menuRef = useRef(null); // Ref to track the menu element
     const dispatch = useDispatch();
@@ -38,8 +39,7 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
     }, []);
 
     const handleOnclick = (e) => {
-        const action = showUpload(true);
-        dispatch(action);
+        setShowUpload(true);
     };
 
     const handleOnlickLogout = (e) => {
@@ -101,6 +101,9 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
                     </div>
                 </div>
             )}
+            {
+                showUpload && <UpLoad setShowUpload={setShowUpload} />
+            }
 
 
         </div>

@@ -146,6 +146,8 @@ function Home() {
                     ))}
                 </div>
             </div>
+
+
             <div className={cx('block')}>
                 <div className={cx('storage-info')}>
                     <h2 className={cx('title')}>Storage Usage</h2>

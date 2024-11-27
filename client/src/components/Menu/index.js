@@ -5,7 +5,6 @@ import * as AlbumService from '../../services/albumService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
-
 function Menu({ ImageObj, MenuItems, albumOnlick, setAlbumOnlick }) {
 
     const current = albumOnlick.length > 0 ? albumOnlick : MenuItems;
@@ -43,7 +42,6 @@ function Menu({ ImageObj, MenuItems, albumOnlick, setAlbumOnlick }) {
                     Back
                 </Button>
             )}
-            {/* If have id => item = ablumObj, If dont have id => item = MenuItems*/}
             {current.map((item, index) => (
                 item.id ? (
                     <Button key={index} four onClick={(e) => handleAddImgToAlbum(e, item, ImageObj)}>

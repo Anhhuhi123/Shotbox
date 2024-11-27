@@ -1,6 +1,5 @@
 import classNames from 'classnames/bind'
 import styles from './Input.module.scss'
-import { Formik } from 'formik'
 const cx = classNames.bind(styles)
 function Input({ className, type, placeholder, error, value, onChange, onBlur, checked, ...otherProps }) {
     const classes = cx({

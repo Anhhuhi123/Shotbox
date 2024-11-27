@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import uploadReducer from './upload'
 import authReducer from './auth'
+import vertifyReducer from './verify'
 const rootReducer = combineReducers({
-    upload: uploadReducer,
     auth: authReducer,
+    verify: vertifyReducer,
 })
 export default rootReducer;

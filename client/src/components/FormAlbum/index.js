@@ -10,7 +10,7 @@ import Button from '../Button';
 import * as AlbumService from '../../services/albumService';
 const cx = classNames.bind(styles);
 
-function FormAlbum({ handleUnmount }) {
+function FormAlbum({ setShowFormAlbum }) {
     const formik = useFormik({
         initialValues: {
             albumName: '',
@@ -80,7 +80,7 @@ function FormAlbum({ handleUnmount }) {
                     )}
 
                     <div>
-                        <Button first onClick={handleUnmount} type="button">
+                        <Button first onClick={() => setShowFormAlbum(false)} type="button">
                             Cancel
                         </Button>
                         <Button first type="submit">

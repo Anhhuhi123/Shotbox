@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './FormCapacity.module.scss';
 import Input from '../Input';
@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as capacityPackageService from '../../services/capacityPackageService';
 import * as Yup from 'yup';
 const cx = classNames.bind(styles);
-function FormCapacity({ title, handleUnmount, capacityDetail, checkOption }) {
+function FormCapacity({ title, handleUnmount, capacityDetail, showOption }) {
     const text = title.split(' ')[0];
     const validationSchema = Yup.object({
         name: Yup.string()
@@ -44,7 +44,7 @@ function FormCapacity({ title, handleUnmount, capacityDetail, checkOption }) {
                 description: values.description,
                 price: parseInt(values.price),
             }
-            if (checkOption) {
+            if (showOption) {
                 updatCapacity(idPackage, data);
             } else {
                 addCapacity(data);

@@ -22,7 +22,16 @@ db.connect((err) => {
 
 routes(app);
 
-app.listen(port, () => {
-    console.log(`http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`http://localhost:${port}`);
+// });
+
+app.listen(8080, '192.168.138.241', () => {
+    console.log('Backend is running on http://192.168.138.241:8080');
+  });
+
+// app.listen(8080, '0.0.0.0', () => {
+//     console.log('Backend is running on http://0.0.0.0:8080');
+// });
+  
 

@@ -1,19 +1,15 @@
 import classNames from 'classnames/bind';
 import styles from './Album.module.scss';
-import Input from '../../components/Input/';
-import Button from '../../components/Button';
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from 'uuid';
 import FormAlbum from '../../components/FormAlbum';
 import * as AlbumService from '../../services/albumService';
-
 const cx = classNames.bind(styles);
-
 function Album() {
     const [showformAlbum, setShowFormAlbum] = useState(false);
     const [listAlbums, setListAlbums] = useState([]);
     const navigate = useNavigate();
+
     useEffect(() => {
         const getAllAlbums = async () => {
             try {
@@ -26,18 +22,17 @@ function Album() {
         if (!showformAlbum) {
             getAllAlbums();
         }
-    }, []);
+    }, [showformAlbum]);
+
+
+    const handleOnclickDirect = (e, obj) => {
+        navigate(`/album/${obj.location}`)
+    }
 
     const handleOnclick = (e) => {
         setShowFormAlbum(!showformAlbum);
     };
 
-    const handleOnclickCancel = (e) => {
-        setShowFormAlbum(false);
-    };
-    const handleOnclickDirect = (e, obj) => {
-        navigate(`/album/${obj.location}`)
-    }
     return (
         <div className={cx('wrapper')}>
             {listAlbums.map((obj) => (
@@ -47,7 +42,7 @@ function Album() {
                 </div>
             ))}
             <i className={`fa-solid fa-plus ${cx('card', 'card-bonus')}`} onClick={handleOnclick}></i>
-            {showformAlbum && <FormAlbum handleUnmount={handleOnclickCancel} />}
+            {showformAlbum && <FormAlbum setShowFormAlbum={setShowFormAlbum} />}
         </div>
     );
 }

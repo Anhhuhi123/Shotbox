@@ -48,7 +48,10 @@
 
 }
 @media only screen and (max-width: 550px) {
-    .demo111{
+    .text-modifier{
+        display: none;
+    }
+    .fa-user-modifier {
         display: none;
     }
    
@@ -107,4 +110,10 @@
     width: 10px;
     text-align: center;
     margin-right: 10px;
+}
+
+
+.fa-user-modifier{
+    background-color: white;
+    margin-right: 0px;
 }

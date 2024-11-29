@@ -8,57 +8,43 @@
     z-index: 2;
 }
 
-.upload {
+.block {
     position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     left: 50%;
-    top: -220px; /* Ban đầu phần tử sẽ ở ngoài màn hình (phía trên) */
+    top: -220px; 
     height: 220px;
     width: 80%;
     max-width: 500px;
     transform: translateX(-50%);
     background-color: #efefef;
     padding: 10px 30px;
-    transition: top 0.5s ease-out; /* Hiệu ứng chuyển động mượt mà khi thay đổi top */
+    transition: top 0.5s ease-out;
 }
 
-
-
-.upload.show {
+.block.show {
     top: 50px;
 }
+
 .wrapper-button {
-    padding: 10px;
+    padding: 10px 20px;
     background-color: #fff;
 }
 
-.frame {
+.form {
     background-color: #fff;
     padding: 20px;
     width: 100%;
     min-height: 50px;
     display: flex;
-    align-items: center;
-}
-
-.circle-xmark {
-    position: absolute;
-    top: 7px;
-    right: 7px;
-    cursor: pointer;
-    transition: .4s ease;
-}
-
-.circle-xmark:hover {
-    font-weight: 700;
+    align-items: stretch;
 }
 
 .input {
     flex: 3;
     font-size: 14px;
-    height: 33px;
     outline: none;
     border: 1px solid rgb(221, 220, 220);
     padding: 5px;
@@ -66,7 +52,6 @@
 
 .btn {
     flex: 1;
-    
     &.disabled {
         user-select: none;
         cursor: not-allowed;
@@ -75,16 +60,25 @@
       }
 }
 
+.icon-modifier {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    cursor: pointer;
+    transition: 0.4s ease;
+    &:hover{
+        font-weight: 700;
+    }
+}
 
 @media screen and (max-width: 600px) {
-    .upload {
+    .block {
         max-width: 400px; 
     }
 }
 
 @media screen and (max-width: 500px) {
-  
-    .frame{
+    .form{
         display: flex;
         flex-direction: column;
         .input{
@@ -95,5 +89,4 @@
     .btn{
         font-size: 14px;
     }
-    
 }

@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from './Webcam.module.scss';
 import classNames from 'classnames/bind';
 import Camera from '../../components/Camera';
 import Button from '../../components/Button';
-import axios from 'axios';
 import * as ImageService from '../../services/imageService';
 const cx = classNames.bind(styles);
 
@@ -29,15 +31,21 @@ function Webcam() {
             const res = await ImageService.createImage({
                 url: response.data.secure_url,
             })
-            alert(res.data)
+            toast.success(`Success:${res.message}`, {
+                position: "bottom-right",
+                autoClose: 1000,
+            });
         } catch (error) {
             console.error('Upload failed:', error);
+            toast.error(`Error:${error.response.data.message}`, {
+                position: "bottom-right",
+                autoClose: 1000,
+            });
         }
     };
 
     return (
         <div className={cx('wrapper')} >
-            {/* <h2 className={cx('title')}>My Camera</h2> */}
             {!capturedImage && <Camera setCapturedImage={setCapturedImage} />}
             {
                 capturedImage && (
@@ -49,13 +57,13 @@ function Webcam() {
             {
                 capturedImage && (
                     <div className={cx('list-btn')}>
-                        <Button first onClick={() => setCapturedImage(null)}>
+                        <Button icon={<i className={`fa-solid fa-arrows-rotate ${cx('icon-modifier')}`}></i>} first onClick={() => setCapturedImage(null)}>
                             Back
                         </Button>
-                        <Button first onClick={handleAddImages}>
+                        <Button icon={<i className={`fa-solid fa-image ${cx('icon-modifier')}`}></i>} first onClick={handleAddImages}>
                             Add To Images
                         </Button>
-                        <Button first onClick={() => {
+                        <Button icon={<i className={`fa-solid fa-download ${cx('icon-modifier')}`}></i>} first onClick={() => {
                             const link = document.createElement('a');
                             link.href = URL.createObjectURL(capturedImage);
                             link.download = 'demo.jpg';
@@ -66,6 +74,7 @@ function Webcam() {
                     </div>
                 )
             }
+            <ToastContainer />
         </div >
     );
 }

@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import classNames from 'classnames/bind';
 import styles from './AlbumDetail.module.scss';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import Menu from '../../components/Menu';
 import Button from '../../components/Button';
+import FormConfirm from '../../components/FormConfirm';
 import * as AlbumService from '../../services/albumService';
+import Input from '../../components/Input'
 import { useParams } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
@@ -13,17 +17,19 @@ function AlbumDetail() {
     const { id } = useParams();
     const [activeIndex, setActiveIndex] = useState(null);
     const [img, setImg] = useState([]);
-    const [test, setTest] = useState([]);
+    const [albumOnlick, setAlbumOnlick] = useState([]);
     const [album, setAlbum] = useState(null);
     const [fixAlbum, setFixAlbum] = useState(false);
     const [albumName, setAlbumName] = useState("");
     const [description, setDescription] = useState("");
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [showFormConfirm, setShowFormConfirm] = useState(false);
     const menuRef = useRef(null);
-
     const [isImageClicked, setIsImageClicked] = useState(false);  // State to track image click
     const [selectedImage, setSelectedImage] = useState(null);
     const imgRefs = useRef([]);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [listIdImgChecked, setListIdImgChecked] = useState([]);
+    // console.log(img);
     useEffect(() => {
         const showAlbumDetail = async () => {
             try {
@@ -69,7 +75,9 @@ function AlbumDetail() {
         }
     };
 
-    const handleDownloadImg = async (ImageObj) => {
+    const handleDownloadImg = async (ImageObj, e) => {
+        if (isDeleting) return;
+        e.stopPropagation();
         const url = ImageObj.url;
         try {
             const response = await fetch(url);
@@ -84,15 +92,31 @@ function AlbumDetail() {
         }
     }
 
-    const handleDeleteImg = (ImageObj) => {
+    const handleDeleteImg = (ImageObj, e) => {
+        console.log(ImageObj.id);
+        if (isDeleting) return;
+        e.stopPropagation();
+        setIsDeleting(true);
+        document.removeEventListener('mousedown', handleClickOutside);
         const idAlbumImg = ImageObj.id;
         const deleteImgFromAlbum = async () => {
             try {
                 const res = await AlbumService.deleteImgFromAlbum(idAlbumImg);
-                alert(res.message);
-                setImg((prev) => prev.filter((img) => img.id !== idAlbumImg));
+                toast.success(`Success:${res.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                    onClose: () => {
+                        setImg((prev) => prev.filter((img) => img.id !== idAlbumImg));
+                        setActiveIndex(null);
+                        setIsDeleting(false);
+                    },
+                });
             } catch (error) {
                 console.log(error);
+                toast.error(`Error:${error.respone.data.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
             }
         }
         deleteImgFromAlbum();
@@ -111,22 +135,24 @@ function AlbumDetail() {
         const deleteAlbum = async () => {
             const id = album.id;
             try {
-                const res = await AlbumService.deleteAlbum(id);
+                await AlbumService.deleteAlbum(id);
+                window.location.href = "/album"
             } catch (error) {
                 console.log(error);
             }
         }
         deleteAlbum();
-        window.location.href = "/album"
     }
 
     const MenuItems = [
         {
             name: 'Download',
+            icon: 'fa-solid fa-download',
             handleOnclick: handleDownloadImg
         },
         {
             name: 'Delete',
+            icon: 'fa-solid fa-trash',
             handleOnclick: handleDeleteImg
         }
     ];
@@ -152,14 +178,14 @@ function AlbumDetail() {
                     description: values.description
                 }
                 try {
-                    const res = await AlbumService.updateAlbum(id, data);
-                    alert(res.message);
+                    await AlbumService.updateAlbum(id, data);
+                    window.location.reload();
                 } catch (error) {
+                    formik.setFieldError('albumName', error.response.data.message);
                     console.log(error);
                 }
             }
             updateAlbum();
-            window.location.reload();
         },
     });
     const handleCloseImage = () => {
@@ -167,12 +193,47 @@ function AlbumDetail() {
         setSelectedImage(null);
     };
     const handleGetImage = (e, index) => {
+        if (isDeleting) return;
         const imgElement = imgRefs.current[index];
         if (imgElement) {
             setSelectedImage(imgElement.src);  // Save selected image URL
             setIsImageClicked(true);  // Mark image as clicked
         }
     };
+    const handleOnclickCheckbox = (e, obj) => {
+        // if (listIdImgChecked.length === 0) {
+        //     setIsHideAlbum(false);
+        // }
+        setListIdImgChecked((pre) => {
+            const isChecked = listIdImgChecked.includes(obj.id);
+            if (isChecked) {
+                return listIdImgChecked.filter(item => item !== obj.id);
+            }
+            else {
+                return [...pre, obj.id]
+            }
+        });
+    }
+    const handleDeleteMutipleImgFromAlbum = (e) => {
+        const fetchData = async () => {
+            try {
+                const res = await AlbumService.deleteMultipleImgFromAlbum(listIdImgChecked);
+                toast.success(`Success:${res.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+                setListIdImgChecked([]);
+                setImg((prev) => prev.filter((img) => !listIdImgChecked.includes(img.id)));
+            } catch (error) {
+                console.log(error);
+                toast.success(`Error:${error.response.data.message}`, {
+                    position: "bottom-center",
+                    autoClose: 1000,
+                });
+            }
+        }
+        fetchData();
+    }
     return (
         <div className={cx('wrapper')}>
             {album && (
@@ -218,10 +279,16 @@ function AlbumDetail() {
                             </>
                         )}
                     </div>
-                    <div className={cx('icon')} onClick={() => setFixAlbum(true)}>
+                    <div className={cx('icon')} onClick={() => {
+                        if (isDeleting) return;
+                        setFixAlbum(true)
+                    }}>
                         <i className="fa-solid fa-pen" ></i>
                     </div>
-                    <div className={cx('icon1')} onClick={() => setShowDeleteConfirm(true)}>
+                    <div className={cx('icon1')} onClick={() => {
+                        if (isDeleting) return;
+                        setShowFormConfirm(true)
+                    }}>
                         <i className="fa-solid fa-trash"></i>
                     </div>
                 </div>
@@ -245,29 +312,35 @@ function AlbumDetail() {
                         <div className={cx('block-option')} ref={activeIndex === index ? menuRef : null}>
                             <i className={`fa-solid fa-bars ${cx('icon-modifier')}`} onClick={() => handleOnclick(index)}>
                                 {activeIndex === index && (
-                                    <Menu ImageObj={obj} setImg={setImg} MenuItems={MenuItems} test={test} setTest={setTest} />
+                                    <Menu ImageObj={obj} setImg={setImg} MenuItems={MenuItems} albumOnlick={albumOnlick} setAlbumOnlick={setAlbumOnlick} />
                                 )}
                             </i>
                         </div>
+                        <Input type="checkbox" className={cx('modifier-btn-checkbox')} onChange={(e) => handleOnclickCheckbox(e, obj)} checked={listIdImgChecked.includes(obj.id)} />
                     </div>
                 ))}
             </div>
-
-
-            {showDeleteConfirm && (
-                <div className={cx('modal')}>
-                    <div className={cx('modal-content')}>
-                        <h3>Confirm</h3>
-                        <p>Do you want to delete this album?</p>
-                        <div className={cx('modal-buttons')}>
-                            <button onClick={() => setShowDeleteConfirm(false)}>Cancel</button>
-                            <button onClick={(e) => handleDeleteAlbum(e)}>Delete</button>
-                        </div>
+            {
+                listIdImgChecked.length > 0 &&
+                <div className={cx('block')}>
+                    <div className={cx('toolbar')}>
+                        <Button second icon={<i className={`fa-solid fa-trash`} ></i>} onClick={handleDeleteMutipleImgFromAlbum} ></Button>
                     </div>
                 </div>
-            )}
+            }
 
-        </div>
+            {showFormConfirm && (
+                <FormConfirm title={"Confirm"} content={"Do you want to delete this album?"}>
+                    <div className={cx('modal-buttons')}>
+                        <Button first onClick={() => setShowFormConfirm(false)} className={cx('btn-cancel')}>Cancel</Button>
+                        <Button first onClick={(e) => handleDeleteAlbum(e)} className={cx('btn-delete')}>Delete</Button>
+                    </div>
+                </FormConfirm>
+            )
+            }
+            <ToastContainer />
+
+        </div >
     );
 }
 

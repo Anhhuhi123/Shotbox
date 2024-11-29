@@ -62,6 +62,24 @@ export const addImgToAlbum = async (value) => {
         throw error;
     }
 }
+export const addMultipleImgToAlbum = async (value) => {
+    try {
+        const res = await request.post('/album/images/multiple', value);
+        return res;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+export const deleteMultipleImgFromAlbum = async (value) => {
+    try {
+        const res = await request.post('/album/images/delete/multiple', value);
+        return res;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
 export const deleteImgFromAlbum = async (idAlbumImg) => {
     try {
         const res = await request.deleteRequest(`/album/images/${idAlbumImg}`);

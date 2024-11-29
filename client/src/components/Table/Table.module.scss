@@ -1,0 +1,40 @@
+.wrapper {
+    table {
+      width: 100%; /* Chiếm toàn bộ chiều rộng */
+      border-collapse: collapse;
+      margin: 20px 0;
+      table-layout: fixed; /* Kích thước cột cố định */
+    }
+  
+    th,
+    td {
+        padding: 12px 15px;
+        text-align: left;
+        border: 1px solid #ddd; /* Viền nhẹ */
+        white-space: normal; /* Cho phép xuống dòng */
+        word-wrap: break-word; /* Đảm bảo từ dài được ngắt dòng */
+        word-break: break-word; /* Ngắt từ nếu cần */
+      }
+      
+  
+    th {
+      background-color: #007bff; /* Màu nền cho tiêu đề */
+      color: #ffffff;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+  
+    tr:hover {
+      background-color: #f9f9f9; /* Hiệu ứng hover */
+    }
+  
+    @media screen and (max-width: 768px) {
+      th, td {
+        font-size: 10px; /* Kích thước nhỏ hơn trên màn hình nhỏ */
+      }
+    }
+  }
+
+.btn{
+    cursor: pointer;
+}

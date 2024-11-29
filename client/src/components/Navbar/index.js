@@ -3,14 +3,15 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames/bind';
 import styles from './Navbar.module.scss';
-import { showUpload } from '../../redux/actions/upload';
 import { authLogout } from '../../redux/actions/auth';
 import Button from '../Button';
+import UpLoad from '../Upload';
 import * as userService from '../../services/userService.js';
 
 const cx = classnames.bind(styles);
 
 function NavBar({ mainLayout, defaultLayout, href, children }) {
+    const [showUpload, setShowUpload] = useState(false);
     const [showMenuItems, setShowMenuItems] = useState(false);
     const menuRef = useRef(null); // Ref to track the menu element
     const dispatch = useDispatch();
@@ -38,8 +39,7 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
     }, []);
 
     const handleOnclick = (e) => {
-        const action = showUpload(true);
-        dispatch(action);
+        setShowUpload(true);
     };
 
     const handleOnlickLogout = (e) => {
@@ -82,11 +82,11 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
                     </div>
 
                     <div className={cx('actions')}>
-                        <Button icon={<i className="fa-regular fa-user"></i>} className={cx('demo111')}></Button>
+                        <Button icon={<i className="fa-regular fa-user"></i>} className={cx('fa-user-modifier')}></Button>
                     </div>
 
                     <div className={cx('actions')}>
-                        <Button to='/user' className={cx('demo111')}>{user ? user.name : ""}</Button>
+                        <Button to='/user' className={cx('text-modifier')}>{user ? user.name : ""}</Button>
                     </div>
 
                     <div className={cx('option')} ref={menuRef} onClick={() => setShowMenuItems(!showMenuItems)}>
@@ -101,6 +101,11 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
                     </div>
                 </div>
             )}
+            {
+                showUpload && <UpLoad setShowUpload={setShowUpload} />
+            }
+
+
         </div>
     );
 }

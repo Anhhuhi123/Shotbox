@@ -1,7 +1,14 @@
 import axios from 'axios';
 // config request
+// const request = axios.create({
+//     baseURL: 'http://192.168.138.241:8080',
+//     headers: {
+//         'Content-Type': 'application/json',
+//     }
+// })
+
 const request = axios.create({
-    baseURL: 'http://192.168.138.241:8080',
+    baseURL: 'http://localhost:8080',
     headers: {
         'Content-Type': 'application/json',
     }

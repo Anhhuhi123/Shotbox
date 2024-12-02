@@ -11,6 +11,7 @@ const cx = classNames.bind(styles);
 function UpLoad({ setShowUpload }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
     const fileInputRef = useRef(null);
 
     useEffect(() => {
@@ -37,6 +38,12 @@ function UpLoad({ setShowUpload }) {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
+                onUploadProgress: (progressEvent) => {
+                    const progress = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    setUploadProgress(progress);
+                },
             });
             const res = await ImageService.createImage({
                 url: response.data.secure_url,
@@ -50,9 +57,9 @@ function UpLoad({ setShowUpload }) {
             });
         } catch (error) {
             console.error('Upload failed:', error);
-            toast.error(`Error:${error.response.data.message}`, {
+            toast.error(`Error: ${error.response?.data?.message || 'Upload failed'}`, {
                 position: "bottom-center",
-                autoClose: 1000,
+                autoClose: 3000,
             });
         }
     };
@@ -71,30 +78,53 @@ function UpLoad({ setShowUpload }) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('block', { show: isVisible })}>
+                <h2 className={cx('title')}>Upload Image</h2>
+                
                 <div className={cx('wrapper-button')}>
                     <Button five onClick={handleSelectFromDevice} className={cx('btn')}>
-                        Select-From-Device
+                        Select From Device
                     </Button>
                 </div>
+                
                 <div className={cx('form')}>
                     <input
                         type="text"
                         className={cx('input')}
-                        placeholder="Paste your URL here..."
+                        placeholder="Selected file or paste URL here..."
                         value={selectedFile ? selectedFile.name : ''}
                         readOnly
                     />
-                    <Button five onClick={handleUpload} className={cx('btn', { disabled: !selectedFile })} disabled={!selectedFile}>
-                        UpLoad
+                    <Button 
+                        five 
+                        onClick={handleUpload} 
+                        className={cx('btn', { disabled: !selectedFile })} 
+                        disabled={!selectedFile}
+                    >
+                        Upload
                     </Button>
                 </div>
+                
+                {uploadProgress > 0 && (
+                    <div className={cx('progress-bar')}>
+                        <div 
+                            className={cx('progress')} 
+                            style={{ width: `${uploadProgress}%` }}
+                        />
+                    </div>
+                )}
+                
                 <input
                     type="file"
                     ref={fileInputRef}
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
+                    accept="image/*"
                 />
-                <i className={`fa-regular fa-circle-xmark ${cx('icon-modifier')}`} onClick={handleClickIcon}></i>
+                
+                <i 
+                    className={`fa-regular fa-circle-xmark ${cx('icon-modifier')}`} 
+                    onClick={handleClickIcon}
+                />
             </div>
             <ToastContainer />
         </div>

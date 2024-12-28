@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import * as capacityPackageService from '../../services/capacityPackageService';
 import * as Yup from 'yup';
 const cx = classNames.bind(styles);
-function FormCapacity({ title, handleUnmount, capacityDetail, showOption }) {
+function FormCapacity({ title, handleUnmount, capacityDetail, isUpdate }) {
     const text = title.split(' ')[0];
     const validationSchema = Yup.object({
         name: Yup.string()
@@ -44,7 +44,7 @@ function FormCapacity({ title, handleUnmount, capacityDetail, showOption }) {
                 description: values.description,
                 price: parseInt(values.price),
             }
-            if (showOption) {
+            if (isUpdate) {
                 updatCapacity(idPackage, data);
             } else {
                 addCapacity(data);
@@ -75,9 +75,7 @@ function FormCapacity({ title, handleUnmount, capacityDetail, showOption }) {
             })
         }
     }
-    const handleCancel = () => {
-        handleUnmount();
-    }
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('block')}>
@@ -145,7 +143,7 @@ function FormCapacity({ title, handleUnmount, capacityDetail, showOption }) {
                         )}
                     </div>
                     <div>
-                        <Button first onClick={handleCancel} type="button">
+                        <Button first onClick={() => handleUnmount()} type="button">
                             Cancel
                         </Button>
                         <Button first type="submit">

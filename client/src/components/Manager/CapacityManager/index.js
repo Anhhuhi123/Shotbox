@@ -13,7 +13,7 @@ function CapacityManager() {
     const [currentItems, setCurrentItems] = useState([]);
     const [titleCapacity, setTitleCapacity] = useState('');
     const [capacityDetail, setCapacityDetail] = useState({});
-    const [showOption, setShowOption] = useState(false);  // true is update , false is add
+    const [isUpdate, setIsUpdate] = useState(false);  // true is update , false is add
     const [showFormConfirm, setShowFormConfirm] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
@@ -63,17 +63,17 @@ function CapacityManager() {
     const actions = [
         {
             title: 'UPDATE',
-            width: '10%',
+            width: '15%',
             handler: (item) => {
                 const { id, name, size, description, price } = item;
                 setCapacityDetail({ id, name, size, description, price });
-                setShowOption(true);
+                setIsUpdate(true);
                 setTitleCapacity('Update Capacity')
             }
         },
         {
             title: 'DELETE',
-            width: '10%',
+            width: '15%',
             handler: (item) => {
                 const { id, name, size, description, price } = item;
                 setCapacityDetail({ id, name, size, description, price });
@@ -94,7 +94,7 @@ function CapacityManager() {
         }
     }
     const handleAdd = (e) => {
-        setShowOption(false);
+        setIsUpdate(false);
         setTitleCapacity('Add New Capacity')
     }
     const handleUnmount = (e) => {
@@ -116,7 +116,7 @@ function CapacityManager() {
         </div>
         <Table currentItems={currentItems} columns={columns} actions={actions} />
         {
-            titleCapacity && <FormCapacity title={titleCapacity} handleUnmount={handleUnmount} capacityDetail={capacityDetail} showOption={showOption} />
+            titleCapacity && <FormCapacity title={titleCapacity} handleUnmount={handleUnmount} capacityDetail={capacityDetail} isUpdate={isUpdate} />
         }
         {
             showFormConfirm && <FormConfirm title={"Confirm"} content={"Do you want to delete this capacity package?"}>

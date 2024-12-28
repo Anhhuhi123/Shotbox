@@ -1,0 +1,42 @@
+.block {
+    position: fixed;  
+    right: 10px;         
+    bottom: 0;        
+    display: flex;
+    flex-direction: column;  
+    justify-content: center;  
+    align-items: center;      
+    z-index: 1000;    
+    // width: 80px;     
+    height: auto;    
+}
+.toolbar{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}
+
+.list {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    z-index: 999;  /* Đảm bảo phần tử này sẽ nằm trên các phần tử khác */
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    margin: 0;
+    // background-color: red;
+    // padding: 10px;
+}
+.list-item{
+    cursor: pointer;
+    padding: 5px 5px;
+    background-color: black;
+    font-size: 14px;
+    color: #a3a3a3;
+    &:hover{
+        color: white;
+    }
+}
+

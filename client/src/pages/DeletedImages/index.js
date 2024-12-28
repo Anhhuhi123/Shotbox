@@ -1,61 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './DeletedImages.module.scss';
-import * as deletedImgService from '../../services/deletedImgService';
-import Menu from '../../components/Menu';
-import Input from '../../components/Input'
-import Button from '../../components/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import * as deletedImgService from '../../services/deletedImgService';
+import ImageCardList from '../../components/ImageCardList';
+import Toolbar from '../../components/Toolbar';
+import useDeletedImages from '../../hooks/useDeletedImages';
+
 const cx = classNames.bind(styles);
 
 function DeletedImages() {
-    const [deletedImg, setDeleteImg] = useState([]);
-    const [activeIndex, setActiveIndex] = useState(null);
-    const [albumOnlick, setAlbumOnlick] = useState([]);
-    const menuRef = useRef(null);
-    const [isImageClicked, setIsImageClicked] = useState(false);  // State to track image click
-    const [selectedImage, setSelectedImage] = useState(null);
-    const imgRefs = useRef([]);
-    const [isDeleting, setIsDeleting] = useState(false);
+    const { deletedImg, setDeleteImg } = useDeletedImages();
     const [listIdImgChecked, setListIdImgChecked] = useState([]);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [displayAlbums, setDisplayAlbums] = useState([]);
 
-    useEffect(() => {
-        const getDeletedImg = async () => {
-            try {
-                const res = await deletedImgService.showDeletedImages();
-                setDeleteImg(res.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        getDeletedImg();
-    }, []);
-    // handle when we mousedown
-    useEffect(() => {
-        if (activeIndex !== null) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [activeIndex]);
-
-    const handleOnclick = (index) => {
-        if (isDeleting) return;
-        setActiveIndex(activeIndex === index ? null : index);
-    };
-
-    const handleClickOutside = (e) => {
-        if (menuRef.current && !menuRef.current.contains(e.target)) {
-            setActiveIndex(null);
-        }
-    };
     const handleRestore = (objDeletedImage, e) => {
         if (isDeleting) return;
         e.stopPropagation();
         setIsDeleting(true);
-        document.removeEventListener('mousedown', handleClickOutside);
+        // document.removeEventListener('mousedown', handleClickOutside);
         const id = objDeletedImage.id;
         const restoreImg = async () => {
             try {
@@ -82,7 +47,7 @@ function DeletedImages() {
         if (isDeleting) return;
         e.stopPropagation();
         setIsDeleting(true);
-        document.removeEventListener('mousedown', handleClickOutside);
+        // document.removeEventListener('mousedown', handleClickOutside);
         const id = objDeletedImage.id;
         const removeImg = async () => {
             try {
@@ -112,29 +77,7 @@ function DeletedImages() {
             handleOnclick: handleDeleteImg
         }
     ];
-    const handleGetImage = (e, index) => {
-        if (isDeleting) return;
-        const imgElement = imgRefs.current[index];
-        if (imgElement) {
-            setSelectedImage(imgElement.src);  // Save selected image URL
-            setIsImageClicked(true);  // Mark image as clicked
-        }
-    };
-    const handleCloseImage = () => {
-        setIsImageClicked(false);
-        setSelectedImage(null);
-    };
-    const handleOnclickCheckbox = (e, objDeletedImage) => {
-        setListIdImgChecked((pre) => {
-            const isChecked = listIdImgChecked.includes(objDeletedImage.id);
-            if (isChecked) {
-                return listIdImgChecked.filter(item => item !== objDeletedImage.id);
-            }
-            else {
-                return [...pre, objDeletedImage.id]
-            }
-        });
-    }
+
     const handleRestoneMulitple = (e) => {
         const fetchData = async () => {
             try {
@@ -155,6 +98,7 @@ function DeletedImages() {
         }
         fetchData();
     }
+
     const handleDelMulitple = (e) => {
         const fetchData = async () => {
             try {
@@ -175,42 +119,46 @@ function DeletedImages() {
         }
         fetchData();
     }
+    const menuToolbar = [
+        {
+            icon: 'fa-solid fa-arrows-rotate',
+            handleOnclick: handleRestoneMulitple
+        },
+        {
+            icon: 'fa-solid fa-trash',
+            handleOnclick: handleDelMulitple
+        }
+    ];
+    ////////////////////////////////////////
+    const handleOnclickCheckbox = (e, deletedImage) => {
+        setListIdImgChecked((pre) => {
+            const isChecked = listIdImgChecked.includes(deletedImage.id);
+            if (isChecked) {
+                return listIdImgChecked.filter(item => item !== deletedImage.id);
+            }
+            else {
+                return [...pre, deletedImage.id]
+            }
+        });
+    }
+
     return (
-        <div className={cx('demo')}>
-            {isImageClicked && selectedImage && (
-                <div className={cx('image-overlay')} onClick={handleCloseImage}>
-                    <img src={selectedImage} alt="Selected" className={cx('full-screen-img')} />
-                </div>
-            )}
-            {deletedImg.map((obj, index) => (
-                <div key={index} className={cx('wrapper')}>
-                    <img
-                        ref={(el) => (imgRefs.current[index] = el)}
-                        src={obj.url}
-                        className={cx('img')}
-                        alt="img"
-                        onClick={(e) => handleGetImage(e, index)}
-                    />
-                    <div className={cx('hope')} ref={activeIndex === index ? menuRef : null}>
-                        <i className={`fa-solid fa-bars ${cx('icon-modifier')}`} onClick={() => handleOnclick(index)}>
-                            {activeIndex === index && (
-
-                                <Menu ImageObj={obj} MenuItems={MenuItems} albumOnlick={albumOnlick} setAlbumOnlick={setAlbumOnlick} />
-
-                            )}
-                        </i>
-                    </div>
-                    <Input type="checkbox" className={cx('modifier-btn-checkbox')} onChange={(e) => handleOnclickCheckbox(e, obj)} checked={listIdImgChecked.includes(obj.id)} />
-                </div>
-            ))}
+        <div className={cx('wrapper')}>
+            <ImageCardList
+                images={deletedImg}
+                displayAlbums={displayAlbums}
+                setDisplayAlbums={setDisplayAlbums}
+                menuItems={MenuItems}
+                isDeleting={isDeleting}
+                handleCheckboxChange={handleOnclickCheckbox}
+                listIdImgChecked={listIdImgChecked}
+            />
             {
                 listIdImgChecked.length > 0 &&
-                <div className={cx('block')}>
-                    <div className={cx('toolbar')}>
-                        <Button second icon={<i className={`fa-solid fa-arrows-rotate`}></i>} onClick={handleRestoneMulitple}></Button>
-                        <Button second icon={<i className={`fa-solid fa-trash`} onClick={handleDelMulitple} ></i>}  ></Button>
-                    </div>
-                </div>
+                <Toolbar
+                    menuToolbar={menuToolbar}
+                    listIdImgChecked={listIdImgChecked}
+                />
             }
             <ToastContainer />
         </div>

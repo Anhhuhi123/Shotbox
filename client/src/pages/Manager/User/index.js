@@ -3,41 +3,34 @@ import classNames from 'classnames/bind';
 import styles from './User.module.scss';
 import UserManager from '../../../components/Manager/UserManager';
 import Button from '../../../components/Button';
+import Chart from '../../../components/Chart'
 import * as historyUpgradeService from '../../../services/historyUpgrade';
+import { useAllUser } from '../../../hooks/useUser';
+import { useAllHistoryUpgradePending } from '../../../hooks/useHistoryUpgrade';
+
 const cx = classNames.bind(styles);
-
 function User() {
+    const { users, setUsers, allUser } = useAllUser();
     const [isOpen, setIsOpen] = useState(false);
-    const [listHistoryPanding, setListHistoryPanding] = useState([]);
-    useEffect(() => {
-
-        const fetchData = async () => {
-            try {
-                const res = await historyUpgradeService.showHistoryUpgradePanding();
-                setListHistoryPanding(res.data);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchData();
-    }, [])
+    const { allUpgradePending } = useAllHistoryUpgradePending();
     const toggleDropdown = () => setIsOpen((prev) => !prev);
     return (
         <div className={cx('wrapper')}>
-            <UserManager itemsPerPage={5} />
+            <Chart type={'UserChart'} items={users} />
+            <UserManager itemsPerPage={5} items={users} setItems={setUsers} fullItems={allUser} />
             <div className={cx('block-btn')}>
                 <Button
                     third
                     onClick={toggleDropdown}
                     icon={<i className={`fa-solid fa-bell ${cx('icon-modifier')}`}></i>}
                     className={cx('btn-modifier')}>
-                    <span className={cx('text')}>{listHistoryPanding.length}</span>
+                    <span className={cx('text')}>{allUpgradePending.length}</span>
                 </Button>
             </div>
             {isOpen && (
                 <div className={cx('dropdown')}>
-                    {listHistoryPanding.length > 0
-                        ? listHistoryPanding.map((data, index) => (
+                    {allUpgradePending.length > 0
+                        ? allUpgradePending.map((data, index) => (
                             <div key={index} className={cx('dropdown-item')}>
                                 <strong>{data.userName}</strong>
                                 <p className={cx('paragraph')}>Package Require: "{data.packageName}"</p>

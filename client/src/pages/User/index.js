@@ -16,6 +16,8 @@ function User() {
         email: "",
 
     });
+    const [isChangeEmailOpen, setIsChangeEmailOpen] = useState(false);
+    const [hideButtonChange, setHideButtonChange] = useState(true);
     useEffect(() => {
         const fetchApi = async () => {
             try {
@@ -31,8 +33,6 @@ function User() {
         }
         fetchApi();
     }, [])
-    const [isChangeEmailOpen, setIsChangeEmailOpen] = useState(false);
-    const [hideButtonChange, setHideButtonChange] = useState(true);
     const validationSchema = Yup.object({
         current_password: Yup.string().required('Required'),
         new_password: Yup.string()

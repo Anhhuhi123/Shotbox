@@ -3,19 +3,16 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames/bind';
 import styles from './Navbar.module.scss';
-import { authLogout } from '../../redux/actions/auth';
 import Button from '../Button';
 import UpLoad from '../Upload';
+import { authLogout } from '../../redux/actions/auth';
 import * as userService from '../../services/userService.js';
-
 const cx = classnames.bind(styles);
-
-function NavBar({ mainLayout, defaultLayout, href, children }) {
+function NavBar({ mainLayout, defaultLayout, children }) {
+    const dispatch = useDispatch();
+    const menuRef = useRef(null);
     const [showUpload, setShowUpload] = useState(false);
     const [showMenuItems, setShowMenuItems] = useState(false);
-    const menuRef = useRef(null); // Ref to track the menu element
-    const dispatch = useDispatch();
-
     const [user, setUser] = useState({
         name: "",
         email: "",
@@ -38,21 +35,13 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
         }
     }, []);
 
-    const handleOnclick = (e) => {
-        setShowUpload(true);
+    const handleClickOutside = (event) => {
+        if (menuRef.current && !menuRef.current.contains(event.target)) {
+            setShowMenuItems(false);
+        }
     };
 
-    const handleOnlickLogout = (e) => {
-        dispatch(authLogout());
-    };
-
-    // Close menu when clicking outside
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setShowMenuItems(false);
-            }
-        };
         if (showMenuItems) {
             document.addEventListener('mousedown', handleClickOutside);
         } else {
@@ -63,22 +52,19 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
         };
     }, [showMenuItems]);
 
-
     return (
         <div className={cx('wrapper')}>
             <Link className={cx('logo')} to="../home"></Link>
             {children}
-
             {mainLayout && (
                 <div className={cx('actions')}>
                     <Button first to='/login'>Log In</Button>
                 </div>
             )}
-
             {defaultLayout && (
                 <div className={cx('fix-toolbar')}>
                     <div className={cx('actions')}>
-                        <Button second onClick={handleOnclick}>UPLOAD</Button>
+                        <Button second onClick={() => setShowUpload(true)}>UPLOAD</Button>
                     </div>
 
                     <div className={cx('actions')}>
@@ -95,18 +81,17 @@ function NavBar({ mainLayout, defaultLayout, href, children }) {
                             <div className={cx('menu-items')}>
                                 <Button to='/user' four icon={<i className={`fa-solid fa-gear ${cx('icon-modifier')}`}></i>}>Settings</Button>
                                 <Button to='/deleted/images' four icon={<i className={`fa-solid fa-trash ${cx('icon-modifier')}`}></i>}>Recycle Bin</Button>
-                                <Button four onClick={handleOnlickLogout} icon={<i className={`fa-solid fa-right-from-bracket ${cx('icon-modifier')}`}></i>}>Logout</Button>
+                                <Button four onClick={() => dispatch(authLogout())} icon={<i className={`fa-solid fa-right-from-bracket ${cx('icon-modifier')}`}></i>}>Logout</Button>
                             </div>
                         )}
                     </div>
                 </div>
-            )}
+            )
+            }
             {
                 showUpload && <UpLoad setShowUpload={setShowUpload} />
             }
-
-
-        </div>
+        </div >
     );
 }
 

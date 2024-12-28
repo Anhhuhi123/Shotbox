@@ -13,16 +13,13 @@ function UpLoad({ setShowUpload }) {
     const [isVisible, setIsVisible] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const fileInputRef = useRef(null);
-
+    const displayFileNameRef = useRef('');
     useEffect(() => {
         setIsVisible(true);
     }, []);
 
-    const handleSelectFromDevice = () => {
-        fileInputRef.current.click();
-    };
-
     const handleUpload = async () => {
+        setSelectedFile(null);
         const CLOUD_NAME = 'dt3gvugaf';
         const PRESET_NAME = 'demo-upload';
         const FOLDER_NAME = 'Demo';
@@ -45,16 +42,10 @@ function UpLoad({ setShowUpload }) {
                     setUploadProgress(progress);
                 },
             });
-            const res = await ImageService.createImage({
+            await ImageService.createImage({
                 url: response.data.secure_url,
             });
-            toast.success(`Success:${res.message}`, {
-                position: "bottom-center",
-                autoClose: 1000,
-                onClose: () => {
-                    window.location.reload();
-                },
-            });
+            window.location.reload();
         } catch (error) {
             console.error('Upload failed:', error);
             toast.error(`Error: ${error.response?.data?.message || 'Upload failed'}`, {
@@ -68,51 +59,48 @@ function UpLoad({ setShowUpload }) {
         const file = e.target.files[0];
         if (file) {
             setSelectedFile(file);
+            displayFileNameRef.current = file;
         }
-    };
-
-    const handleClickIcon = () => {
-        setShowUpload(false);
     };
 
     return (
         <div className={cx('wrapper')}>
             <div className={cx('block', { show: isVisible })}>
                 <h2 className={cx('title')}>Upload Image</h2>
-                
+
                 <div className={cx('wrapper-button')}>
-                    <Button five onClick={handleSelectFromDevice} className={cx('btn')}>
+                    <Button five onClick={() => fileInputRef.current.click()} className={cx('btn')}>
                         Select From Device
                     </Button>
                 </div>
-                
+
                 <div className={cx('form')}>
                     <input
                         type="text"
                         className={cx('input')}
                         placeholder="Selected file or paste URL here..."
-                        value={selectedFile ? selectedFile.name : ''}
+                        value={selectedFile ? selectedFile.name : displayFileNameRef.current.name}
                         readOnly
                     />
-                    <Button 
-                        five 
-                        onClick={handleUpload} 
-                        className={cx('btn', { disabled: !selectedFile })} 
+                    <Button
+                        five
+                        onClick={handleUpload}
+                        className={cx('btn', { disabled: !selectedFile })}
                         disabled={!selectedFile}
                     >
                         Upload
                     </Button>
                 </div>
-                
+
                 {uploadProgress > 0 && (
                     <div className={cx('progress-bar')}>
-                        <div 
-                            className={cx('progress')} 
+                        <div
+                            className={cx('progress')}
                             style={{ width: `${uploadProgress}%` }}
                         />
                     </div>
                 )}
-                
+
                 <input
                     type="file"
                     ref={fileInputRef}
@@ -120,10 +108,10 @@ function UpLoad({ setShowUpload }) {
                     onChange={handleFileChange}
                     accept="image/*"
                 />
-                
-                <i 
-                    className={`fa-regular fa-circle-xmark ${cx('icon-modifier')}`} 
-                    onClick={handleClickIcon}
+
+                <i
+                    className={`fa-regular fa-circle-xmark ${cx('icon-modifier')}`}
+                    onClick={() => setShowUpload(false)}
                 />
             </div>
             <ToastContainer />

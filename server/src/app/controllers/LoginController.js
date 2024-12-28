@@ -13,7 +13,6 @@ class LoginController {
                 return res.status(400).json({ field: 'username', error: 'Username is not correct' });
             }
             const isPasswordValid = await bcrypt.compare(password, user.password);
-
             if (!isPasswordValid) {
                 // res error if password is not correct 
                 return res.status(400).json({ field: 'password', error: 'Password is not correct' });
@@ -30,7 +29,6 @@ class LoginController {
                     expiresIn: process.env.JWT_EXPIRE,
                 }
             )
-
             return res.status(200).json({
                 message: 'Login Successful',
                 token: token,

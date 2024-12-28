@@ -1,7 +1,6 @@
 import DeletedImages from '../models/DeletedImages.js';
 import Images from '../models/Images.js';
 class DeletedImagesController {
-    // Get localhost/album/
     async showAllDeletedImages(req, res) {
         try {
             const { id, name, email } = req.user; // data handle from middleware
@@ -35,11 +34,9 @@ class DeletedImagesController {
     }
     async restoreMultipleDeletedImage(req, res) {
         const listIdDeletedImage = req.body;
-
         if (!Array.isArray(listIdDeletedImage) || listIdDeletedImage.length === 0) {
             return res.status(400).json({ message: "Invalid input. Please provide an array of image IDs." });
         }
-
         let successCount = 0;
         let failedIds = [];
         try {
@@ -52,13 +49,12 @@ class DeletedImagesController {
                         failedIds.push(idDeletedImage); // Lưu ID không tồn tại
                         continue; // Bỏ qua ảnh này và tiếp tục với ảnh tiếp theo
                     }
-
                     // get information deletedImage
                     const { url, deletedBy } = dataDeletedImage;
                     //step2: restore by add image into table Images
                     await Images.create(url, deletedBy);
                     //step3: delete deletedImage
-                    await DeletedImages.deleteById(IdDeletedImage);
+                    await DeletedImages.deleteById(idDeletedImage);
                     successCount++;
                 } catch (error) {
                     console.error(`Failed to restore image with ID ${IdDeletedImage}:`, error);
@@ -76,8 +72,6 @@ class DeletedImagesController {
             return res.status(500).json({ message: "An unexpected error occurred during image restoration." });
         }
     }
-
-
     async removeDeletedImages(req, res) {
         const id = req.params.id;
         try {
@@ -85,14 +79,12 @@ class DeletedImagesController {
             if (affectedRows === 0) {
                 return res.status(404).json({ message: "Deleted image not found." });
             }
-
             return res.status(200).json({ message: "Removed deleted image successfully." });
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: "Failed to remove deleted image." });
         }
     }
-
     async removeMultipleDeletedImages(req, res) {
         const listIdDeletedImage = req.body;
         if (!Array.isArray(listIdDeletedImage) || listIdDeletedImage.length === 0) {

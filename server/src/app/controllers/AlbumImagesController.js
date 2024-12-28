@@ -1,7 +1,6 @@
 import AlbumImage from '../models/AlbumImage.js';
 
 class AlbumImageController {
-    // Get localhost/album/images/
     async postImageToAlbum(req, res) {
         try {
             const { albumId, imageId } = req.body;
@@ -34,9 +33,7 @@ class AlbumImageController {
         try {
             // const urlParams = req.params.id;
             const urlParams = req.params.slug;
-
             const images = await AlbumImage.getAllImagesFromAlbum(urlParams);
-
             return res.status(200).json({ data: images });
         } catch (error) {
             console.error("Error fetching images:", error); // Log lỗi chi tiết
@@ -80,8 +77,6 @@ class AlbumImageController {
             res.status(500).json({ message: "Failed to delete image(s). Please try again later." });
         }
     }
-
-
 }
 
 export default new AlbumImageController();

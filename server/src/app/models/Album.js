@@ -74,14 +74,14 @@ const Album = {
             throw new Error("Failed to delete image. Please try again.");
         }
     },
-    checkDuplicateAlbumName: async (albumName, id) => {
+    checkDuplicateAlbumName: async (albumName, userId, idAlbum) => {
         try {
             const query = `
                 SELECT COUNT(*) as count 
                 FROM album 
-                WHERE albumName = ? AND id != ?
+                WHERE albumName = ? AND userId = ? AND id != ?
             `;
-            const [rows] = await db.query(query, [albumName, id]);
+            const [rows] = await db.query(query, [albumName, userId, idAlbum]);
             return rows[0].count > 0; // Nếu số lượng lớn hơn 0, nghĩa là đã tồn tại album
         } catch (error) {
             console.error("Error checking duplicate album name:", error);

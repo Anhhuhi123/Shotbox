@@ -1,13 +1,13 @@
 import classNames from "classnames/bind";
 import styles from './Menu.module.scss';
 import Button from "../Button";
-import * as AlbumService from '../../services/albumService';
+import * as AlbumImageService from '../../services/albumImageService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
-function Menu({ ImageObj, MenuItems, albumOnlick, setAlbumOnlick }) {
+function Menu({ ImageObj, MenuItems, displayAlbums, setDisplayAlbums }) {
 
-    const current = albumOnlick.length > 0 ? albumOnlick : MenuItems;
+    const current = displayAlbums.length > 0 ? displayAlbums : MenuItems;
     const handleAddImgToAlbum = (e, AlbumObj, ImageObj) => {
         e.stopPropagation();
         const addImgToAblum = async () => {
@@ -16,7 +16,7 @@ function Menu({ ImageObj, MenuItems, albumOnlick, setAlbumOnlick }) {
                 imageId: ImageObj.id,
             }
             try {
-                const res = await AlbumService.addImgToAlbum(data);
+                const res = await AlbumImageService.addImgToAlbum(data);
                 toast.success(`Success:${res.message}`, {
                     position: "bottom-center",
                     autoClose: 1000,
@@ -34,10 +34,10 @@ function Menu({ ImageObj, MenuItems, albumOnlick, setAlbumOnlick }) {
 
     return (
         <div className={cx('wrapper')}>
-            {albumOnlick.length > 0 && (
+            {displayAlbums.length > 0 && (
                 <Button four icon={<i className="fa-solid fa-arrow-left"></i>} className={cx('modifier')} onClick={(e) => {
                     e.stopPropagation();
-                    setAlbumOnlick([]);
+                    setDisplayAlbums([]);
                 }}>
                     Back
                 </Button>

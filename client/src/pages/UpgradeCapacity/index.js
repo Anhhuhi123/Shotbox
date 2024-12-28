@@ -1,42 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames/bind';
 import styles from './UpgradeCapacity.module.scss';
-import * as capacityPackageService from '../../services/capacityPackageService';
 import * as historyUpgradeService from '../../services/historyUpgrade';
-import Button from '../../components/Button'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Button from '../../components/Button'
+import { useHistoryUpgradeSuccess } from '../../hooks/useHistoryUpgrade';
+import { useAllCapacityPackage } from '../../hooks/useCapacity';
+
 const cx = classnames.bind(styles);
 function UpgradeCapacity() {
-    const [listCapacityPackage, setListCapacityPackage] = useState([]);
-    const [capacityUpgraded, setCapacityUpgraded] = useState([]);
+    const { upgradeSucess } = useHistoryUpgradeSuccess();
+    const { capacityPackages } = useAllCapacityPackage();
     const sizeCapacityUpgraded = [];
-    capacityUpgraded.forEach((item) => {
+
+    upgradeSucess.forEach((item) => {
         sizeCapacityUpgraded.push(item.size);
     })
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await capacityPackageService.showAllCapacityPackages();
-                setListCapacityPackage(res.data);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchData();
-    }, []);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await historyUpgradeService.showUpgradeSucess();
-                // console.log(res.data);
-                setCapacityUpgraded(res.data);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchData();
-    }, []);
+
     const handleOnclick = (e, item) => {
         const data = {
             capacityPackageId: item.id,
@@ -62,7 +42,7 @@ function UpgradeCapacity() {
         <div className={cx('wrapper')}>
             <div className={cx('block')}>
                 {
-                    listCapacityPackage && listCapacityPackage.map((item, index) => {
+                    capacityPackages && capacityPackages.map((item, index) => {
                         return <div className={cx('card')} key={index}>
                             <h3 className={cx('heading-title')}>{item.name}</h3>
                             <h3 className={cx('heading-title')}>{item.size}MB</h3>

@@ -18,7 +18,7 @@ function Webcam() {
         const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
         const formData = new FormData();
-        formData.append('file', capturedImage); // 'file' là tên trường được yêu cầu bởi Cloudinary
+        formData.append('file', capturedImage);
         formData.append('upload_preset', PRESET_NAME);
         formData.append('folder', FOLDER_NAME);
 

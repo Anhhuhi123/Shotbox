@@ -3,7 +3,7 @@ import User from '../models/User.js';
 class HistoryUpgradeController {
     async showAllHistoryUpgrades(req, res) {
         try {
-            const { id, name, email } = req.user;
+            const { id } = req.user;
             const userExists = await User.findById(id); // Check userExists
             if (!userExists) {
                 return res.status(404).json({ message: 'User not found' });
@@ -21,7 +21,7 @@ class HistoryUpgradeController {
     }
     async showHistoryUpgradePading(req, res) {
         try {
-            const { id, name, email } = req.user;
+            const { id } = req.user;
             const userExists = await User.findById(id); // Check userExists
             if (!userExists) {
                 return res.status(404).json({ message: 'User not found' });
@@ -56,10 +56,9 @@ class HistoryUpgradeController {
             return res.status(500).json({ message: "An error occurred while fetching upgrade history. Please try again later." });
         }
     }
-
     async showUpgradeSuccess(req, res) {
         try {
-            const { id, name, email } = req.user;
+            const { id } = req.user;
             const userId = id;
             const listHistoryUpgrade = await HistoryUpgrade.getByUserIdAndStatus(userId, 'success');
             if (listHistoryUpgrade.length === 0) {
@@ -77,7 +76,7 @@ class HistoryUpgradeController {
             if (!data) {
                 return res.status(400).json({ message: 'Missing request data.' });
             }
-            const { id, name, email } = req.user;
+            const { id } = req.user;
             const userPending = await HistoryUpgrade.checkPendingByUserId(id);
             if (userPending.length > 0) {
                 return res.status(409).json({ message: 'Waiting for admin confirmation.' });

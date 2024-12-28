@@ -7,6 +7,7 @@ class ImagesController {
         try {
             const { id, name, email } = req.user; // data handle from middleware
             const images = await Images.getAllImages(id);
+            // console.log(images);
             return res.status(200).json({ data: images });
         } catch (error) {
             console.error("Error fetching images:", error); // Log lỗi chi tiết
@@ -17,7 +18,7 @@ class ImagesController {
     async postImages(req, res) {
         try {
             const { url } = req.body;
-            const { id, name, email } = req.user;
+            const { id } = req.user;
             // check input
             if (!url) {
                 return res.status(400).json({ message: 'Image URL is required.' });
@@ -29,7 +30,6 @@ class ImagesController {
             return res.status(500).json({ message: 'Internal Server Error' });
         }
     }
-
     // Delete localhost/images/:id
     async deleteImages(req, res) {
         try {

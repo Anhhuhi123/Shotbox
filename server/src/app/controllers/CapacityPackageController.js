@@ -35,8 +35,6 @@ class CapacityPackageController {
             return res.status(500).json({ message: 'An error occurred while creating the capacity package', error: error.message });
         }
     }
-
-
     async updateCapacityPackage(req, res) {
         try {
             const { id, name, email } = req.user;
@@ -62,8 +60,6 @@ class CapacityPackageController {
             return res.status(500).json({ message: 'An error occurred while updating the capacity package', error: error.message });
         }
     }
-
-
     async deleteCapacityPackage(req, res) {
         try {
             const { id, name, email } = req.user;
@@ -89,8 +85,6 @@ class CapacityPackageController {
             return res.status(500).json({ message: 'An error occurred while deleting the capacity package', error: error.message });
         }
     }
-
-
 }
 
 export default new CapacityPackageController();

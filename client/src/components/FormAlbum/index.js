@@ -1,5 +1,4 @@
 import { useFormik } from 'formik';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
 import classNames from 'classnames/bind';
@@ -10,11 +9,11 @@ import Button from '../Button';
 import * as AlbumService from '../../services/albumService';
 const cx = classNames.bind(styles);
 
-function FormAlbum({ setShowFormAlbum }) {
+function FormAlbum({ title, setShowFormAlbum, albumDetail, isUpdate }) {
     const formik = useFormik({
         initialValues: {
-            albumName: '',
-            description: '',
+            albumName: albumDetail?.albumName || '',
+            description: albumDetail?.description || '',
         },
         validationSchema: Yup.object({
             albumName: Yup.string()
@@ -23,26 +22,37 @@ function FormAlbum({ setShowFormAlbum }) {
             description: Yup.string()
                 .max(500, 'Description cannot exceed 500 characters'),
         }),
-        onSubmit: async (values, { resetForm }) => {
-            const uniqueId = uuidv4();
-            try {
-                const res = await AlbumService.createAlbum({
-                    albumName: values.albumName,
-                    description: values.description,
-                    location: uniqueId,
-                });
-
-                toast.success(`Success:${res.message}`, {
-                    position: "bottom-center",
-                    autoClose: 1000,
-                    onClose: () => {
-                        resetForm();
+        onSubmit: async (values) => {
+            if (!isUpdate) {
+                const uniqueId = uuidv4();
+                try {
+                    await AlbumService.createAlbum({
+                        albumName: values.albumName,
+                        description: values.description,
+                        location: uniqueId,
+                    });
+                    window.location.reload();
+                } catch (error) {
+                    formik.setFieldError('albumName', `${error.response.data.message}`);
+                    console.error('Error creating album:', error);
+                }
+            }
+            else {
+                const updateAlbum = async () => {
+                    const id = albumDetail.id;
+                    const data = {
+                        albumName: values.albumName,
+                        description: values.description
+                    }
+                    try {
+                        await AlbumService.updateAlbum(id, data);
                         window.location.reload();
-                    },
-                });
-            } catch (error) {
-                formik.setFieldError('albumName', `${error.response.data.message}`);
-                console.error('Error creating album:', error);
+                    } catch (error) {
+                        formik.setFieldError('albumName', error.response.data.message);
+                        console.log(error);
+                    }
+                }
+                updateAlbum();
             }
         },
     });
@@ -50,7 +60,7 @@ function FormAlbum({ setShowFormAlbum }) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('form')}>
-                <h2>ADD NEW ALBUM</h2>
+                <h2>{title}</h2>
                 <form onSubmit={formik.handleSubmit}>
                     <Input
                         className={cx('album-control')}
@@ -84,12 +94,11 @@ function FormAlbum({ setShowFormAlbum }) {
                             Cancel
                         </Button>
                         <Button first type="submit">
-                            Add
+                            {isUpdate ? "Update" : "Add"}
                         </Button>
                     </div>
                 </form>
             </div>
-            <ToastContainer />
         </div>
     );
 }

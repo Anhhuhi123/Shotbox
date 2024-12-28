@@ -11,13 +11,15 @@ class UserController {
     async showAllUser(req, res) {
         try {
             const users = await User.getAllUsers();
+            console.log(users);
             return res.status(200).json(
                 users.map(user => ({
                     id: user.id,
                     name: user.name,
                     email: user.email,
                     roleId: user.roleId,
-                    capacity: user.capacity
+                    capacity: user.capacity,
+                    createdAt: user.createdAt
                 }))
             );
         } catch (error) {
@@ -25,7 +27,6 @@ class UserController {
             return res.status(500).json({ message: 'Failed to fetch users' });
         }
     }
-
     async getRoleId(req, res) {
         try {
             const { id } = req.user;
@@ -56,7 +57,6 @@ class UserController {
             res.status(500).json({ error: 'An error occurred while fetching the user.' });
         }
     }
-
     // GET thông tin người dùng theo ID
     async getUserById(req, res) {
         try {
@@ -90,8 +90,6 @@ class UserController {
             res.status(500).json({ error: 'An error occurred while fetching the user.' });
         }
     }
-
-
     // PUT để cập nhật thông tin người dùng
     async updateUserPassword(req, res) {
         try {
@@ -106,19 +104,16 @@ class UserController {
             if (!userExists) {
                 return res.status(404).json({ error: 'User not found.' });
             }
-
             // Nếu có currentPassword, kiểm tra xem mật khẩu hiện tại có trùng khớp không
             if (currentPassword && !(await bcrypt.compare(currentPassword, userExists.password))) {
                 return res.status(400).json({ error: 'Incorrect current password.' });
             }
-
             // Nếu có newPassword, mã hóa mật khẩu mới
             let hashedPassword = userExists.password; // Giữ mật khẩu cũ nếu không có mật khẩu mới
             // Có pass mới thì mã hoá rồi mới thêm
             if (newPassword) {
                 hashedPassword = await bcrypt.hash(newPassword, 10);
             }
-
             // Chuẩn bị dữ liệu cập nhật
             const updatedData = {
                 // name: name || userExists.name, // Giữ giá trị cũ nếu không có giá trị mới
@@ -126,41 +121,33 @@ class UserController {
                 password: hashedPassword,
                 // roleId: roleId || userExists.roleId,
             };
-
             // Cập nhật thông tin người dùng
             const updated = await User.update(id, updatedData);
             if (updated) {
                 return res.status(200).json({ message: 'Password updated successfully.' });
             }
-
             return res.status(500).json({ error: 'Failed to update user.' });
         } catch (error) {
             console.error("Error in updateUser:", error);
             res.status(500).json({ error: 'An error occurred while updating the user.' });
         }
     }
-
     async updateUserEmail(req, res) {
         try {
-            const { id, name, email } = req.user;
-
+            const { id } = req.user;
             const { newEmail } = req.body;
-
             // Tìm người dùng trong cơ sở dữ liệu
             const userExists = await User.findById(id);
             if (!userExists) {
                 return res.status(404).json({ error: 'User not found.' });
             }
-
             const userPassword = userExists.password; // Giữ mật khẩu cũ nếu không có mật khẩu mới
-
             // Chuẩn bị dữ liệu cập nhật
             const updatedData = {
                 email: newEmail,
                 password: userPassword,
                 // roleId: roleId || userExists.roleId,
             };
-
             // Cập nhật thông tin người dùng
             const updated = await User.update(id, updatedData);
             if (updated) {
@@ -173,7 +160,6 @@ class UserController {
             res.status(500).json({ error: 'An error occurred while updating the user.' });
         }
     }
-
     // DELETE để xóa người dùng
     async deleteUser(req, res) {
         const userId = req.params.id;
@@ -210,16 +196,15 @@ class UserController {
             return res.status(500).json({ message: 'An error occurred while changing role', error: error.message });
         }
     }
-
     async UpdateUserCapacity(req, res) {
         try {
-            const { id, name, email } = req.user;
+            const { id } = req.user;
             const userExists = await User.findById(id);
             if (!userExists) {
                 return res.status(404).json({ message: 'User not found' });
             }
             if (userExists.roleId === 1) {
-                const { newCapacity, userId, capacityPackageId } = req.body;
+                const { newCapacity, userId } = req.body;
                 if (!userId || !newCapacity) {
                     return res.status(400).json({ message: 'Invalid userId or newRoleId' });
                 }

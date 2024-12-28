@@ -1,47 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './FormUpdate.module.scss';
-import * as userService from '../../services/userService';
-import * as capacityPackageService from '../../services/capacityPackageService';
-import * as historyUpgradeService from '../../services/historyUpgrade';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAllCapacityPackage } from '../../hooks/useCapacity';
+import { useHistoryUpgradePending } from '../../hooks/useHistoryUpgrade';
+import * as userService from '../../services/userService';
 const cx = classNames.bind(styles);
-function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
+function FormUpdate({ setShowFormUpdate, checkRoleId, userId }) {
+
+    const listCapacityPending = [];
     const roleSelectRef = useRef();
     const capacitySelectRef = useRef();
-    const [listCapacityPackage, setListCapacityPackage] = useState([]);
+    const { capacityPackages } = useAllCapacityPackage();
+    const { upgradePending } = useHistoryUpgradePending(userId);
     const [isSaving, setIsSaving] = useState(false);
-    const [upgradePending, setUpgradePeding] = useState([]);
 
-    const arrPackage = [];
     upgradePending.map((item) => {
-        arrPackage.push(item.size);
+        listCapacityPending.push(item.size);
     })
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await capacityPackageService.showAllCapacityPackages();
-                setListCapacityPackage(res.data);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await historyUpgradeService.showUpgradePending(userId);
-                setUpgradePeding(res.data);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchData();
-    }, []);
 
     const updateRoleIdData = async (data) => {
         try {
@@ -77,7 +54,7 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
             }
         } catch (error) {
             console.log(error);
-            toast.success(`Error: Update Failed`, {
+            toast.error(`Error: Update Failed`, {
                 position: "bottom-center",
                 autoClose: 1000,
             });
@@ -88,9 +65,9 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
         setIsSaving(true);
         const roleSelectElement = roleSelectRef.current;
         const capacitySelectElement = capacitySelectRef.current;
-        if (capacitySelectElement.selectedIndex > 0 && arrPackage.length > 0) {
+        if (capacitySelectElement.selectedIndex > 0 && listCapacityPending.length > 0) {
 
-            if (arrPackage.includes(parseInt(capacitySelectElement.value))) {
+            if (listCapacityPending.includes(parseInt(capacitySelectElement.value))) {
                 const data1 = {
                     newRoleId: parseInt(roleSelectElement.value),
                     userId: userId,
@@ -110,7 +87,7 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
             }
             setIsSaving(false);
         }
-        else if (capacitySelectElement.selectedIndex > 0 && arrPackage.length === 0) {
+        else if (capacitySelectElement.selectedIndex > 0 && listCapacityPending.length === 0) {
             toast.error('User dont require upgrade', {
                 position: 'bottom-center',
                 autoClose: 1000,
@@ -142,8 +119,8 @@ function FormUpdate({ setShowFormUpdate, checkRoleId, userId, capacity }) {
             <select name="capacity" id="capacity" ref={capacitySelectRef} className={cx('select-option')}>
                 <option value="option">Option</option>
                 {
-                    listCapacityPackage && listCapacityPackage.map((item) => {
-                        return arrPackage.includes(item.size)
+                    capacityPackages && capacityPackages.map((item) => {
+                        return listCapacityPending.includes(item.size)
                             ? <option key={item.id} value={`${item.size}`} className={cx('option-modifier')}>{`${item.name} - ${item.size}MB`}</option>
                             : <option key={item.id} value={`${item.size}`} >{`${item.name} - ${item.size}MB`}</option>
                     })

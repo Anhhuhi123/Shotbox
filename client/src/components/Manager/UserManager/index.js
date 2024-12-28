@@ -6,35 +6,17 @@ import Table from '../../Table';
 import FormUpdate from "../../FormUpdate";
 import Input from "../../Input";
 import Button from "../../Button"
-import * as userService from '../../../services/userService';
 const cx = classNames.bind(styles)
 
-function UserManager({ itemsPerPage }) {
-    const [items, setItems] = useState([]);
-    const [fullItems, setFullItems] = useState([]);
+function UserManager({ itemsPerPage, items, setItems, fullItems }) {
+
     const [itemOffset, setItemOffset] = useState(0);
-    const [loading, setLoading] = useState(true);
     const [showFormUpdate, setShowFormUpdate] = useState(false);
     const [userId, setUserId] = useState(null);
     const [capacity, setCapacity] = useState(null);
     const [checkRoleId, setCheckRoleId] = useState(null);
     const [valueInput, setValueInput] = useState('');
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await userService.getAllUsers();
-                setItems(res);
-                setFullItems(res);
-            } catch (error) {
-                console.error("Failed to fetch data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
-    // Calculate pagination variables
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = items.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(items.length / itemsPerPage);
@@ -52,9 +34,6 @@ function UserManager({ itemsPerPage }) {
         setItems(newItems);
     }
 
-    if (loading) {
-        return <div>Loading...</div>; // Show a loading indicator
-    }
     const columns = [
         {
             title: 'ID',

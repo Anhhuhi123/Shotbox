@@ -14,7 +14,7 @@ router.put('/roleId', UserController.ChangeRoleId);
 
 router.put('/capacity', UserController.UpdateUserCapacity);
 
-router.get('/account', UserController.getUser);
+router.get('/account', UserController.getAccount);
 
 router.get('/:id', UserController.getUserById);
 
@@ -24,7 +24,6 @@ router.put('/password', UserController.updateUserPassword);
 
 router.put('/email', UserController.updateUserEmail);
 
-router.delete('/:id', UserController.deleteUser);
 
 
 export default router;

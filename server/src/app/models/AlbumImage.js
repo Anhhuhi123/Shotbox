@@ -1,6 +1,6 @@
 import db from '../../config/database.js'
 
-const AlbumImages = {
+const AlbumImage = {
     getAllImagesFromAlbum: async (urlParams) => {
         try {
             const query = `
@@ -16,23 +16,25 @@ const AlbumImages = {
                 JOIN images ON album_images.imageId = images.id
                 WHERE album.location = ?;
             `;
-
             const [rows] = await db.query(query, [urlParams]);
             return rows;
         } catch (error) {
             console.error("Error retrieving images from album:", error);
-            throw new Error("Unable to retrieve images. Please try again later.");
+            throw new Error("Unable to retrieve images from the album. Please try again later.");
         }
     },
     findByIdAlbum: async (albumId) => {
-        const query = 'SELECT * FROM  album_images WHERE albumId = ?';
-        const [rows] = await db.query(
-            query, [albumId]
-        );
-        if (rows.length > 0) {
-            return rows[0];
+        try {
+            const query = 'SELECT * FROM album_images WHERE albumId = ?';
+            const [rows] = await db.query(query, [albumId]);
+            if (rows.length > 0) {
+                return rows[0];
+            }
+            return null;
+        } catch (error) {
+            console.error("Error finding album images by albumId:", error);
+            throw new Error("Unable to find album images. Please try again later.");
         }
-        return null;
     },
     create: async (albumId, imageId) => {
         try {
@@ -40,8 +42,8 @@ const AlbumImages = {
             const [result] = await db.query(query, [albumId, imageId]);
             return result.insertId;
         } catch (error) {
-            console.error(`Error inserting album`, error);
-            throw new Error('Unable to insert album into the database.');
+            console.error("Error inserting album image:", error);
+            throw new Error("Unable to add image to album. Please try again later.");
         }
     },
     delete: async (albumImgId) => {
@@ -50,8 +52,8 @@ const AlbumImages = {
             const [result] = await db.query(query, [albumImgId]);
             return result.affectedRows;
         } catch (error) {
-            console.error("Error deleting image:", error);
-            throw new Error("Failed to delete image. Please try again.");
+            console.error("Error deleting album image by id:", error);
+            throw new Error("Unable to delete image from album. Please try again later.");
         }
     },
     deleteByImgId: async (imageId) => {
@@ -60,21 +62,20 @@ const AlbumImages = {
             const [result] = await db.query(query, [imageId]);
             return result.affectedRows;
         } catch (error) {
-            console.error("Error deleting image:", error);
-            throw new Error("Failed to delete image. Please try again.");
+            console.error("Error deleting album image by imageId:", error);
+            throw new Error("Unable to delete image by imageId. Please try again later.");
         }
     },
     deleteByAlbumId: async (albumId) => {
-
-        const deleteAlbumQuery = 'DELETE FROM album_images WHERE albumId  = ?';
         try {
-            const [result] = await db.query(deleteAlbumQuery, [albumId]);
-            return result.affectedRows; // Trả về số lượng bản ghi đã bị xóa (nếu thành công là 1)
+            const query = 'DELETE FROM album_images WHERE albumId = ?';
+            const [result] = await db.query(query, [albumId]);
+            return result.affectedRows;
         } catch (error) {
-            console.error("Lỗi khi xóa album :", error);
-            throw error;
+            console.error("Error deleting album images by albumId:", error);
+            throw new Error("Unable to delete images by albumId. Please try again later.");
         }
     }
 }
 
-export default AlbumImages;
+export default AlbumImage;

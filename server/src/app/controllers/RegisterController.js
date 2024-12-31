@@ -1,28 +1,17 @@
-import User from '../models/User.js';
-import bcrypt from "bcrypt";
-
-const saltRounds = 10;
+import AuthenService from '../services/AuthenService.js';
 
 class RegisterController {
-    // POST localhost/register
-    async createUser(req, res) {
+    async register(req, res) {
         try {
-            const { username, password, ...otherFields } = req.body;
-            const userExists = await User.findByUsername(username);
-            if (userExists) {
-                return res.status(401).json({ error: 'User already exists.' });
-            }
-            const hashPassword = await bcrypt.hash(password, saltRounds);
-            const newData = {
-                username,
-                password: hashPassword,
-                ...otherFields
-            };
-            await User.create(newData);
-            return res.status(200).json({ data: 'Register success' });
+            const data = req.body;
+            const result = await AuthenService.register(data);
+            return res.status(200).json(result);
         } catch (error) {
-            console.error('Error during registration:', error); // Log lỗi chi tiết
-            return res.status(500).json({ error: error.message });
+            console.error('Error during registration:', error);
+            if (error.statusCode) {
+                return res.status(error.statusCode).json({ message: error.message });
+            }
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
     }
 }

@@ -5,7 +5,7 @@ const router = express.Router();
 router.all("*", auth);
 
 
-router.get('/', ImagesController.getAllImages);
+router.get('/', ImagesController.showAllImage);
 
 router.post('/', ImagesController.postImages);
 

@@ -8,7 +8,7 @@ const DeletedImages = {
             return rows;
         } catch (error) {
             console.error('Error fetching deleted images:', error);
-            throw error; // Re-throw the error so it can be handled further up if needed
+            throw new Error('Unable to fetch deleted images. Please try again later.');
         }
     },
     getDeletedImageById: async (id) => {
@@ -17,24 +17,22 @@ const DeletedImages = {
             const [rows] = await db.query(query, [id]);
             return rows[0];
         } catch (error) {
-            console.error('Error fetching deleted images:', error);
-            throw error; // Re-throw the error so it can be handled further up if needed
+            console.error('Error fetching deleted image by id:', error);
+            throw new Error('Unable to fetch the deleted image. Please try again later.');
         }
     },
-
-    // Hàm thêm ảnh vào bảng deleted_images
     create: async (data) => {
-        const { id, userId, fileName, fileSize, fileWidth, fileHeight, fileFormat, url } = data;
+        const { userId, fileName, fileSize, fileWidth, fileHeight, fileFormat, url } = data;
         try {
             const query = `
-                INSERT INTO Deleted_Images ( url, fileName, fileSize, fileWidth, fileHeight, fileFormat, deletedBy)
-                VALUES ( ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO Deleted_Images (url, fileName, fileSize, fileWidth, fileHeight, fileFormat, deletedBy)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
             `;
             const [result] = await db.query(query, [url, fileName, fileSize, fileWidth, fileHeight, fileFormat, userId]);
-
             return result.insertId;
         } catch (error) {
             console.error("Error inserting deleted image:", error);
+            throw new Error('Failed to insert deleted image. Please try again later.');
         }
     },
     deleteById: async (id) => {

@@ -1,35 +1,29 @@
-import DeletedImages from '../models/DeletedImages.js';
-import Images from '../models/Images.js';
+import DeletedImageService from '../services/DeletedImageService.js';
 class DeletedImagesController {
     async showAllDeletedImages(req, res) {
         try {
-            const { id, name, email } = req.user; // data handle from middleware
-            const deletedImages = await DeletedImages.getAllDeletedImages(id);;
+            const { id } = req.user;
+            const deletedImages = await DeletedImageService.getAllDeletedImages(id);;
             return res.status(200).json({ data: deletedImages });
         } catch (error) {
-            console.error("Error fetching images:", error); // Log lỗi chi tiết
-            return res.status(500).json({ error: "An error occurred while fetching images." });
+            console.error("Error fetching images:", error);
+            if (error.statusCode) {
+                return res.status(error.statusCode).json({ message: error.message });
+            }
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
     }
     async restoreDeletedImages(req, res) {
-        const id = req.params.id;
+        const idDeteleImage = req.params.id;
         try {
-            // step1: get and check exist deletedImage 
-            const dataDeletedImage = await DeletedImages.getDeletedImageById(id);
-            if (!dataDeletedImage) {
-                return res.status(404).json({ message: "Image not found in deleted images." });
-            }
-            // get information deletedImage
-            const { url, deletedBy } = dataDeletedImage;
-            //step2: restore by add image into table Images
-            await Images.create(url, deletedBy);
-            //step3: delete deletedImage
-            await DeletedImages.deleteById(id);
-
-            return res.status(200).json({ message: "Image restored successfully." });
+            const result = await DeletedImageService.restoreDeletedImages(idDeteleImage);
+            return res.status(200).json(result);
         } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: "Failed to restore image." });
+            console.error("Error fetching images:", error);
+            if (error.statusCode) {
+                return res.status(error.statusCode).json({ message: error.message });
+            }
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
     }
     async restoreMultipleDeletedImage(req, res) {
@@ -37,85 +31,54 @@ class DeletedImagesController {
         if (!Array.isArray(listIdDeletedImage) || listIdDeletedImage.length === 0) {
             return res.status(400).json({ message: "Invalid input. Please provide an array of image IDs." });
         }
-        let successCount = 0;
-        let failedIds = [];
         try {
-            for (const idDeletedImage of listIdDeletedImage) {
-                try {
-                    // step1: get and check exist deletedImage 
-                    const dataDeletedImage = await DeletedImages.getDeletedImageById(idDeletedImage);
-
-                    if (!dataDeletedImage) {
-                        failedIds.push(idDeletedImage); // Lưu ID không tồn tại
-                        continue; // Bỏ qua ảnh này và tiếp tục với ảnh tiếp theo
-                    }
-                    // get information deletedImage
-                    const { url, deletedBy } = dataDeletedImage;
-                    //step2: restore by add image into table Images
-                    await Images.create(url, deletedBy);
-                    //step3: delete deletedImage
-                    await DeletedImages.deleteById(idDeletedImage);
-                    successCount++;
-                } catch (error) {
-                    console.error(`Failed to restore image with ID ${IdDeletedImage}:`, error);
-                    failedIds.push(IdDeletedImage);
-                }
-            }
+            const result = await DeletedImageService.restoreMultipleDeletedImages(listIdDeletedImage);
             return res.status(200).json({
-                message: `${successCount}Image restoration completed.`,
-                successCount,
-                failedCount: failedIds.length,
-                failedIds,
+                message: `${result.successCount} image(s) restored successfully.`,
+                successCount: result.successCount,
+                failedCount: result.failedCount,
+                failedIds: result.failedIds,
             });
         } catch (error) {
-            console.error("Error restoring images:", error);
-            return res.status(500).json({ message: "An unexpected error occurred during image restoration." });
+            console.error("Error in restoring images:", error);
+            if (error.statusCode) {
+                return res.status(error.statusCode).json({ message: error.message });
+            }
+            return res.status(500).json({ message: 'Internal Server Error' });
         }
     }
-    async removeDeletedImages(req, res) {
-        const id = req.params.id;
+    async removeDeletedImage(req, res) {
+        const { id } = req.params; // Lấy ID ảnh từ tham số trong URL
         try {
-            const affectedRows = await DeletedImages.deleteById(id);
-            if (affectedRows === 0) {
-                return res.status(404).json({ message: "Deleted image not found." });
-            }
-            return res.status(200).json({ message: "Removed deleted image successfully." });
+            const result = await DeletedImageService.removeDeletedImageById(id);
+            return res.status(200).json(result);
         } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: "Failed to remove deleted image." });
+            console.error('Error in removeDeletedImage controller:', error);
+            if (error.statusCode) {
+                return res.status(error.statusCode).json({ message: error.message });
+            }
+            return res.status(500).json({ message: 'Internal Server Error' });
         }
     }
     async removeMultipleDeletedImages(req, res) {
-        const listIdDeletedImage = req.body;
+        const listIdDeletedImage = req.body; // Lấy mảng ID ảnh từ yêu cầu
         if (!Array.isArray(listIdDeletedImage) || listIdDeletedImage.length === 0) {
             return res.status(400).json({ message: "Invalid input. Please provide an array of image IDs." });
         }
-        let successCount = 0;
-        let failedIds = [];
         try {
-            for (const idDeletedImage of listIdDeletedImage) {
-                try {
-                    const affectedRows = await DeletedImages.deleteById(idDeletedImage);
-
-                    if (affectedRows > 0) {
-                        successCount++;
-                    } else {
-                        failedIds.push(idDeletedImage);
-                    }
-                } catch (error) {
-                    console.error(`Error deleting image with ID ${idDeletedImage}:`, error);
-                    failedIds.push(idDeletedImage);
-                }
-            }
+            const result = await DeletedImageService.removeMultipleDeletedImages(listIdDeletedImage);
             return res.status(200).json({
-                message: `${successCount} Image deletion process completed.`,
-                // successCount,
-                failedCount: failedIds.length,
-                failedIds,
+                message: `${result.successCount} Image deletion process completed.`,
+                successCount: result.successCount,
+                failedCount: result.failedCount,
+                failedIds: result.failedIds,
             });
         } catch (error) {
-            console.error("Unexpected error during image deletion:", error);
-            return res.status(500).json({ message: "An unexpected error occurred during the deletion process." });
+            console.error('Error in removeMultipleDeletedImages controller:', error);
+            if (error.statusCode) {
+                return res.status(error.statusCode).json({ message: error.message });
+            }
+            return res.status(500).json({ message: 'Internal Server Error' });
         }
     }
 }

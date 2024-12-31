@@ -1,7 +1,7 @@
 import db from '../../config/database.js'
 import axios from 'axios';
 import sharp from 'sharp';
-import fs from 'fs';
+
 const Image = {
     getAllImages: async (userId) => {
         try {
@@ -31,7 +31,6 @@ const Image = {
             const fileSizeInKB = buffer.length / 1024; // Chuyển đổi kích thước từ byte sang KB
             // Sử dụng sharp để lấy thông tin ảnh
             const metadata = await sharp(buffer).metadata();
-            // const query = 'INSERT INTO images (url, userId) VALUES (?, ?)';
             const query = 'INSERT INTO images (userId,url, fileName, fileSize, fileWidth, fileHeight, fileFormat) VALUES (?, ?, ?, ?, ?, ?, ?)';
             const [result] = await db.query(query, [userId, url, url.split('/').pop(), fileSizeInKB.toFixed(2), metadata.width, metadata.height, metadata.format]);
             return result.insertId;
@@ -50,7 +49,6 @@ const Image = {
             throw new Error("Failed to delete image. Please try again.");
         }
     }
-
 }
 
 export default Image;

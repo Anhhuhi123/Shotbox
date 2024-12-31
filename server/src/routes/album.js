@@ -6,7 +6,7 @@ router.all("*", auth);
 
 router.get('/:id', AlbumController.showAlbumDetail);
 router.get('/', AlbumController.showAllAlbums);
-router.post('/', AlbumController.postAlbum);
+router.post('/', AlbumController.createNewAlbum);
 router.delete('/:id', AlbumController.deleteAlbum);
 router.put('/:id', AlbumController.updateAlbum);
 

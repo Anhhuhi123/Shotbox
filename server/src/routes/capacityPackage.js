@@ -6,7 +6,7 @@ router.all("*", auth);
 
 router.get('/', CapacityPackageController.showAllCapacityPackages);
 
-router.post('/', CapacityPackageController.postCapacityPackage);
+router.post('/', CapacityPackageController.createCapacityPackage);
 
 router.put('/:id', CapacityPackageController.updateCapacityPackage);
 

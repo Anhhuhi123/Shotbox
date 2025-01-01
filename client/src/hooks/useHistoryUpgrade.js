@@ -20,7 +20,7 @@ export const useAllHistoryUpgradePending = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await historyUpgradeService.showUpgradePending();
+                const res = await historyUpgradeService.showHistoryUpgradePanding();
                 setAllUpgradePending(res.data);
             } catch (error) {
                 console.log(error);

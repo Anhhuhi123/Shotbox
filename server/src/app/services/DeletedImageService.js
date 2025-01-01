@@ -1,6 +1,8 @@
 import DeletedImages from '../models/DeletedImages.js';
 import Images from '../models/Images.js';
 import createError from '../../utils/errorUtils.js';
+import extractPublicId from '../../utils/extractUtils.js';
+import cloudinary from '../../config/cloudinary.js'
 
 const DeletedImagesService = {
     getAllDeletedImages: async (idUser) => {
@@ -67,22 +69,42 @@ const DeletedImagesService = {
     },
     removeDeletedImageById: async (id) => {
         try {
+            const deletedImage = await DeletedImages.getDeletedImageById(id);
+            if (!deletedImage) {
+                throw createError('Deleted image not found.', 404);
+            }
+            const url = deletedImage.url;
+            const publicId = extractPublicId(url);
+            if (!publicId) {
+                throw createError('Invalid public ID extracted from URL.', 400);
+            }
+            await cloudinary.api.delete_resources(
+                [publicId],
+                { type: 'upload', resource_type: 'image', invalidate: true }
+            );
+            // if (deleteResult.deleted[publicId] !== 'deleted') {
+            //     // console.warn(`Cloudinary deletion status for ${publicId}:`, deleteResult);
+            //     throw createError('Failed to delete image on Cloudinary.', 500);
+            // }
             const affectedRows = await DeletedImages.deleteById(id);
             if (affectedRows === 0) {
-                throw createError('Deleted image not found.', 404);
+                throw createError('Deleted image not found in database.', 404);
             }
             return { message: 'Removed deleted image successfully.' };
         } catch (error) {
-            console.error('Error in removeDeletedImageById:', error);
+            console.error(`Error in removeDeletedImageById for ID ${id}:`, error);
             throw error;
         }
     },
+
     removeMultipleDeletedImages: async (listIdDeletedImage) => {
         let successCount = 0;
         let failedIds = [];
-
+        let urls = [];
         for (const idDeletedImage of listIdDeletedImage) {
             try {
+                const deletedImage = await DeletedImages.getDeletedImageById(idDeletedImage);
+                urls.push(deletedImage.url);
                 const affectedRows = await DeletedImages.deleteById(idDeletedImage);
                 if (affectedRows > 0) {
                     successCount++;
@@ -94,6 +116,10 @@ const DeletedImagesService = {
                 failedIds.push(idDeletedImage);
             }
         }
+        const publicIds = urls.map((url) => extractPublicId(url));
+        await cloudinary.api.delete_resources(
+            publicIds, { type: 'upload', resource_type: 'image', invalidate: true }
+        );
         return {
             successCount,
             failedIds,

@@ -3,19 +3,21 @@ const HistoryUpgrade = {
     getAllHistoryUpgrade: async () => {
         try {
             const query = `
-                SELECT
-                    users.id, 
-                    users.name AS userName,
-                    capacity_package.name AS packageName,
-                    capacity_package.size,
-                    capacity_package.price,
-                    history_upgrade.createdAt,
-                    history_upgrade.status
-                FROM users
-                JOIN history_upgrade ON users.id = history_upgrade.userId
-                JOIN capacity_package ON history_upgrade.capacityPackageId = capacity_package.id
-            `;
+                        SELECT
+                            users.id, 
+                            users.name AS userName,
+                            capacity_package.name AS packageName,
+                            capacity_package.size,
+                            capacity_package.price,
+                            history_upgrade.createdAt,
+                            history_upgrade.status
+                        FROM users
+                        JOIN history_upgrade ON users.id = history_upgrade.userId
+                        JOIN capacity_package ON history_upgrade.capacityPackageId = capacity_package.id
+                        ORDER BY history_upgrade.createdAt ASC
+                    `;
             const [rows] = await db.query(query);
+            console.log(rows);
             return rows;
         } catch (error) {
             console.error("Error retrieving images from album:", error);

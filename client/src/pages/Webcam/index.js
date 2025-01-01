@@ -12,7 +12,7 @@ const cx = classNames.bind(styles);
 function Webcam() {
     const [capturedImage, setCapturedImage] = useState(null);
     const handleAddImages = async () => {
-        const CLOUD_NAME = 'dt3gvugaf';
+        const CLOUD_NAME = 'djfgf1byn';
         const PRESET_NAME = 'demo-upload';
         const FOLDER_NAME = 'Demo';
         const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;

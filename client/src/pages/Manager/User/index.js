@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './User.module.scss';
 import UserManager from '../../../components/Manager/UserManager';
@@ -13,6 +13,7 @@ function User() {
     const { users, setUsers, allUser } = useAllUser();
     const [isOpen, setIsOpen] = useState(false);
     const { allUpgradePending } = useAllHistoryUpgradePending();
+    console.log(allUpgradePending);
     const toggleDropdown = () => setIsOpen((prev) => !prev);
     return (
         <div className={cx('wrapper')}>

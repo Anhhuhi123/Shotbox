@@ -32,7 +32,6 @@ function Signup({ setShowFormSignup }) {
         },
         validationSchema: validationSchema,
         onSubmit: (value) => {
-            console.log(value);
             const fetchApi = async () => {
                 try {
                     const res = await registerService.register(value);
@@ -40,16 +39,13 @@ function Signup({ setShowFormSignup }) {
                         window.location.reload();
                     }
                 } catch (error) {
-                    alert(error.response.data.error);
+                    console.log("error: ", error);
+                    formik.setFieldError('username', error.response.data.message);
                 }
             }
             fetchApi();
         }
     })
-    useEffect(() => {
-        // call api ở đây
-
-    }, [formik.values.username])
 
     const handleOnclick = (e) => {
         setShowFormSignup(false)

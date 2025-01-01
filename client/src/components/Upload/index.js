@@ -20,7 +20,7 @@ function UpLoad({ setShowUpload }) {
 
     const handleUpload = async () => {
         setSelectedFile(null);
-        const CLOUD_NAME = 'dt3gvugaf';
+        const CLOUD_NAME = 'djfgf1byn';
         const PRESET_NAME = 'demo-upload';
         const FOLDER_NAME = 'Demo';
         const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;

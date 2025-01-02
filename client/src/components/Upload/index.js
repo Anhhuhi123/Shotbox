@@ -18,28 +18,9 @@ function UpLoad({ setShowUpload }) {
         setIsVisible(true);
     }, []);
 
-<<<<<<< HEAD
-    const handleSelectFromDevice = () => {
-        fileInputRef.current.click();
-    };
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setSelectedFile(file);
-        }
-    };
-
-    const handleUpload = async (e) => {
-
-        //const CLOUD_NAME = 'djfgf1byn';
-        const CLOUD_NAME = 'dnouyejs5';
-
-=======
     const handleUpload = async () => {
         setSelectedFile(null);
         const CLOUD_NAME = 'djfgf1byn';
->>>>>>> tien
         const PRESET_NAME = 'demo-upload';
         const FOLDER_NAME = 'Demo';
         const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;

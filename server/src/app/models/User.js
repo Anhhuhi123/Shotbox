@@ -2,18 +2,6 @@ import db from '../../config/database.js';
 
 const User = {
     getAllUsers: async () => {
-<<<<<<< HEAD
-        const query = 'SELECT * FROM Users';
-        const [rows] = await db.query(query);
-        return rows;
-    },
-    findByUsername: async (data) => {
-        const username = data;
-        const query = 'SELECT * FROM Users WHERE name = ?';
-        const [rows] = await db.query(query, [username]);
-        if (rows.length > 0) {
-            return rows[0];
-=======
         try {
             const query = 'SELECT * FROM users';
             const [rows] = await db.query(query);
@@ -21,18 +9,8 @@ const User = {
         } catch (error) {
             console.error('Error fetching usernames:', error);
             throw new Error('Failed to fetch usernames');
->>>>>>> tien
         }
     },
-<<<<<<< HEAD
-    // hoi tai sao lai viet  const email = data; ma khong ghi nhieu mien ra data o day la gi?
-    findByEmail: async (data) => {
-        const email = data;
-        const query = 'SELECT * FROM Users WHERE email = ?';
-        const [rows] = await db.query(query, [email]);
-        if (rows.length > 0) {
-            return rows[0];
-=======
     findByUsername: async (username) => {
         try {
             const query = 'SELECT * FROM users WHERE name = ?';
@@ -64,7 +42,6 @@ const User = {
         } catch (error) {
             console.error("Error fetching user by ID:", error);
             throw new Error("Unable to find user.");
->>>>>>> tien
         }
     },
     //loi roldid van chua cap nhap thanh cong 
@@ -104,21 +81,6 @@ const User = {
     },
     
     create: async (data) => {
-<<<<<<< HEAD
-
-        //cu
-        // const { name, email, password,roldid } = data;
-        // const query = 'INSERT INTO users (name, email, password, roldid) VALUES (?, ?, ?, ?)';
-        // const [result] = await db.query(
-        //     query, [name, email, password,roldid]
-        // );
-
-        // moi
-        const { username, email, password, roldid } = data; 
-        const query = 'INSERT INTO Users (name, email, password, roldid) VALUES (?, ?, ?, ?)';
-        const [result] = await db.query(query, [username, email, password, roldid]);
-        return result.insertId;
-=======
         try {
             const { username, email, password } = data;
             const roleId = 2;
@@ -130,7 +92,6 @@ const User = {
             console.error("Error creating user:", error);
             throw new Error("Unable to create user.");
         }
->>>>>>> tien
     },
     update: async (userId, data) => {
         try {

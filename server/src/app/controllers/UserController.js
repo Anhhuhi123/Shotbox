@@ -51,33 +51,6 @@ class UserController {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
     }
-<<<<<<< HEAD
-
-    // PUT request để cập nhật thông tin người dùng
-    async updateUser(req, res) {
-        try {
-            const userId = req.params.id;
-            const { name, email, password, roldId } = req.body; // Dữ liệu cập nhật
-                
-            // Gọi hàm update từ model User để cập nhật thông tin người dùng
-            const updatedUser = await User.update({ id: userId, name, email, password, roldId});
-
-            if (updatedUser) {
-                return res.status(200).json({
-                    message: 'User updated successfully',
-                    data: updatedUser
-                });
-            } else {
-                return res.status(404).json({
-                    message: 'User not found'
-                });
-            }
-        } catch (error) {
-            return res.status(500).json({
-                message: 'Error updating user',
-                error: error.message
-            });
-=======
     async findUserByUsername(req, res) {
         try {
             const username = req.query.search;
@@ -89,7 +62,6 @@ class UserController {
                 return res.status(error.statusCode).json({ message: error.message });
             }
             return res.status(500).json({ error: 'Internal Server Error' });
->>>>>>> tien
         }
     }
     async updateUserPassword(req, res) {

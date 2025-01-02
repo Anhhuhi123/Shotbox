@@ -140,21 +140,6 @@ function Images() {
         });
     }
     return (
-<<<<<<< HEAD
-        <div>
-            {/* Images */}
-            {img.map((obj, index) => {
-                return (
-                    <img
-                        key={index}
-                        src={obj.filePath}
-                        className={cx('img')}
-                        alt="img"
-                    />
-                );
-            })}
-        </div>
-=======
         <>
             <ImageCardList
                 images={img}
@@ -180,7 +165,6 @@ function Images() {
         </>
 
 
->>>>>>> tien
     );
 }
 

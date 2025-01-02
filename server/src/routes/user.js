@@ -1,13 +1,7 @@
 import express from 'express';
 import UserController from '../app/controllers/UserController.js'
-<<<<<<< HEAD
-import auth from '../middleware/auth.js';
-const router = express.Router();
-router.all("*", auth);
-=======
 import auth from "../middleware/auth.js";
 const router = express.Router();
->>>>>>> tien
 
 router.get('/username', UserController.findUserByUsername);
 

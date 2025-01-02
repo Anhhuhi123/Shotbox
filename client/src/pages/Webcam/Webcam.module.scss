@@ -7,37 +7,6 @@ html, body {
     display: flex;
     justify-content: center;
     flex-direction: column;
-<<<<<<< HEAD
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh; // Đảm bảo wrapper chiếm toàn bộ chiều cao màn hình
-    height: 100%;
-    width: 100%;
-    background-color: #333;
-
-    .demo {
-        max-width: 100%;
-        max-height: 100%;
-        img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: cover;
-        }
-    }
-
-    .demo3 {
-        margin-top: 40px;
-        display: flex;
-        gap: 10px;
-    }
-
-    .title {
-        color: #fff;
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
-}
-=======
     position: relative;
 }
 .block-img{
@@ -81,4 +50,3 @@ html, body {
     text-align: center;
     margin-right: 15px;
 }
->>>>>>> tien

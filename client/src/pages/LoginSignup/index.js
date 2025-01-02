@@ -1,7 +1,9 @@
 import LoginSigup from "../../components/LoginSignup";
 function Account() {
-    return (<div className='wrapper'>
-        <LoginSigup />
-    </div>);
+    return (
+        <>
+            <LoginSigup />
+        </>
+    );
 }
 export default Account;

@@ -1,17 +1,41 @@
-import Images from '../models/Images.js';
-
+import ImageService from '../services/ImageService.js';
 class ImagesController {
+<<<<<<< HEAD
     // Get localhost/images/
     async getAllImages(req, res) {
         const images = await Images.getAllImages();
         console.log(images)
         return res.status(200).json({ data: images });
+=======
+    async showAllImage(req, res) {
+        try {
+            const { id } = req.user;
+            const images = await ImageService.getAllImages(id);
+            return res.status(200).json({ data: images });
+        } catch (error) {
+            console.error("Error fetching images:", error); // Log lỗi chi tiết
+            if (error.statusCode) {
+                return res.status(error.statusCode).json({ message: error.message });
+            }
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+>>>>>>> tien
     }
-    // Post localhost/images/
     async postImages(req, res) {
-        await Images.create(req.body);
-        return res.status(200).json({ data: 'Success' });
+        try {
+            const { url } = req.body;
+            const { id } = req.user;
+            const result = await ImageService.uploadImage(url, id);
+            return res.status(201).json(result);
+        } catch (error) {
+            console.error('Error uploading image:', error); // Log detail error
+            if (error.statusCode) {
+                return res.status(error.statusCode).json({ message: error.message });
+            }
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
+<<<<<<< HEAD
     // Delete
 
     async deleteImages(req, res) {
@@ -43,6 +67,44 @@ class ImagesController {
         } catch (error) {
             console.error('Error deleting image:', error);
             res.status(500).json({ message: 'Failed to delete image' });
+=======
+    async deleteImages(req, res) {
+        try {
+            const imgId = req.params.id;
+            const result = await ImageService.deleteImage(imgId);
+            res.status(200).json(result);
+
+        } catch (error) {
+            console.error("Error deleting image:", error);
+            if (error.statusCode) {
+                return res.status(error.statusCode).json({ message: error.message });
+            }
+            return res.status(500).json({ error: 'Internal Server Error' })
+        }
+    }
+    async deleteMultiple(req, res) {
+        try {
+            const arrIdImg = req.body;
+            const result = await ImageService.deleteMultipleImages(arrIdImg);
+            if (result.statusCode === 207) {
+                return res.status(207).json({
+                    message: result.message,
+                    deletedImages: result.deletedImages,
+                    notFoundIds: result.notFoundIds,
+                });
+            }
+            return res.status(200).json({
+                message: result.message,
+                deletedImages: result.deletedImages,
+            });
+
+        } catch (error) {
+            console.error("Error deleting images:", error);
+            if (error.statusCode) {
+                return res.status(error.statusCode).json({ message: error.message });
+            }
+            return res.status(500).json({ error: 'Internal Server Error' })
+>>>>>>> tien
         }
     }
 }

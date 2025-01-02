@@ -1,30 +1,27 @@
 const initialState = {
     isAuthenticated: !!localStorage.getItem('authToken'),
-    user: null,
+    roleId: null,
 }
-
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'LOGIN_SUCCESS': {
-            const newState = action.payload;
             return {
                 ...state,
-                isAuthenticated: newState,
+                isAuthenticated: action.payload,
             }
         }
         case 'LOGOUT': {
-            const newState = action.payload;
             return {
                 ...state,
-                isAuthenticated: newState,
-                user: null,
+                isAuthenticated: action.payload,
+                roleId: null,
+
             }
         }
         case 'CHECK_ACCOUNT': {
-            const newState = action.payload;
             return {
                 ...state,
-                user: newState,
+                roleId: action.payload,
             }
         }
         default:

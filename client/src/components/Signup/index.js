@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import classNames from "classnames/bind";
@@ -32,7 +31,6 @@ function Signup({ setShowFormSignup }) {
         },
         validationSchema: validationSchema,
         onSubmit: (value) => {
-            console.log(value);
             const fetchApi = async () => {
                 try {
                     const res = await registerService.register(value);
@@ -40,81 +38,80 @@ function Signup({ setShowFormSignup }) {
                         window.location.reload();
                     }
                 } catch (error) {
-                    alert(error.response.data.error);
+                    console.log("error: ", error);
+                    formik.setFieldError('username', error.response.data.message);
                 }
             }
             fetchApi();
         }
     })
-    useEffect(() => {
-        // call api ở đây
-
-    }, [formik.values.username])
 
     const handleOnclick = (e) => {
         setShowFormSignup(false)
     }
 
     return (
-        <form action="" className={cx("signup")} onSubmit={formik.handleSubmit}>
-            <i className={`fa-solid fa-xmark ${cx('xmark')}`} onClick={handleOnclick}></i>
-            <h2 className={cx("signup-title")}>CREATE AN ACCOUNT </h2>
-            <div className={cx('group-control')}>
-                <Input className={cx("signup-control")}
-                    type="text"
-                    id="username"
-                    name="username"
-                    placeholder="Username"
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.username && formik.errors.username ? formik.errors.username : null}
-                />
-            </div>
+        <div className={cx('wrapper')}>
+            <form action="" className={cx("signup")} onSubmit={formik.handleSubmit}>
+                <i className={`fa-solid fa-xmark ${cx('xmark')}`} onClick={handleOnclick}></i>
+                <h2 className={cx("signup-title")}>CREATE AN ACCOUNT </h2>
+                <div className={cx('group-control')}>
+                    <Input className={cx("signup-control")}
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Username"
+                        value={formik.values.username}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.username && formik.errors.username ? formik.errors.username : null}
+                    />
+                </div>
 
-            <div className={cx('group-control')}>
-                <Input className={cx("signup-control")}
-                    type="text"
-                    id="email"
-                    name="email"
-                    placeholder="Email"
-                    autoComplete="username"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.email && formik.errors.email ? formik.errors.email : null}
-                />
-            </div>
+                <div className={cx('group-control')}>
+                    <Input className={cx("signup-control")}
+                        type="text"
+                        id="email"
+                        name="email"
+                        placeholder="Email"
+                        autoComplete="username"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.email && formik.errors.email ? formik.errors.email : null}
+                    />
+                </div>
 
-            <div className={cx('group-control')}>
-                <Input className={cx("signup-control")}
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Password"
-                    autoComplete="new-password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.password && formik.errors.password ? formik.errors.password : null}
-                />
-            </div>
+                <div className={cx('group-control')}>
+                    <Input className={cx("signup-control")}
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        autoComplete="new-password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.password && formik.errors.password ? formik.errors.password : null}
+                    />
+                </div>
 
-            <div className={cx('group-control')}>
-                <Input className={cx("signup-control")}
-                    type="password"
-                    id="password_confirmation"
-                    name="password_confirmation"
-                    placeholder="Confirm Password"
-                    autoComplete="new-password"
-                    value={formik.values.password_confirmation}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.password_confirmation && formik.errors.password_confirmation ? formik.errors.password_confirmation : null}
-                />
-            </div>
-            <button className={cx("signup-submit")} type='submit'>Register</button>
-        </form>
+                <div className={cx('group-control')}>
+                    <Input className={cx("signup-control")}
+                        type="password"
+                        id="password_confirmation"
+                        name="password_confirmation"
+                        placeholder="Confirm Password"
+                        autoComplete="new-password"
+                        value={formik.values.password_confirmation}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.password_confirmation && formik.errors.password_confirmation ? formik.errors.password_confirmation : null}
+                    />
+                </div>
+                <button className={cx("signup-submit")} type='submit'>Register</button>
+            </form>
+        </div>
     );
 }
 export default Signup;

@@ -1,17 +1,35 @@
 import express from 'express';
 import UserController from '../app/controllers/UserController.js'
+<<<<<<< HEAD
 import auth from '../middleware/auth.js';
 const router = express.Router();
 router.all("*", auth);
+=======
+import auth from "../middleware/auth.js";
+const router = express.Router();
+>>>>>>> tien
 
-router.get('/account', UserController.getUser);
+router.get('/username', UserController.findUserByUsername);
+
+router.all("*", auth);
+
+router.get('/roleId', UserController.getRoleId);
+
+// change role 
+router.put('/roleId', UserController.ChangeRoleId);
+
+router.put('/capacity', UserController.UpdateUserCapacity);
+
+router.get('/account', UserController.getAccount);
 
 router.get('/:id', UserController.getUserById);
 
-router.get('/', UserController.getAllUser)
+router.get('/', UserController.showAllUser)
 
-router.put('/:id', UserController.updateUser);
+router.put('/password', UserController.updateUserPassword);
 
-router.delete('/:id', UserController.deleteUser);
+router.put('/email', UserController.updateUserEmail);
+
+
 
 export default router;

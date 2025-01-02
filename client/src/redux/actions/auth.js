@@ -5,7 +5,6 @@ export const authLogin = (res) => {
         payload: true
     }
 }
-
 export const authLogout = () => {
     localStorage.removeItem('authToken');
     return {
@@ -13,10 +12,9 @@ export const authLogout = () => {
         payload: false
     }
 }
-
-export const authAccount = (data) => {
+export const authAccount = (roleId) => {
     return {
         type: 'CHECK_ACCOUNT',
-        payload: data,
+        payload: roleId,
     }
 }

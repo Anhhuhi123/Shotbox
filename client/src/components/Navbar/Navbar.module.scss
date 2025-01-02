@@ -8,6 +8,7 @@
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 0 13px rgba(0, 0, 0, .1);
+    z-index: 1;
 }
 .logo{
     display: inline-block;
@@ -25,10 +26,36 @@
     }
 
 }
+@media only screen and (max-width: 750px) {
+   .wrapper{
+       z-index: 2;
+   }
+   
+ }
 .actions{
     margin-right: 3px;
     position: relative;
+    user-select: none;
+
 }
+.option{
+    // margin-right: 10px;
+    // margin-left: 10px;
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+    padding: 10px;
+
+}
+@media only screen and (max-width: 550px) {
+    .text-modifier{
+        display: none;
+    }
+    .fa-user-modifier {
+        display: none;
+    }
+   
+ }
 .fix-toolbar{
     display: flex;
     align-items: center;
@@ -40,7 +67,9 @@
     width: 120px;
     background-color: black;
     top:35px;
-    right: 0;   
+    right: 10px;   
+   
+
 }
 .upload-container{
     display: flex;
@@ -74,4 +103,17 @@
         font-weight: 700;
     }
 
+}
+
+.icon-modifier{
+    display: inline-block;
+    width: 10px;
+    text-align: center;
+    margin-right: 10px;
+}
+
+
+.fa-user-modifier{
+    background-color: white;
+    margin-right: 0px;
 }

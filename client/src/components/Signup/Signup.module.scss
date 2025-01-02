@@ -1,3 +1,14 @@
+.wrapper{
+    position: fixed;
+    background-color: rgba(150, 148, 148, 0.8);
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+}
+
 .signup{
     width: 432px;
     background-color: white;
@@ -6,6 +17,7 @@
     text-align: center;
     position: relative;
 }
+
 .xmark{
     position: absolute;
     top:10px;
@@ -15,18 +27,19 @@
         cursor: pointer;
     }
 }
+
 .signup-title{
     text-align: center;
 }
+
 .group-control{
     margin: 0 10px 10px 10px;
+    padding: 0px 10px ;
 }
 
 .signup-control{
     background: #f5f6f7;
     line-height: 20px;
-    margin-left: 20px;
-    margin-right:  20px;
     border-radius: 5px;
     border-style: none;
     padding: 10px 0px;

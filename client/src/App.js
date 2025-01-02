@@ -3,6 +3,7 @@ import routes from './routes/index'
 import MainLayout from './layouts/MainLayout'
 import DefaultLayout from './layouts/DefaultLayout'
 import CreateAccountLayout from './layouts/CreateAccountLayout'
+import UpgradeLayout from './layouts/UpgradeLayout'
 import * as userService from './services/userService';
 import { useEffect } from 'react';
 import { useDispatch } from "react-redux";
@@ -17,8 +18,8 @@ function App() {
     const fetchData = async () => {
       if (isAuthenticated) {
         try {
-          const res = await userService.getUser();
-          dispatch(authAccount(res));
+          const res = await userService.getRoleId();
+          dispatch(authAccount(res.roleId));
         } catch (error) {
           console.error(error);
         }
@@ -33,10 +34,13 @@ function App() {
           {
             routes.map((route, index) => {
               let Layout = DefaultLayout;
-              if (route.layout === null) {
+              if (route.layout === 'undefined') {
+                Layout = UpgradeLayout;
+              }
+              else if (route.layout === null) {
                 Layout = CreateAccountLayout;
               }
-              if (route.layout) {
+              else if (route.layout) {
                 Layout = MainLayout;
               }
               let Page = route.component;

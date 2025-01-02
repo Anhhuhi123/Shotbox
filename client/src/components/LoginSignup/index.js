@@ -1,22 +1,22 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux'
 import { useFormik } from 'formik';
+import { Link } from 'react-router-dom'
 import * as Yup from 'yup';
 import classNames from "classnames/bind";
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // option
 import 'tippy.js/themes/light.css';
 import styles from './LoginSignup.module.scss'
-import * as loginService from '../../services/loginService'
-import { authLogin } from '../../redux/actions/auth'
 import Input from "../Input";
 import Signup from '../Signup';
-
-
+import * as loginService from '../../services/loginService'
+import { authLogin } from '../../redux/actions/auth'
 const cx = classNames.bind(styles)
 function LoginSigup() {
     const [showFormSignup, setShowFormSignup] = useState(false);
     const dispatch = useDispatch();
+
     const validationSchema = Yup.object({
         username: Yup.string()
             .required('Required')
@@ -41,13 +41,13 @@ function LoginSigup() {
                     }
                 }
                 catch (error) {
-                    console.log(error.response.data);
+                    console.log(error);
                     const data = error.response.data;
                     if (data.field === 'username') {
-                        formik.setFieldError(data.field, data.error);
+                        formik.setFieldError('username', data.message);
                     }
                     else {
-                        formik.setFieldError(data.field, data.error);
+                        formik.setFieldError('password', data.message);
                     }
                 }
             }
@@ -58,8 +58,6 @@ function LoginSigup() {
     const handleOnclick = (e) => {
         setShowFormSignup(true)
     }
-
-    // login
 
     return (<div className={cx('wrapper')}>
 
@@ -73,7 +71,7 @@ function LoginSigup() {
         </div>
 
         <div className="login-container">
-            <form action="" method="GET" className={cx("login")} onSubmit={formik.handleSubmit}>
+            <form className={cx("login")} onSubmit={formik.handleSubmit}>
 
                 <h2 className={cx("login-title")}>LOG IN</h2>
                 <div className={cx('group-control')}>
@@ -88,7 +86,7 @@ function LoginSigup() {
                     />
                     {formik.errors.username && formik.touched.username ?
                         <Tippy content={formik.errors.username} placement={'bottom'} >
-                            <i className={`fa-solid fa-circle-exclamation ${cx('exclamation-mark')}`}></i>
+                            <i className={`fa-solid fa-circle-exclamation ${cx('icon-modifier')}`}></i>
                         </Tippy> : null
                     }
                 </div>
@@ -105,7 +103,7 @@ function LoginSigup() {
                     />
                     {formik.errors.password && formik.touched.password ?
                         <Tippy content={formik.errors.password} placement={'bottom'}>
-                            <i className={`fa-solid fa-circle-exclamation ${cx('exclamation-mark')}`}></i>
+                            <i className={`fa-solid fa-circle-exclamation ${cx('icon-modifier')}`}></i>
                         </Tippy> : null
                     }
                 </div>
@@ -115,7 +113,7 @@ function LoginSigup() {
                 </div>
 
                 <div className={cx("forgot")}>
-                    <a href="/">Forgot password?</a>
+                    <Link to="./identify">Forgot password?</Link>
                 </div>
 
                 <button className={cx("btn-signup")} type='button' onClick={handleOnclick}>Create new account</button>
@@ -123,9 +121,7 @@ function LoginSigup() {
         </div>
 
         {showFormSignup &&
-            <div className={cx("signup-container")}>
-                <Signup setShowFormSignup={setShowFormSignup} />
-            </div>
+            <Signup setShowFormSignup={setShowFormSignup} />
         }
 
     </div>);

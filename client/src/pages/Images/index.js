@@ -14,7 +14,7 @@ function Images() {
     const [listIdImgChecked, setListIdImgChecked] = useState([]);
     const [isDeleting, setIsDeleting] = useState(false);
     const [displayAlbums, setDisplayAlbums] = useState([])
-
+    const [activeIndex, setActiveIndex] = useState(null);
     // function handle of MenuItems
     const handleShowListAlbumName = async (obj, e) => {
         if (isDeleting) return;
@@ -50,6 +50,7 @@ function Images() {
         if (isDeleting) return;
         e.stopPropagation();
         setIsDeleting(true);
+        setActiveIndex(null);
         // document.removeEventListener('mousedown', handleClickOutside);
         const idImg = ImageObj.id;
         const fetchData = async () => {
@@ -148,6 +149,8 @@ function Images() {
                 isDeleting={isDeleting}
                 handleCheckboxChange={handleOnclickCheckbox}
                 listIdImgChecked={listIdImgChecked}
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
             />
             {
                 listIdImgChecked.length > 0 &&

@@ -6,7 +6,7 @@ import Menu from '../Menu';
 
 const cx = classNames.bind(styles);
 
-function ImageCard({ imgObj, isActive, isChecked, onImageClick, onOptionClick, onCheckboxChange, menuRef, MenuItems, displayAlbums, setDisplayAlbums, }) {
+function ImageCard({ imgObj, isActive, isChecked, onImageClick, onOptionClick, onCheckboxChange, menuRef, MenuItems, displayAlbums, setDisplayAlbums }) {
     const imgRef = useRef(null);
 
     return (

@@ -41,13 +41,13 @@ function LoginSigup() {
                     }
                 }
                 catch (error) {
-                    console.log(error.response.data);
+                    console.log(error);
                     const data = error.response.data;
                     if (data.field === 'username') {
-                        formik.setFieldError(data.field, data.error);
+                        formik.setFieldError('username', data.message);
                     }
                     else {
-                        formik.setFieldError(data.field, data.error);
+                        formik.setFieldError('password', data.message);
                     }
                 }
             }

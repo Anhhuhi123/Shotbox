@@ -125,7 +125,7 @@ class UserController {
             const { id } = req.user; // Lấy userId từ thông tin đăng nhập
             const { newCapacity, userId } = req.body; // Lấy newCapacity và userId từ request body
             const selectUserId = userId;
-            const result = await UpdateUserCapacityService.updateCapacity(id, newCapacity, selectUserId);
+            const result = await UserService.updateCapacity(id, newCapacity, selectUserId);
             return res.status(200).json(result);
         } catch (error) {
             console.error(error);

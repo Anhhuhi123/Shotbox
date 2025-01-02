@@ -71,10 +71,10 @@ const User = {
             throw new Error("Unable to update user.");
         }
     },
-    updateRoleId: async (newRoleId, userId) => {
+    updateRoleId: async (newRoleId, selectUserId) => {
         try {
             const query = 'UPDATE users SET roleId = ? WHERE id = ?';
-            const [result] = await db.query(query, [newRoleId, userId]);
+            const [result] = await db.query(query, [newRoleId, selectUserId]);
             return result.affectedRows > 0;
         } catch (error) {
             console.error('Error updating roleId:', error);

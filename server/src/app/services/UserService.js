@@ -101,7 +101,7 @@ const UserService = {
             if (![1, 2].includes(newRoleId)) {
                 throw createError('Invalid newRoleId', 400);
             }
-            const updateRows = await User.updateRoleId(newRoleId, userId);
+            const updateRows = await User.updateRoleId(newRoleId, selectUserId);
             if (updateRows === 0) {
                 throw createError('Failed to update role', 404);
             }

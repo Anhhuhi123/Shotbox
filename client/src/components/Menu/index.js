@@ -4,9 +4,10 @@ import Button from "../Button";
 import * as AlbumImageService from '../../services/albumImageService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useState } from "react";
 const cx = classNames.bind(styles);
 function Menu({ ImageObj, MenuItems, displayAlbums, setDisplayAlbums }) {
-
+    const [isBack, setIsBack] = useState(true);
     const current = displayAlbums.length > 0 ? displayAlbums : MenuItems;
     const handleAddImgToAlbum = (e, AlbumObj, ImageObj) => {
         e.stopPropagation();
@@ -16,10 +17,12 @@ function Menu({ ImageObj, MenuItems, displayAlbums, setDisplayAlbums }) {
                 imageId: ImageObj.id,
             }
             try {
+                setIsBack(false);
                 const res = await AlbumImageService.addImgToAlbum(data);
                 toast.success(`Success:${res.message}`, {
                     position: "bottom-center",
                     autoClose: 1000,
+                    onClose: () => setIsBack(true),
                 });
             } catch (error) {
                 console.log(error);
@@ -37,7 +40,9 @@ function Menu({ ImageObj, MenuItems, displayAlbums, setDisplayAlbums }) {
             {displayAlbums.length > 0 && (
                 <Button four icon={<i className="fa-solid fa-arrow-left"></i>} className={cx('modifier')} onClick={(e) => {
                     e.stopPropagation();
-                    setDisplayAlbums([]);
+                    if (isBack) {
+                        setDisplayAlbums([]);
+                    }
                 }}>
                     Back
                 </Button>

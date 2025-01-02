@@ -5,8 +5,7 @@ import ImageCard from '../ImageCard';
 import 'react-toastify/dist/ReactToastify.css';
 
 const cx = classNames.bind(styles);
-function ImageCardList({ images, displayAlbums, setDisplayAlbums, menuItems, isDeleting, handleCheckboxChange, listIdImgChecked }) {
-    const [activeIndex, setActiveIndex] = useState(null);
+function ImageCardList({ images, displayAlbums, setDisplayAlbums, menuItems, isDeleting, handleCheckboxChange, listIdImgChecked, activeIndex, setActiveIndex }) {
     const [selectedImage, setSelectedImage] = useState(null);
     const [isImageClicked, setIsImageClicked] = useState(false);
     const menuRef = useRef(null);

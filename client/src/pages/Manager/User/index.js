@@ -4,7 +4,6 @@ import styles from './User.module.scss';
 import UserManager from '../../../components/Manager/UserManager';
 import Button from '../../../components/Button';
 import Chart from '../../../components/Chart'
-import * as historyUpgradeService from '../../../services/historyUpgrade';
 import { useAllUser } from '../../../hooks/useUser';
 import { useAllHistoryUpgradePending } from '../../../hooks/useHistoryUpgrade';
 

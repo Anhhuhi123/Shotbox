@@ -15,6 +15,7 @@ function DeletedImages() {
     const [listIdImgChecked, setListIdImgChecked] = useState([]);
     const [isDeleting, setIsDeleting] = useState(false);
     const [displayAlbums, setDisplayAlbums] = useState([]);
+    const [activeIndex, setActiveIndex] = useState(null);
 
     const handleRestore = (objDeletedImage, e) => {
         if (isDeleting) return;
@@ -152,6 +153,8 @@ function DeletedImages() {
                 isDeleting={isDeleting}
                 handleCheckboxChange={handleOnclickCheckbox}
                 listIdImgChecked={listIdImgChecked}
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
             />
             {
                 listIdImgChecked.length > 0 &&

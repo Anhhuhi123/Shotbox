@@ -11,7 +11,7 @@ class LoginController {
                 user: result.user
             })
         } catch (error) {
-            console.log(error);
+            console.error(error);
             if (error.statusCode) {
                 return res.status(error.statusCode).json({ message: error.message });
             }

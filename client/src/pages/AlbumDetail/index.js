@@ -23,6 +23,7 @@ function AlbumDetail() {
     const [listIdImgChecked, setListIdImgChecked] = useState([]);
     const [isDeleting, setIsDeleting] = useState(false);
     const [showFormConfirm, setShowFormConfirm] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(null);
 
     const handleDownloadImg = async (ImageObj, e) => {
         if (isDeleting) return;
@@ -46,20 +47,13 @@ function AlbumDetail() {
         if (isDeleting) return;
         e.stopPropagation();
         setIsDeleting(true);
-        // document.removeEventListener('mousedown', handleClickOutside);
         const idAlbumImg = ImageObj.id;
         const deleteImgFromAlbum = async () => {
             try {
-                const res = await AlbumImageService.deleteImgFromAlbum(idAlbumImg);
-                toast.success(`Success:${res.message}`, {
-                    position: "bottom-center",
-                    autoClose: 1000,
-                    onClose: () => {
-                        setImg((prev) => prev.filter((img) => img.id !== idAlbumImg));
-                        // setActiveIndex(null);
-                        setIsDeleting(false);
-                    },
-                });
+                await AlbumImageService.deleteImgFromAlbum(idAlbumImg);
+                setImg((prev) => prev.filter((img) => img.id !== idAlbumImg));
+                setActiveIndex(null);
+                setIsDeleting(false);
             } catch (error) {
                 console.log(error);
                 toast.error(`Error:${error.respone.data.message}`, {
@@ -147,6 +141,8 @@ function AlbumDetail() {
                 isDeleting={isDeleting}
                 handleCheckboxChange={handleOnclickCheckbox}
                 listIdImgChecked={listIdImgChecked}
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
             />
             {
                 listIdImgChecked.length > 0 &&

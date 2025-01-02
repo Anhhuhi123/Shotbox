@@ -4,17 +4,20 @@ export const useHistoryUpgradePending = (userId) => {
     const [upgradePending, setUpgradePending] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
+            if (!userId) return;
             try {
                 const res = await historyUpgradeService.showUpgradePending(userId);
                 setUpgradePending(res.data);
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
-        }
+        };
+
         fetchData();
-    }, []);
-    return { upgradePending, setUpgradePending }
+    }, [userId]);
+    return { upgradePending, setUpgradePending };
 };
+
 export const useAllHistoryUpgradePending = () => {
     const [allUpgradePending, setAllUpgradePending] = useState([]);
     useEffect(() => {

@@ -17,7 +17,6 @@ const HistoryUpgrade = {
                         ORDER BY history_upgrade.createdAt ASC
                     `;
             const [rows] = await db.query(query);
-            console.log(rows);
             return rows;
         } catch (error) {
             console.error("Error retrieving images from album:", error);

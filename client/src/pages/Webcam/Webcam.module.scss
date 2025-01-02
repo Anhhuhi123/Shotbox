@@ -34,6 +34,22 @@ html, body {
     justify-content: center;
 }
 
+.button {
+    background-color: rgba(255, 255, 255, 0.2); /* Màu nền trong suốt */
+    backdrop-filter: blur(5px); /* Hiệu ứng làm mờ nền */
+    border: 2px solid rgba(255, 255, 255, 0.3); /* Viền trong suốt */
+    padding: 12px 24px; /* Khoảng cách bên trong */
+    border-radius: 50px; /* Bo góc */
+    color: white; /* Màu chữ */
+    font-weight: 500; /* Độ đậm của chữ */
+    transition: all 0.3s ease; /* Hiệu ứng chuyển tiếp */
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.3); /* Màu nền khi hover */
+        transform: translateY(-2px); /* Hiệu ứng dịch chuyển khi hover */
+    }
+}
+
 @media screen and (max-width:750px){
     .block-img {
         display: flex;

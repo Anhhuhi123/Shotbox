@@ -3,6 +3,7 @@ import { Bar, Line } from 'react-chartjs-2';
 import Chart from "chart.js/auto";
 Chart.register(CategoryScale);
 
+
 const component = {
     ChartBar: Bar,
     ChartLine: Line,

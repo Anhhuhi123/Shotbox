@@ -59,13 +59,13 @@ function Webcam() {
             {
                 capturedImage && (
                     <div className={cx('list-btn')}>
-                        <Button icon={<i className={`fa-solid fa-arrows-rotate ${cx('icon-modifier')}`}></i>} first onClick={() => setCapturedImage(null)}>
+                        <Button className={cx('button')} icon={<i className={`fa-solid fa-arrows-rotate ${cx('icon-modifier')}`}></i>} first onClick={() => setCapturedImage(null)}>
                             Back
                         </Button>
-                        <Button icon={<i className={`fa-solid fa-image ${cx('icon-modifier')}`}></i>} first onClick={handleAddImages}>
+                        <Button className={cx('button')} icon={<i className={`fa-solid fa-image ${cx('icon-modifier')}`}></i>} first onClick={handleAddImages}>
                             Add To Images
                         </Button>
-                        <Button icon={<i className={`fa-solid fa-download ${cx('icon-modifier')}`}></i>} first onClick={() => {
+                        <Button className={cx('button')} icon={<i className={`fa-solid fa-download ${cx('icon-modifier')}`}></i>} first onClick={() => {
                             const link = document.createElement('a');
                             link.href = URL.createObjectURL(capturedImage);
                             link.download = 'demo.jpg';

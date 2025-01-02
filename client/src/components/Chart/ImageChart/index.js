@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ChartType from "./ChartType";
+import './Chart.scss';
 
 function ImageChart({ items }) {
     const currentYear = new Date(Date.now()).getFullYear();
@@ -25,33 +26,36 @@ function ImageChart({ items }) {
 
     return (
         <div>
-            <select onChange={(e) => setSelectedYear(e.target.value)} value={selectedYear}>
-                {yearOptions.map((yearOption) => (
-                    <option key={yearOption} value={yearOption}>
-                        {yearOption}
-                    </option>
-                ))}
-            </select>
+            <h1>Image Chart</h1>
+            <div className="select-container">
+                <select className="select" onChange={(e) => setSelectedYear(e.target.value)} value={selectedYear}>
+                    {yearOptions.map((yearOption) => (
+                        <option key={yearOption} value={yearOption}>
+                            {yearOption}
+                        </option>
+                    ))}
+                </select>
 
-            <select onChange={(e) => setSelectedMonth(e.target.value)} value={selectedMonth}>
-                <option value="All">All</option>
-                {monthOptions.map((monthName, index) => (
-                    <option key={index} value={index + 1}>
-                        {monthName}
-                    </option>
-                ))}
-            </select>
+                <select className="select" onChange={(e) => setSelectedMonth(e.target.value)} value={selectedMonth}>
+                    <option value="All">All</option>
+                    {monthOptions.map((monthName, index) => (
+                        <option key={index} value={index + 1}>
+                            {monthName}
+                        </option>
+                    ))}
+                </select>
 
-            <select onChange={(e) => setSelectChartType(e.target.value)} value={selectChartType}>
-                {chartTypes.map((chartType) => (
-                    <option key={chartType} value={chartType}>
-                        {chartType}
-                    </option>
-                ))}
-            </select>
+                <select className="select" onChange={(e) => setSelectChartType(e.target.value)} value={selectChartType}>
+                    {chartTypes.map((chartType) => (
+                        <option key={chartType} value={chartType}>
+                            {chartType}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             <ChartType chartType={selectChartType} items={items} year={selectedYear} month={selectedMonth} />
-        </div >
+        </div>
     );
 }
 

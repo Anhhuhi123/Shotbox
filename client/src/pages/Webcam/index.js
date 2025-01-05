@@ -11,13 +11,10 @@ function Webcam() {
     const [capturedImage, setCapturedImage] = useState(null);
     // console.log(capturedImage)
     const handleAddImages = async () => {
-        //const CLOUD_NAME = 'djfgf1byn';
-        const CLOUD_NAME = 'dnouyejs5';
-
-        const PRESET_NAME = 'demo-upload';
-        const FOLDER_NAME = 'Demo';
+        const CLOUD_NAME = process.env.CLOUD_NAME;
+        const PRESET_NAME = process.env.PRESET_NAME;
+        const FOLDER_NAME = process.env.FOLDER_NAME;
         const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
-
         const formData = new FormData();
         formData.append('file', capturedImage); // 'file' là tên trường được yêu cầu bởi Cloudinary
         formData.append('upload_preset', PRESET_NAME);

@@ -1,18 +1,18 @@
 import axios from 'axios';
 // config request
-// const request = axios.create({
-//     baseURL: 'https://192.168.100.7:8080',
-//     headers: {
-//         'Content-Type': 'application/json',
-//     }
-// })
-
 const request = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: 'https://192.168.221.241:8080',
     headers: {
         'Content-Type': 'application/json',
     }
 })
+
+// const request = axios.create({
+//     baseURL: 'http://localhost:8080',
+//     headers: {
+//         'Content-Type': 'application/json',
+//     }
+// })
 
 // Sử dụng interceptor để thêm token vào những request cần thiết
 request.interceptors.request.use(

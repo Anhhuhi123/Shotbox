@@ -18,32 +18,147 @@ function UpLoad({ setShowUpload }) {
         setIsVisible(true);
     }, []);
 
+    // const handleUpload = async () => {
+    //     setSelectedFile(null);
+    //     const CLOUD_NAME = 'djfgf1byn';
+    //     const PRESET_NAME = 'demo-upload';
+    //     const FOLDER_NAME = 'Demo';
+    //     const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+
+    //     const formData = new FormData();
+    //     formData.append('file', selectedFile);
+    //     formData.append('upload_preset', PRESET_NAME);
+    //     formData.append('folder', FOLDER_NAME);
+
+    //     try {
+    //         const response = await axios.post(api, formData, {
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data',
+    //             },
+    //             onUploadProgress: (progressEvent) => {
+    //                 const progress = Math.round(
+    //                     (progressEvent.loaded * 100) / progressEvent.total
+    //                 );
+    //                 setUploadProgress(progress);
+    //             },
+    //         });
+    //         await ImageService.createImage({
+    //             url: response.data.secure_url,
+    //         });
+    //         window.location.reload();
+    //     } catch (error) {
+    //         console.error('Upload failed:', error);
+    //         toast.error(`Error: ${error.response?.data?.message || 'Upload failed'}`, {
+    //             position: "bottom-center",
+    //             autoClose: 3000,
+    //         });
+    //     }
+    // };
+
+    // const handleFileChange = (e) => {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         setSelectedFile(file);
+    //         displayFileNameRef.current = file;
+    //     }
+    // };
+
+    // return (
+    //     <div className={cx('wrapper')}>
+    //         <div className={cx('block', { show: isVisible })}>
+    //             <h2 className={cx('title')}>Upload Image</h2>
+
+    //             <div className={cx('wrapper-button')}>
+    //                 <Button five onClick={() => fileInputRef.current.click()} className={cx('btn')}>
+    //                     Select From Device
+    //                 </Button>
+    //             </div>
+
+    //             <div className={cx('form')}>
+    //                 <input
+    //                     type="text"
+    //                     className={cx('input')}
+    //                     placeholder="Selected file or paste URL here..."
+    //                     value={selectedFile ? selectedFile.name : displayFileNameRef.current.name}
+    //                     readOnly
+    //                 />
+    //                 <Button
+    //                     five
+    //                     onClick={handleUpload}
+    //                     className={cx('btn', { disabled: !selectedFile })}
+    //                     disabled={!selectedFile}
+    //                 >
+    //                     Upload
+    //                 </Button>
+    //             </div>
+
+    //             {uploadProgress > 0 && (
+    //                 <div className={cx('progress-bar')}>
+    //                     <div
+    //                         className={cx('progress')}
+    //                         style={{ width: `${uploadProgress}%` }}
+    //                     />
+    //                 </div>
+    //             )}
+
+    //             <input
+    //                 type="file"
+    //                 ref={fileInputRef}
+    //                 style={{ display: 'none' }}
+    //                 onChange={handleFileChange}
+    //                 accept="image/*"
+    //             />
+
+    //             <i
+    //                 className={`fa-regular fa-circle-xmark ${cx('icon-modifier')}`}
+    //                 onClick={() => setShowUpload(false)}
+    //             />
+    //         </div>
+    //         <ToastContainer />
+    //     </div>
+    // );
+
+    const handleFileChange = (e) => {
+        const files = Array.from(e.target.files); // Chuyển FileList thành mảng
+        if (files.length > 0) {
+            setSelectedFile(files); // Lưu danh sách file vào state
+            displayFileNameRef.current = files.map(file => file.name).join(', '); // Hiển thị danh sách tên file
+        }
+    };
+    
     const handleUpload = async () => {
-        setSelectedFile(null);
+        if (!selectedFile || selectedFile.length === 0) return;
         const CLOUD_NAME = 'djfgf1byn';
         const PRESET_NAME = 'demo-upload';
         const FOLDER_NAME = 'Demo';
         const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
-
-        const formData = new FormData();
-        formData.append('file', selectedFile);
-        formData.append('upload_preset', PRESET_NAME);
-        formData.append('folder', FOLDER_NAME);
-
+    
         try {
-            const response = await axios.post(api, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                onUploadProgress: (progressEvent) => {
-                    const progress = Math.round(
-                        (progressEvent.loaded * 100) / progressEvent.total
-                    );
-                    setUploadProgress(progress);
-                },
-            });
-            await ImageService.createImage({
-                url: response.data.secure_url,
+            for (let file of selectedFile) {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('upload_preset', PRESET_NAME);
+                formData.append('folder', FOLDER_NAME);
+    
+                const response = await axios.post(api, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                    onUploadProgress: (progressEvent) => {
+                        const progress = Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total
+                        );
+                        setUploadProgress(progress);
+                    },
+                });
+    
+                await ImageService.createImage({
+                    url: response.data.secure_url,
+                });
+            }
+            toast.success('All files uploaded successfully!', {
+                position: "bottom-center",
+                autoClose: 3000,
             });
             window.location.reload();
         } catch (error) {
@@ -54,44 +169,36 @@ function UpLoad({ setShowUpload }) {
             });
         }
     };
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setSelectedFile(file);
-            displayFileNameRef.current = file;
-        }
-    };
-
+    
     return (
         <div className={cx('wrapper')}>
             <div className={cx('block', { show: isVisible })}>
                 <h2 className={cx('title')}>Upload Image</h2>
-
+    
                 <div className={cx('wrapper-button')}>
                     <Button five onClick={() => fileInputRef.current.click()} className={cx('btn')}>
                         Select From Device
                     </Button>
                 </div>
-
+    
                 <div className={cx('form')}>
                     <input
                         type="text"
                         className={cx('input')}
-                        placeholder="Selected file or paste URL here..."
-                        value={selectedFile ? selectedFile.name : displayFileNameRef.current.name}
+                        placeholder="Selected file(s) or paste URL here..."
+                        value={displayFileNameRef.current}
                         readOnly
                     />
                     <Button
                         five
                         onClick={handleUpload}
-                        className={cx('btn', { disabled: !selectedFile })}
-                        disabled={!selectedFile}
+                        className={cx('btn', { disabled: !selectedFile || selectedFile.length === 0 })}
+                        disabled={!selectedFile || selectedFile.length === 0}
                     >
                         Upload
                     </Button>
                 </div>
-
+    
                 {uploadProgress > 0 && (
                     <div className={cx('progress-bar')}>
                         <div
@@ -100,15 +207,16 @@ function UpLoad({ setShowUpload }) {
                         />
                     </div>
                 )}
-
+    
                 <input
                     type="file"
                     ref={fileInputRef}
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
                     accept="image/*"
+                    multiple // Thêm thuộc tính multiple để cho phép chọn nhiều file
                 />
-
+    
                 <i
                     className={`fa-regular fa-circle-xmark ${cx('icon-modifier')}`}
                     onClick={() => setShowUpload(false)}
@@ -117,6 +225,7 @@ function UpLoad({ setShowUpload }) {
             <ToastContainer />
         </div>
     );
+    
 }
 
 export default UpLoad;

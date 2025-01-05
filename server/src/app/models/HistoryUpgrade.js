@@ -3,19 +3,19 @@ const HistoryUpgrade = {
     getAllHistoryUpgrade: async () => {
         try {
             const query = `
-                        SELECT
-                            users.id, 
-                            users.name AS userName,
-                            capacity_package.name AS packageName,
-                            capacity_package.size,
-                            capacity_package.price,
-                            history_upgrade.createdAt,
-                            history_upgrade.status
-                        FROM users
-                        JOIN history_upgrade ON users.id = history_upgrade.userId
-                        JOIN capacity_package ON history_upgrade.capacityPackageId = capacity_package.id
-                        ORDER BY history_upgrade.createdAt ASC
-                    `;
+                SELECT
+                    users.id, 
+                    users.name AS userName,
+                    capacity_package.name AS packageName,
+                    capacity_package.size,
+                    capacity_package.price,
+                    history_upgrade.createdAt,
+                    history_upgrade.status
+                FROM users
+                JOIN history_upgrade ON users.id = history_upgrade.userId
+                JOIN capacity_package ON history_upgrade.capacityPackageId = capacity_package.id
+                ORDER BY history_upgrade.createdAt DESC
+            `;
             const [rows] = await db.query(query);
             return rows;
         } catch (error) {
@@ -23,6 +23,7 @@ const HistoryUpgrade = {
             throw new Error("Unable to retrieve images. Please try again later.");
         }
     },
+    
     getHistoryUpgradePading: async () => {
         const status = 'pending';
         try {
